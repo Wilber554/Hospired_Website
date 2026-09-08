@@ -503,6 +503,80 @@ body {
     position: relative;
     margin-left: 170px;
 }
+/* =========================================================
+   CORRECCIÓN DEFINITIVA DEL LAYOUT SIDEBAR + CONTENIDO
+   ========================================================= */
+
+.main-container {
+    width: calc(100% - var(--sidebar-width));
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+.top-navbar {
+    width: 100%;
+}
+
+.search-container {
+    margin-left: 0;
+}
+
+.content-body {
+    width: 100%;
+    min-width: 0;
+}
+
+/* TABLET */
+@media (max-width: 1100px) and (min-width: 769px) {
+
+    .main-container {
+        width: calc(100% - var(--sidebar-width));
+        margin-left: var(--sidebar-width);
+    }
+
+    .search-container {
+        margin-left: 0 !important;
+    }
+
+    .content-body {
+        width: 100%;
+        padding-left: 24px;
+        padding-right: 24px;
+    }
+}
+
+/* MÓVIL */
+@media (max-width: 768px) {
+
+    .main-container {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+    }
+
+    .top-navbar {
+        width: 100%;
+        margin-top: 0 !important;
+        padding: 64px 16px 12px !important;
+    }
+
+    .search-container {
+        width: 100%;
+        max-width: none !important;
+        margin-left: 0 !important;
+    }
+
+    .content-body {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 20px 16px 32px !important;
+    }
+}
 
 /* Estilos coherentes para el Modal de Detalles del Centro */
 #centerDetailModal .profile-modal-panel {
