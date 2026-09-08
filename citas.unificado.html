@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospired - Agendamiento de Citas Médicas y Laboratorios</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="centro-detalle.js"></script>
+    <link rel="stylesheet" href="accesibilidad-global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="accesibilidad-global.js"></script>
+    <script src="centro-seleccionado.js"></script>
+    <script src="perfil.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        .booking-section { padding: 40px 20px; max-width: 1000px; margin: 0 auto; margin-left: 310px; }
+        .booking-card { background-color: var(--color-surface, #ffffff); border: 1px solid var(--color-border, rgba(21, 70, 102, 0.15)); border-radius: 16px; padding: 32px; box-shadow: 0 10px 25px rgba(21, 70, 102, 0.08); }
+        .form-section-title { color: var(--color-text-main, #154666); font-size: 1.25rem; font-weight: 700; margin-top: 24px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--hospired-green, #509C81); display: flex; align-items: center; gap: 8px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group.full-width { grid-column: 1 / -1; }
+        .form-group label { font-weight: 700; font-size: 0.9rem; color: var(--color-text-main, #154666); }
+        .form-control { width: 100%; padding: 12px 16px; border: 1px solid var(--color-border, #D3DFE6); border-radius: 8px; font-size: 0.95rem; background-color: var(--bg-subtle, #F4F7F9); color: var(--color-text-main, #154666); transition: all 0.3s ease; }
+        .form-control:focus { outline: none; border-color: var(--hospired-blue, #388DAE); background-color: #ffffff; box-shadow: 0 0 0 3px rgba(56, 141, 174, 0.15); }
+        .type-selector-group { display: flex; gap: 16px; margin-bottom: 10px; }
+        .type-option-btn { flex: 1; padding: 14px 20px; border: 2px solid var(--color-border, #D3DFE6); background-color: var(--bg-subtle, #F4F7F9); color: var(--color-text-main, #154666); font-weight: 700; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; transition: all 0.3s ease; }
+        .type-option-btn.active { border-color: var(--hospired-blue, #388DAE); background-color: rgba(56, 141, 174, 0.1); color: var(--hospired-blue, #388DAE); }
+        .radio-options-inline { display: flex; gap: 20px; align-items: center; padding: 10px 0; }
+        .radio-options-inline label { font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .btn-submit-container { margin-top: 32px; }
+        .success-message { display: none; background-color: #E6F4EA; border: 1px solid #509C81; color: #137333; padding: 16px; border-radius: 8px; text-align: center; margin-top: 20px; font-weight: 600; }
+        .form-icon,
+        .service-icon,
+        .submit-icon {
+            width: 1.2em;
+            height: 1.2em;
+            flex: 0 0 auto;
+            vertical-align: middle;
+        }
+
+        .form-section-title,
+        .type-option-btn,
+        .btn-wizard-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @media (max-width: 1100px) {
+            .booking-section {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .booking-section {
+                padding: 24px 16px 32px;
+            }
+
+            .booking-card {
+                padding: 20px 16px;
+            }
+
+            .type-selector-group {
+                flex-direction: column;
+            }
+
+            .type-option-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .form-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .form-section-title {
+                font-size: 1.08rem;
+            }
+        }
+    </style>
+</head>
+<body id="page-body">
+
+<div class="shape-decor shape-1"></div>
+<div class="shape-decor shape-2"></div>
+<div class="shape-decor shape-3"></div>
+
+<aside class="sidebar" role="navigation" aria-label="Navegación lateral">
+    <div class="brand-container">
+        <a class="brand" href="index.html" aria-label="Inicio Hospired">
+            <img src="login/Hospired.logo.png" alt="Logo de Hospired">
+        </a>
+    </div>
+    <nav class="vertical-menu">
+        <button class="menu-item" onclick="location.href='index.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span><span>Inicio</span></button>
+        <button class="menu-item active" onclick="location.href='citas.unificado.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span><span>Mis Citas</span></button>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin: 6px 8px;">
+        <button class="menu-item" onclick="location.href='laboratorios.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.75 18.1A2 2 0 0 0 6.47 21h11.06a2 2 0 0 0 1.72-2.9L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line></svg></span><span>Laboratorios</span></button>
+        <button class="menu-item" onclick="location.href='hospitales.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path><line x1="10" y1="9" x2="14" y2="9"></line><line x1="12" y1="7" x2="12" y2="11"></line></svg></span><span>Hospitales</span></button>
+        <button class="menu-item" onclick="location.href='Notificaciones.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span><span>Notificaciones</span></button>
+        <button class="menu-item" onclick="location.href='soporte_y_ayuda.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg></span><span>Soporte y ayuda</span></button>
+        <a class="menu-item" href="index.html#quienes-somos"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span><span>Sobre nosotros</span></a>
+    </nav>
+</aside>
+
+<div class="main-container">
+    <header class="top-navbar" role="banner">
+        <div class="search-container">
+            <form class="search-form" role="search" onsubmit="event.preventDefault();">
+                <input type="search" id="searchInput" name="query" placeholder="Buscar servicios..." aria-label="Buscar servicios médicos" autocomplete="off">
+                <button type="submit" aria-label="Ejecutar búsqueda">Buscar</button>
+            </form>
+            <div id="searchResultsDropdown" class="search-results-dropdown"></div>
+        </div>
+        <div class="right-utilities">
+            <button type="button" class="profile" id="sharedProfileTrigger" aria-label="Abrir perfil del usuario" onclick="openSharedProfileModal()">
+                <div class="avatar" aria-hidden="true" id="userAvatar">MJ</div>
+                <div class="account">
+                    <span class="name" id="userNameLabel">Perfil</span>
+                    <span class="hint" id="userProfileHint">Perfil</span>
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-body">
+        <section class="booking-section">
+            <h2 class="process-title" style="margin-bottom: 24px;">Agendamiento Único de Citas Médicas y Exámenes</h2>
+            <div class="booking-card">
+                <form id="unifiedAppointmentForm" onsubmit="handleFormSubmit(event)">
+                    <div class="form-group full-width">
+                        <label>Selecciona el tipo de servicio que deseas agendar:</label>
+                        <div class="type-selector-group">
+                            <button type="button" id="btnTypeHospital" class="type-option-btn active"
+        onclick="switchServiceType('hospital')">
+    <svg class="service-icon" aria-hidden="true" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 21h18"></path>
+        <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path>
+        <path d="M9 9h6"></path>
+        <path d="M12 6v6"></path>
+    </svg>
+    <span id="btnTypeHospitalText">Hospital / Clínica</span>
+</button>
+
+<button type="button" id="btnTypeLab" class="type-option-btn"
+        onclick="switchServiceType('laboratorio')">
+    <svg class="service-icon" aria-hidden="true" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 3v6.5L4.5 18a2 2 0 0 0 1.8 3h11.4a2 2 0 0 0 1.8-3L15 9.5V3"></path>
+        <path d="M7 3h10"></path>
+        <path d="M7 15h10"></path>
+    </svg>
+    <span id="btnTypeLabText">Laboratorio Clínico</span>
+</button>
+                        </div>
+                    </div>
+
+                    <h3 class="form-section-title">    <svg class="form-icon" aria-hidden="true" viewBox="0 0 24 24"         fill="none" stroke="currentColor" stroke-width="2">        <circle cx="12" cy="8" r="4"></circle>        <path d="M4 21a8 8 0 0 1 16 0"></path>    </svg>    <span id="patientDetailsTitle">Datos del Paciente</span></h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="fullName" data-en="Full Name *" data-es="Nombre Completo *">Nombre Completo *</label><input type="text" id="fullName" class="form-control" placeholder="Ej. Juan Pérez" required></div>
+                        <div class="form-group"><label for="identityDoc" data-en="National ID *" data-es="DUI / Documento de Identificación *">DUI / Documento de Identificación *</label><input type="text" id="identityDoc" class="form-control" placeholder="00000000-0" required></div>
+                        <div class="form-group"><label for="email" data-en="Email *" data-es="Correo Electrónico *">Correo Electrónico *</label><input type="email" id="email" class="form-control" placeholder="juan.perez@example.com" required></div>
+                        <div class="form-group"><label for="phone" data-en="Phone *" data-es="Teléfono de Contacto *">Teléfono de Contacto *</label><input type="tel" id="phone" class="form-control" placeholder="7777-7777" required></div>
+                    </div>
+
+                    <h3 class="form-section-title"><svg class="form-icon" aria-hidden="true" viewBox="0 0 24 24"fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>   <span id="appointmentDetailsTitle">Detalles de la Cita</span></h3>
+                    <div class="form-grid">
+                        <div class="form-group" id="groupHospital">
+                            <label for="institutionHospital" data-en="Healthcare Institution *" data-es="Hospital o Centro Médico *">Hospital o Centro Médico *</label>
+                            <select id="institutionHospital" class="form-control" required>
+                                <option value="">Selecciona un hospital...</option>
+                                <option value="Hospital Internacional San Jude">Hospital Internacional San Jude</option>
+                                <option value="Hospital Metropolitano del Norte">Hospital Metropolitano del Norte</option>
+                                <option value="Hospital de Especialidades San Rafael">Hospital de Especialidades San Rafael</option>
+                                <option value="Clínica médica Alborada">Clínica médica Alborada</option>
+                                <option value="Hospital General Sagrado Corazón">Hospital General Sagrado Corazón</option>
+                                <option value="Centro Traumatológico del Deporte">Centro Traumatológico del Deporte</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="groupLab" style="display: none;">
+                            <label for="institutionLab" data-en="Clinical Laboratory *" data-es="Laboratorio Clínico *">Laboratorio Clínico *</label>
+                            <select id="institutionLab" class="form-control">
+                                <option value="" data-en="Select a laboratory..." data-es="Selecciona un laboratorio...">Selecciona un laboratorio...</option>
+                                <option value="Laboratorios Clínicos Biolab">Laboratorios Clínicos Biolab</option>
+                                <option value="Laboratorios Diagnóstica Express">Laboratorios Diagnóstica Express</option>
+                                <option value="Laboratorio Molecular Genex">Laboratorio Molecular Genex</option>
+                                <option value="MaxiLab Análisis Especializados">MaxiLab Análisis Especializados</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="groupSpecialty">
+                            <label for="specialty" id="labelSpecialty" data-en="Medical Specialty *" data-es="Especialidad Médica *">Especialidad Médica *</label>
+                            <select id="specialty" class="form-control" required>
+                                <option value="" data-en="Select a specialty..." data-es="Selecciona una especialidad...">Selecciona una especialidad...</option>
+                                <option value="Medicina General" data-en="General Medicine" data-es="Medicina General">Medicina General</option>
+                                <option value="Pediatría" data-en="Pediatrics" data-es="Pediatría">Pediatría</option>
+                                <option value="Cardiología" data-en="Cardiology" data-es="Cardiología">Cardiología</option>
+                                <option value="Odontología" data-en="Dentistry" data-es="Odontología">Odontología</option>
+                                <option value="Dermatología" data-en="Dermatology" data-es="Dermatología">Dermatología</option>
+                                <option value="Ginecología y Obstetricia" data-en="Gynecology and Obstetrics" data-es="Ginecología y Obstetricia">Ginecología y Obstetricia</option>
+                                <option value="Oftalmología" data-en="Ophthalmology" data-es="Oftalmología">Oftalmología</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="groupExam" style="display: none;">
+                            <label for="examType" data-en="Exam or Test Type *" data-es="Tipo de Examen o Pruebas *">Tipo de Examen o Pruebas *</label>
+                            <select id="examType" class="form-control">
+                                <option value="" data-en="Select an exam..." data-es="Selecciona un examen...">Selecciona un examen...</option>
+                                <option value="Análisis de Sangre / Hemograma" data-en="Blood Test / Complete Blood Count" data-es="Análisis de Sangre / Hemograma">Análisis de Sangre / Hemograma</option>
+                                <option value="Análisis de Orina Completo" data-en="Complete Urine Analysis" data-es="Análisis de Orina Completo">Análisis de Orina Completo</option>
+                                <option value="Perfil de Glucosa" data-en="Glucose Profile" data-es="Perfil de Glucosa">Perfil de Glucosa</option>
+                                <option value="Perfil Lipídico / Colesterol" data-en="Lipid Profile / Cholesterol" data-es="Perfil Lipídico / Colesterol">Perfil Lipídico / Colesterol</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="groupDoctor">
+                            <label for="doctor" data-en="Attending Physician (Optional)" data-es="Médico Tratante (Opcional)">Médico Tratante (Opcional)</label>
+                            <select id="doctor" class="form-control">
+                                <option value="Cualquier médico disponible" data-en="Any available doctor" data-es="Cualquier médico disponible">Cualquier médico disponible</option>
+                                <option value="Dr. Roberto Pérez" data-en="Dr. Roberto Pérez (Cardiology)" data-es="Dr. Roberto Pérez (Cardiología)">Dr. Roberto Pérez (Cardiología)</option>
+                                <option value="Dra. María Gómez" data-en="Dra. María Gómez (Pediatrics)" data-es="Dra. María Gómez (Pediatría)">Dra. María Gómez (Pediatría)</option>
+                                <option value="Dr. Carlos Martínez" data-en="Dr. Carlos Martínez (General Medicine)" data-es="Dr. Carlos Martínez (Medicina General)">Dr. Carlos Martínez (Medicina General)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="groupMode">
+                            <label for="mode" data-en="Consultation Mode *" data-es="Modalidad de Consulta *">Modalidad de Consulta *</label>
+                            <div class="radio-options-inline">
+                                <label><input type="radio" name="mode" value="Presencial" checked data-en="In-Person" data-es="Presencial"> Presencial</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="form-section-title">    <svg class="form-icon" aria-hidden="true" viewBox="0 0 24 24"         fill="none" stroke="currentColor" stroke-width="2">        <rect x="3" y="4" width="18" height="17" rx="2"></rect>        <path d="M16 2v4M8 2v4M3 10h18"></path>        <path d="M8 14h2M14 14h2M8 17h2"></path>    </svg>    <span id="scheduleTitle" data-en="Schedule and Date" data-es="Horario y Fecha">Horario y Fecha</span></h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label for="appointmentDate" data-en="Desired Date *" data-es="Fecha deseada *">Fecha deseada *</label><input type="date" id="appointmentDate" class="form-control" required></div>
+                        <div class="form-group">
+                            <label for="appointmentTime" data-en="Available Time *" data-es="Horario Disponible *">Horario Disponible *</label>
+                            <select id="appointmentTime" class="form-control" required>
+                                <option value="" data-en="Select a time..." data-es="Selecciona un horario...">Selecciona un horario...</option>
+                                <option value="07:00 AM">07:00 AM</option>
+                                <option value="08:00 AM">08:00 AM</option>
+                                <option value="09:30 AM">09:30 AM</option>
+                                <option value="11:00 AM">11:00 AM</option>
+                                <option value="02:00 PM">02:00 PM</option>
+                                <option value="03:30 PM">03:30 PM</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="reason" data-en="Reason for Consultation or Special Instructions" data-es="Motivo de Consulta o Indicaciones Especiales">Motivo de Consulta o Indicaciones Especiales</label>
+                            <textarea id="reason" class="form-control" rows="3" placeholder="Síntomas principales, preparación previa..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="btn-submit-container">
+                        <button type="submit" class="btn-wizard-trigger"        style="width: 100%; justify-content: center;">        <span id="submitAppointmentText" data-en="Confirm and Schedule Appointment" data-es="Confirmar y Agendar Cita Médica">Confirmar y Agendar Cita Médica</span></button>
+                    </div>
+                </form>
+                <div id="successBox" class="success-message" data-en="✓ Your appointment has been confirmed and saved in your notification history!" data-es="✓ ¡Tu cita ha sido confirmada exitosamente y guardada en tu historial de notificaciones!">✓ ¡Tu cita ha sido confirmada exitosamente y guardada en tu historial de notificaciones!</div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="footer-content">
+        <div class="footer-links-container footer-vertical">
+            <nav class="footer-column" aria-label="Navegación del pie de página: Nosotros">
+                <h4>Nosotros</h4>
+                <ul>
+                    <li><a href="index.html#quienes-somos">¿Quiénes somos?</a></li>
+                    <li><a href="index.html#mision">Nuestra Misión</a></li>
+                    <li><a href="index.html#vision">Nuestra Visión</a></li>
+                    <li><a href="index.html#flujo-atencion-section">Cómo funciona</a></li>
+                </ul>
+            </nav>
+
+            <nav class="footer-column" aria-label="Navegación del pie de página: Soporte y Legal">
+                <h4>Ayuda y Legal</h4>
+                <ul>
+                    <li><a href="soporte_y_ayuda.html">Soporte Técnico</a></li>
+                    <li><a href="soporte_y_ayuda.html#contacto">Ayuda Urgente</a></li>
+                    <li><a href="terminos-condiciones.html">Términos y condiciones</a></li>
+                    <li><a href="index.html#privacidad">Política de privacidad</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-column">
+                <h4>Contáctanos</h4>
+                <ul class="contact-list">
+                    <li>
+                        <a href="tel:22222222" aria-label="Llamar al teléfono fijo de atención 2 2 2 2, 2 2 2 2">
+                            <span class="phone-icon" aria-hidden="true">&#9742;</span>
+                            2222 - 2222
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:23237898" aria-label="Llamar al teléfono celular de asistencia 2 3 2 3, 7 8 9 8">
+                            <span class="phone-icon" aria-hidden="true">&#9743;</span>
+                            2323 - 7898
+                        </a>
+                    </li>
+                </ul>
+                <div class="social-icons-container social-icons-inline">
+                    <a href="https://www.instagram.com/hospired_es?igsh=YXN0dHFocnF6NTZh" target="_blank" rel="noopener" aria-label="Visitar nuestro perfil oficial de Instagram (abre en una nueva pestaña)">
+                        <img src="instagram-8203531_1280.png" alt="Instagram de Hospired">
+                    </a>
+                    <a href="https://facebook.com/hospired" target="_blank" rel="noopener" aria-label="Visitar nuestra página oficial de Facebook (abre en una nueva pestaña)">
+                        <img src="image-removebg-preview.png" alt="Facebook de Hospired">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 Hospired. Todos los derechos reservados. Diseñado con enfoque en accesibilidad universal.</p>
+    </div>
+</footer>
+
+<!-- Filtros SVG ocultos para Daltonismo (Añadir al final del <body> en todas las páginas) -->
+<svg aria-hidden="true" focusable="false" style="display:none;">
+  <filter id="protanopia-filter">
+    <feColorMatrix type="matrix" values="0.567, 0.433, 0,     0, 0,
+                                       0.558, 0.442, 0,     0, 0,
+                                       0,     0.242, 0.758, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+  <filter id="deuteranopia-filter">
+    <feColorMatrix type="matrix" values="0.625, 0.375, 0,   0, 0,
+                                       0.7,   0.3,   0,   0, 0,
+                                       0,     0.3,   0.7, 0, 0,
+                                       0,     0,     0,   1, 0"/>
+  </filter>
+  <filter id="tritanopia-filter">
+    <feColorMatrix type="matrix" values="0.95,  0.05,  0,     0, 0,
+                                       0,     0.433, 0.567, 0, 0,
+                                       0,     0.475, 0.525, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+</svg>
+
+<script>
+    let currentService = 'hospital';
+
+    function getPreferredLanguage() {
+        try {
+            return JSON.parse(localStorage.getItem('hospired_accessibility_preferences') || '{}').language || 'es';
+        } catch (error) {
+            return 'es';
+        }
+    }
+
+    function setFormCopy() {
+        const isEnglish = getPreferredLanguage() === 'en';
+        
+        const mainTitle = document.querySelector('.process-title');
+        if (mainTitle) mainTitle.textContent = isEnglish ? 'Unified Medical Appointment and Laboratory Booking' : 'Agendamiento Único de Citas Médicas y Exámenes';
+
+        const serviceLabel = document.querySelector('.type-selector-group')?.parentElement?.querySelector('label');
+        if (serviceLabel) serviceLabel.textContent = isEnglish ? 'Select the service type you want to schedule:' : 'Selecciona el tipo de servicio que deseas agendar:';
+
+        const btnHospital = document.getElementById('btnTypeHospital');
+        if (btnHospital) btnHospital.textContent = isEnglish ? ' Hospital / Clinic' : ' Hospital / Clínica';
+
+        const btnLab = document.getElementById('btnTypeLab');
+        if (btnLab) btnLab.textContent = isEnglish ? 'Clinical Lab' : 'Laboratorio Clínico';
+
+        const sectionTitles = document.querySelectorAll('.form-section-title');
+        if (sectionTitles[0]) sectionTitles[0].textContent = isEnglish ? ' Patient Details' : ' Datos del Paciente';
+        if (sectionTitles[1]) sectionTitles[1].textContent = isEnglish ? ' Appointment Details' : ' Detalles de la Cita';
+        if (sectionTitles[2]) sectionTitles[2].textContent = isEnglish ? ' Date & Schedule' : ' Horario y Fecha';
+
+        const labels = document.querySelectorAll('.form-group label');
+        labels.forEach(lbl => {
+            const txt = lbl.textContent.trim();
+            if (txt.includes('Nombre Completo')) lbl.textContent = isEnglish ? 'Full Name *' : 'Full Name *';
+            if (txt.includes('DUI')) lbl.textContent = isEnglish ? 'DUI / ID Document *' : 'DUI / Documento de Identificación *';
+            if (txt.includes('Correo Electrónico')) lbl.textContent = isEnglish ? 'Email Address *' : 'Correo Electrónico *';
+            if (txt.includes('Teléfono de Contacto')) lbl.textContent = isEnglish ? 'Contact Phone *' : 'Teléfono de Contacto *';
+            if (txt.includes('Hospital o Centro')) lbl.textContent = isEnglish ? 'Hospital or Medical Center *' : 'Hospital o Centro Médico *';
+            if (txt.includes('Laboratorio Clínico')) lbl.textContent = isEnglish ? 'Clinical Laboratory *' : 'Laboratorio Clínico *';
+            if (txt.includes('Especialidad Médica')) lbl.textContent = isEnglish ? 'Medical Specialty *' : 'Especialidad Médica *';
+            if (txt.includes('Tipo de Examen')) lbl.textContent = isEnglish ? 'Exam or Test Type *' : 'Tipo de Examen o Pruebas *';
+            if (txt.includes('Médico Tratante')) lbl.textContent = isEnglish ? 'Attending Physician (Optional)' : 'Médico Tratante (Opcional)';
+            if (txt.includes('Modalidad de Consulta')) lbl.textContent = isEnglish ? 'Consultation Mode *' : 'Modalidad de Consulta *';
+            if (txt.includes('Fecha deseada')) lbl.textContent = isEnglish ? 'Preferred Date *' : 'Fecha deseada *';
+            if (txt.includes('Horario Disponible')) lbl.textContent = isEnglish ? 'Available Time *' : 'Horario Disponible *';
+            if (txt.includes('Motivo de Consulta')) lbl.textContent = isEnglish ? 'Reason for Visit or Special Instructions' : 'Motivo de Consulta o Indicaciones Especiales';
+        });
+
+        const submitBtn = document.querySelector('.btn-wizard-trigger');
+        if (submitBtn) submitBtn.textContent = isEnglish ? '✨ Confirm and Schedule Appointment' : '✨ Confirmar y Agendar Cita Médica';
+
+        const successBox = document.getElementById('successBox');
+        if (successBox) successBox.textContent = isEnglish ? '✓ Your appointment has been successfully confirmed and saved in your notification history!' : '✓ ¡Tu cita ha sido confirmada exitosamente y guardada en tu historial de notificaciones!';
+
+        const hint = document.getElementById('userProfileHint');
+        if (hint) hint.textContent = isEnglish ? 'Profile' : 'Perfil';
+    }
+
+    function switchServiceType(type) {
+        currentService = type;
+        const btnHospital = document.getElementById('btnTypeHospital');
+        const btnLab = document.getElementById('btnTypeLab');
+        const groupHospital = document.getElementById('groupHospital');
+        const groupLab = document.getElementById('groupLab');
+        const groupSpecialty = document.getElementById('groupSpecialty');
+        const groupExam = document.getElementById('groupExam');
+        const groupDoctor = document.getElementById('groupDoctor');
+        const groupMode = document.getElementById('groupMode');
+
+        if (type === 'hospital') {
+            btnHospital.classList.add('active');
+            btnLab.classList.remove('active');
+            groupHospital.style.display = 'flex';
+            groupLab.style.display = 'none';
+            groupSpecialty.style.display = 'flex';
+            groupExam.style.display = 'none';
+            groupDoctor.style.display = 'flex';
+            groupMode.style.display = 'flex';
+            document.getElementById('institutionHospital').required = true;
+            document.getElementById('institutionLab').required = false;
+            document.getElementById('specialty').required = true;
+            document.getElementById('examType').required = false;
+        } else {
+            btnLab.classList.add('active');
+            btnHospital.classList.remove('active');
+            groupHospital.style.display = 'none';
+            groupLab.style.display = 'flex';
+            groupSpecialty.style.display = 'none';
+            groupExam.style.display = 'flex';
+            groupDoctor.style.display = 'none';
+            groupMode.style.display = 'none';
+            document.getElementById('institutionHospital').required = false;
+            document.getElementById('institutionLab').required = true;
+            document.getElementById('specialty').required = false;
+            document.getElementById('examType').required = true;
+        }
+    }
+
+    function handleFormSubmit(event) {
+        event.preventDefault();
+
+        const profile = JSON.parse(localStorage.getItem('hospired_patient_profile') || 'null');
+        const loggedUser = JSON.parse(localStorage.getItem('hospired_logged_user') || 'null');
+        const currentProfileName = profile?.fullName || profile?.name || loggedUser?.nombre || 'Usuario';
+        const currentProfileEmail = profile?.email || loggedUser?.email || document.getElementById('email').value;
+
+        const appointmentData = {
+            id: 'APT-' + Date.now().toString().slice(-6),
+            type: currentService === 'hospital' ? 'Cita Médica' : 'Examen de Laboratorio',
+            fullName: document.getElementById('fullName').value || currentProfileName,
+            identityDoc: document.getElementById('identityDoc').value,
+            email: currentProfileEmail,
+            phone: document.getElementById('phone').value || loggedUser?.telefono || 'No especificado',
+            institution: currentService === 'hospital' ? document.getElementById('institutionHospital').value : document.getElementById('institutionLab').value,
+            detail: currentService === 'hospital' ? document.getElementById('specialty').value : document.getElementById('examType').value,
+            doctor: currentService === 'hospital' ? document.getElementById('doctor').value : 'N/A',
+            mode: currentService === 'hospital' ? document.querySelector('input[name="mode"]:checked').value : 'Laboratorio',
+            date: document.getElementById('appointmentDate').value,
+            time: document.getElementById('appointmentTime').value,
+            reason: document.getElementById('reason').value || 'Ninguno',
+            status: 'proxima',
+            userEmail: currentProfileEmail,
+            userName: currentProfileName,
+            createdAt: new Date().toISOString()
+        };
+
+        let appointments = JSON.parse(localStorage.getItem('hospired_appointments')) || [];
+        appointments.unshift(appointmentData);
+        localStorage.setItem('hospired_appointments', JSON.stringify(appointments));
+
+        const notifications = JSON.parse(localStorage.getItem('hospired_notifications')) || [];
+        notifications.unshift({
+            id: 'NOT-' + Date.now(),
+            title: 'Cita agendada',
+            message: `${appointmentData.type} confirmada para ${appointmentData.fullName} en ${appointmentData.institution}.`,
+            createdAt: new Date().toISOString(),
+            type: 'appointment',
+            relatedId: appointmentData.id,
+            userEmail: currentProfileEmail
+        });
+        localStorage.setItem('hospired_notifications', JSON.stringify(notifications));
+
+        const successBox = document.getElementById('successBox');
+        successBox.style.display = 'block';
+        document.getElementById('unifiedAppointmentForm').reset();
+        switchServiceType('hospital');
+        successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Cargar perfil guardado si existe
+    window.addEventListener('DOMContentLoaded', () => {
+        sessionStorage.setItem('hospired_active_role', 'patient');
+        setFormCopy();
+        window.addEventListener('hospired-language-change', setFormCopy);
+
+        const profile = JSON.parse(localStorage.getItem('hospired_patient_profile') || 'null');
+        const savedUser = JSON.parse(localStorage.getItem('hospired_logged_user') || 'null');
+        const user = profile || savedUser || {};
+        const name = user.fullName || user.name || user.nombre || user.institutionName || 'Usuario';
+        if (name) {
+            document.getElementById('userNameLabel').textContent = name;
+            document.getElementById('fullName').value = name;
+            const initials = name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userProfileHint').textContent = 'Perfil';
+        }
+        if (user.email) document.getElementById('email').value = user.email;
+        if (user.phone) document.getElementById('phone').value = user.phone;
+        if (user.telefono) document.getElementById('phone').value = user.telefono;
+
+        const centroGuardado = localStorage.getItem(CENTRO_SELECCIONADO_KEY);
+        if (!centroGuardado) return;
+
+        try {
+            const centro = JSON.parse(centroGuardado);
+            const tipo = centro.tipo === 'laboratorio' ? 'laboratorio' : 'hospital';
+            switchServiceType(tipo);
+
+            const selector = document.getElementById(tipo === 'laboratorio' ? 'institutionLab' : 'institutionHospital');
+            if (!selector) return;
+
+            const option = Array.from(selector.options).find(item => item.value === centro.nombre);
+            if (option) {
+                selector.value = centro.nombre;
+            } else {
+                const customOption = new Option(`${centro.nombre} - ${centro.direccion}`, centro.nombre);
+                selector.add(customOption);
+                selector.value = centro.nombre;
+            }
+            localStorage.removeItem(CENTRO_SELECCIONADO_KEY);
+        } catch (error) {
+            localStorage.removeItem(CENTRO_SELECCIONADO_KEY);
+        }
+    });
+    // ...existing code...
+
+function setFormCopy() {
+    const isEnglish = getPreferredLanguage() === 'en';
+
+    const setText = (id, spanish, english) => {
+        const element = document.getElementById(id);
+        if (!element) return;
+
+        element.dataset.es = spanish;
+        element.dataset.en = english;
+        element.textContent = isEnglish ? english : spanish;
+    };
+
+    const mainTitle = document.querySelector('.process-title');
+    if (mainTitle) {
+        mainTitle.textContent = isEnglish
+            ? 'Unified Medical Appointment and Laboratory Booking'
+            : 'Agendamiento Único de Citas Médicas y Exámenes';
+    }
+
+    const serviceLabel = document.querySelector('.type-selector-group')
+        ?.parentElement?.querySelector('label');
+
+    if (serviceLabel) {
+        serviceLabel.textContent = isEnglish
+            ? 'Select the service type you want to schedule:'
+            : 'Selecciona el tipo de servicio que deseas agendar:';
+    }
+
+    setText('btnTypeHospitalText', 'Hospital / Clínica', 'Hospital / Clinic');
+    setText('btnTypeLabText', 'Laboratorio Clínico', 'Clinical Laboratory');
+    setText('patientDetailsTitle', 'Datos del Paciente', 'Patient Details');
+    setText('appointmentDetailsTitle', 'Detalles de la Cita', 'Appointment Details');
+    setText('scheduleTitle', 'Horario y Fecha', 'Date and Schedule');
+    setText(
+        'submitAppointmentText',
+        'Confirmar y Agendar Cita Médica',
+        'Confirm and Schedule Appointment'
+    );
+
+    // ...existing code...
+}
+
+// ...existing code...
+</script>
+</body>
+</html>

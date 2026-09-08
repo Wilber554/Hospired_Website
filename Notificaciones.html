@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospired - Notificaciones e Historial de Citas</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="accesibilidad-global.css">
+    <script src="accesibilidad-global.js"></script>
+    <script src="centro-detalle.js"></script>
+    <script src="perfil.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --color-surface: #ffffff;
+            --color-border: rgba(21, 70, 102, 0.15);
+            --color-text-main: #154666;
+            --color-text-muted: #475569;
+            --color-primary: #00A79D;
+            --color-primary-dark: #007F78;
+            --bg-subtle: #F4F7F9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f3f7f9;
+            color: var(--color-text-main);
+            display: flex;
+            min-height: 100vh;
+            background-image:
+                linear-gradient(rgba(0, 167, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 167, 157, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .shape-decor {
+            position: fixed;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(0, 167, 157, 0.05);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .shape-1 { top: 8%; right: 6%; }
+        .shape-2 { bottom: 6%; left: 12%; }
+
+        .content-body {
+            padding: 32px;
+        }
+
+        .notifications-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 10px 24px 40px 40px;       
+            margin-left: 210px;
+
+        }
+
+        .process-title {
+            color: var(--color-text-main);
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .notif-card {
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 10px 25px rgba(21, 70, 102, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .form-section-title {
+            color: var(--color-text-main);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-top: 0;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--color-primary);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: 1px solid var(--color-border);
+            background: var(--bg-subtle);
+            color: var(--color-text-main);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: transparent;
+        }
+
+        .appointment-item {
+            background: var(--bg-subtle);
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .appointment-info h4 {
+            color: var(--color-text-main);
+            margin-bottom: 4px;
+            font-size: 1.05rem;
+        }
+
+        .appointment-info p {
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            margin: 2px 0;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge-proxima { background: #e0f2fe; color: #0369a1; }
+        .badge-cancelada { background: #fee2e2; color: #991b1b; }
+        .badge-antigua { background: #f1f5f9; color: #475569; }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-pdf { background: #0284c7; color: white; }
+        .btn-cancel { background: #ef4444; color: white; }
+        .btn-restore { background: #10b981; color: white; }
+
+        .campaign-banner {
+            background: linear-gradient(135deg, rgba(0, 167, 157, 0.15), rgba(2, 132, 199, 0.1));
+            border-left: 4px solid var(--color-primary);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .campaign-banner h4 {
+            color: var(--color-primary-dark);
+            margin-bottom: 6px;
+        }
+
+        .campaign-banner p {
+            font-size: 0.9rem;
+            color: var(--color-text-main);
+        }
+
+        @media (max-width: 1100px) {
+            .notifications-section {
+                margin-left: 0;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .notifications-section {
+                padding: 20px 16px 32px;
+            }
+
+            .notif-card {
+                padding: 20px 16px;
+            }
+
+            .appointment-item {
+                align-items: stretch;
+            }
+
+            .action-btns {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn-action {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body id="page-body">
+
+<div class="shape-decor shape-1"></div>
+<div class="shape-decor shape-2"></div>
+
+<aside class="sidebar" role="navigation" aria-label="Navegación lateral">
+    <div class="brand-container">
+        <a class="brand" href="index.html" aria-label="Inicio Hospired">
+            <img src="login/Hospired.logo.png" alt="Logo de Hospired">
+        </a>
+    </div>
+    <nav class="vertical-menu">
+        <button class="menu-item" onclick="location.href='index.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span><span>Inicio</span></button>
+        <button class="menu-item" onclick="location.href='citas.unificado.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span><span>Mis Citas</span></button>
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin: 6px 8px;">
+        <button class="menu-item" onclick="location.href='laboratorios.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.75 18.1A2 2 0 0 0 6.47 21h11.06a2 2 0 0 0 1.72-2.9L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line></svg></span><span>Laboratorios</span></button>
+        <button class="menu-item" onclick="location.href='hospitales.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path><line x1="10" y1="9" x2="14" y2="9"></line><line x1="12" y1="7" x2="12" y2="11"></line></svg></span><span>Hospitales</span></button>
+        <button class="menu-item active" onclick="location.href='Notificaciones.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span><span>Notificaciones</span></button>
+        <button class="menu-item" onclick="location.href='soporte_y_ayuda.html'"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg></span><span>Soporte y ayuda</span></button>
+        <a class="menu-item" href="index.html#quienes-somos"><span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span><span>Sobre nosotros</span></a>
+    </nav>
+</aside>
+
+<div class="main-container">
+    <header class="top-navbar" role="banner">
+        <div class="search-container">
+            <form class="search-form" role="search" onsubmit="event.preventDefault();">
+                <input type="search" id="searchInput" name="query" placeholder="Buscar servicios..." aria-label="Buscar servicios" autocomplete="off">
+                <button type="submit" aria-label="Buscar">Buscar</button>
+            </form>
+        </div>
+        <div class="right-utilities">
+            <button type="button" class="profile" id="sharedProfileTrigger" aria-label="Abrir perfil del usuario" onclick="openSharedProfileModal()">
+                <div class="avatar" id="userAvatar">MJ</div>
+                <div class="account">
+                    <span class="name" id="userNameLabel">Perfil</span>
+                    <span class="hint" id="userProfileHint">Perfil</span>
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-body">
+        <section class="notifications-section">
+            <h2 class="process-title">Centro de Notificaciones e Historial de Citas</h2>
+            
+            <div class="notif-card">
+                <h3 class="form-section-title"> Campañas de Salud y Avisos Cercanos</h3>
+                <div class="campaign-banner">
+                    <h4> Campaña de Vacunación Antigripal Comunitaria</h4>
+                    <p>Acércate al Hospital Metropolitano del Norte o clínicas afiliadas esta semana para recibir tu dosis de refuerzo gratuita sin cita previa. Horario: 8:00 AM - 3:00 PM.</p>
+                </div>
+                <div class="campaign-banner">
+                    <h4> Jornada de Prevención Cardiovascular</h4>
+                    <p>Monitoreo de presión arterial y perfil lipídico básico disponible en el Instituto Cardiovascular CardiCare durante todo el mes de agosto.</p>
+                </div>
+            </div>
+
+            <div class="notif-card">
+                <h3 class="form-section-title"> Historial y Gestión de Citas</h3>
+                
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="filterAppointments('todas', event)">Todas las Citas</button>
+                    <button class="tab-btn" onclick="filterAppointments('proxima', event)">Próximas</button>
+                    <button class="tab-btn" onclick="filterAppointments('cancelada', event)">Canceladas</button>
+                    <button class="tab-btn" onclick="filterAppointments('antigua', event)">Antiguas / Historial</button>
+                </div>
+
+                <div id="appointmentsListContainer"></div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- Filtros SVG ocultos para Daltonismo (Añadir al final del <body> en todas las páginas) -->
+<svg aria-hidden="true" focusable="false" style="display:none;">
+  <filter id="protanopia-filter">
+    <feColorMatrix type="matrix" values="0.567, 0.433, 0,     0, 0,
+                                       0.558, 0.442, 0,     0, 0,
+                                       0,     0.242, 0.758, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+  <filter id="deuteranopia-filter">
+    <feColorMatrix type="matrix" values="0.625, 0.375, 0,   0, 0,
+                                       0.7,   0.3,   0,   0, 0,
+                                       0,     0.3,   0.7, 0, 0,
+                                       0,     0,     0,   1, 0"/>
+  </filter>
+  <filter id="tritanopia-filter">
+    <feColorMatrix type="matrix" values="0.95,  0.05,  0,     0, 0,
+                                       0,     0.433, 0.567, 0, 0,
+                                       0,     0.475, 0.525, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+</svg>
+
+<script>
+    function getPreferredLanguage() {
+        try {
+            return JSON.parse(localStorage.getItem('hospired_accessibility_preferences') || '{}').language || 'es';
+        } catch (error) {
+            return 'es';
+        }
+    }
+
+    function setNotifCopy() {
+        const isEnglish = getPreferredLanguage() === 'en';
+
+        const mainTitle = document.querySelector('.process-title');
+        if (mainTitle) mainTitle.textContent = isEnglish ? 'Notification Center and Appointment History' : 'Centro de Notificaciones e Historial de Citas';
+
+        const sectionTitles = document.querySelectorAll('.form-section-title');
+        if (sectionTitles[0]) sectionTitles[0].textContent = isEnglish ? ' Health Campaigns and Nearby Notices' : ' Campañas de Salud y Avisos Cercanos';
+        if (sectionTitles[1]) sectionTitles[1].textContent = isEnglish ? ' Appointment History and Management' : ' Historial y Gestión de Citas';
+
+        const banners = document.querySelectorAll('.campaign-banner');
+        if (banners[0]) {
+            const h4 = banners[0].querySelector('h4');
+            const p = banners[0].querySelector('p');
+            if (h4) h4.textContent = isEnglish ? ' Community Flu Vaccination Campaign' : ' Campaña de Vacunación Antigripal Comunitaria';
+            if (p) p.textContent = isEnglish ? 'Visit Metropolitan Northern Hospital or affiliated clinics this week to receive your free booster dose without appointment. Hours: 8:00 AM - 3:00 PM.' : 'Acércate al Hospital Metropolitano del Norte o clínicas afiliadas esta semana para recibir tu dosis de refuerzo gratuita sin cita previa. Horario: 8:00 AM - 3:00 PM.';
+        }
+
+        if (banners[1]) {
+            const h4 = banners[1].querySelector('h4');
+            const p = banners[1].querySelector('p');
+            if (h4) h4.textContent = isEnglish ? ' Cardiovascular Prevention Day' : ' Jornada de Prevención Cardiovascular';
+            if (p) p.textContent = isEnglish ? 'Blood pressure monitoring and basic lipid profile available at CardiCare Cardiovascular Institute throughout August.' : 'Monitoreo de presión arterial y perfil lipídico básico disponible en el Instituto Cardiovascular CardiCare durante todo el mes de agosto.';
+        }
+
+        const tabs = document.querySelectorAll('.tab-btn');
+        if (tabs[0]) tabs[0].textContent = isEnglish ? 'All Appointments' : 'Todas las Citas';
+        if (tabs[1]) tabs[1].textContent = isEnglish ? 'Upcoming' : 'Próximas';
+        if (tabs[2]) tabs[2].textContent = isEnglish ? 'Cancelled' : 'Canceladas';
+        if (tabs[3]) tabs[3].textContent = isEnglish ? 'Past / History' : 'Antiguas / Historial';
+
+        const hint = document.getElementById('userProfileHint');
+        if (hint) hint.textContent = isEnglish ? 'Profile' : 'Perfil';
+
+        const activeTab = document.querySelector('.tab-btn.active');
+        const filterVal = activeTab ? (tabs[0] === activeTab ? 'todas' : tabs[1] === activeTab ? 'proxima' : tabs[2] === activeTab ? 'cancelada' : 'antigua') : 'todas';
+        loadAppointments(filterVal);
+    }
+
+    function getCurrentProfile() {
+        return JSON.parse(localStorage.getItem('hospired_patient_profile') || 'null') || JSON.parse(localStorage.getItem('hospired_logged_user') || 'null') || {};
+    }
+
+    function loadAppointments(filter = 'todas') {
+        const isEnglish = getPreferredLanguage() === 'en';
+        const container = document.getElementById('appointmentsListContainer');
+        const appointments = JSON.parse(localStorage.getItem('hospired_appointments')) || [];
+        const currentProfile = getCurrentProfile();
+        const currentEmail = currentProfile.email || currentProfile.correo || '';
+
+        container.innerHTML = '';
+
+        const filtered = appointments.filter(apt => {
+            const matchesUser = !currentEmail || apt.userEmail === currentEmail || apt.email === currentEmail;
+            if (!matchesUser) return false;
+            if (filter === 'todas') return true;
+            return apt.status === filter;
+        });
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<p style="color: var(--color-text-muted); text-align: center; padding: 20px;">${isEnglish ? 'No appointment records found in this category.' : 'No hay registros de citas en esta categoría.'}</p>`;
+            return;
+        }
+
+        filtered.forEach(apt => {
+            const item = document.createElement('div');
+            item.className = 'appointment-item';
+
+            let badgeClass = 'badge-proxima';
+            let statusText = isEnglish ? 'Upcoming' : 'Próxima';
+            if (apt.status === 'cancelada') { badgeClass = 'badge-cancelada'; statusText = isEnglish ? 'Cancelled' : 'Cancelada'; }
+            if (apt.status === 'antigua') { badgeClass = 'badge-antigua'; statusText = isEnglish ? 'Past' : 'Antigua'; }
+
+            const labelPatient = isEnglish ? 'Patient' : 'Paciente';
+            const labelDetail = isEnglish ? 'Detail' : 'Detalle';
+            const labelDoctor = isEnglish ? 'Doctor' : 'Médico';
+            const labelDateTime = isEnglish ? 'Date & Time' : 'Fecha y Hora';
+            const labelAt = isEnglish ? 'at' : 'a las';
+            const btnCancelText = isEnglish ? 'Cancel' : 'Cancelar';
+            const btnRestoreText = isEnglish ? 'Reactivate' : 'Reactivar';
+
+            item.innerHTML = `
+                <div class="appointment-info">
+                    <h4>${apt.type} - ${apt.institution} <span class="badge-status ${badgeClass}">${statusText}</span></h4>
+                    <p><strong>${labelPatient}:</strong> ${apt.fullName} (DUI: ${apt.identityDoc})</p>
+                    <p><strong>${labelDetail}:</strong> ${apt.detail} | <strong>${labelDoctor}:</strong> ${apt.doctor}</p>
+                    <p><strong>${labelDateTime}:</strong> ${apt.date} ${labelAt} ${apt.time}</p>
+                </div>
+                <div class="action-btns">
+                    <button class="btn-action btn-pdf" onclick="downloadPDF('${apt.id}')">📄 PDF</button>
+                    ${apt.status === 'proxima' ? `<button class="btn-action btn-cancel" onclick="changeStatus('${apt.id}', '${filter}')">${btnCancelText}</button>` : ''}
+                    ${apt.status === 'cancelada' ? `<button class="btn-action btn-restore" onclick="changeStatus('${apt.id}', '${filter}')">${btnRestoreText}</button>` : ''}
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }
+
+    function filterAppointments(status, event) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+        loadAppointments(status);
+    }
+
+    function changeStatus(id, newStatus) {
+        let appointments = JSON.parse(localStorage.getItem('hospired_appointments')) || [];
+        appointments = appointments.map(apt => {
+            if (apt.id === id) apt.status = newStatus;
+            return apt;
+        });
+        localStorage.setItem('hospired_appointments', JSON.stringify(appointments));
+        loadAppointments('todas');
+    }
+
+    function downloadPDF(id) {
+        const appointments = JSON.parse(localStorage.getItem('hospired_appointments')) || [];
+        const apt = appointments.find(a => a.id === id);
+        if (!apt) return;
+
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFillColor(0, 167, 157);
+        doc.rect(0, 0, 210, 30, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(18);
+        doc.text("Hospired - Comprobante de Cita Médica", 14, 20);
+
+        doc.setTextColor(30, 41, 59);
+        doc.setFontSize(12);
+        doc.text(`ID de Cita: ${apt.id}`, 14, 45);
+        doc.text(`Estado: ${apt.status.toUpperCase()}`, 14, 53);
+
+        const tableData = [
+            ["Tipo de Servicio", apt.type],
+            ["Institución", apt.institution],
+            ["Paciente", apt.fullName],
+            ["Documento (DUI)", apt.identityDoc],
+            ["Correo Electrónico", apt.email],
+            ["Teléfono", apt.phone],
+            ["Especialidad / Examen", apt.detail],
+            ["Médico Asignado", apt.doctor],
+            ["Modalidad", apt.mode],
+            ["Fecha", apt.date],
+            ["Horario", apt.time],
+            ["Motivo", apt.reason]
+        ];
+
+        doc.autoTable({
+            startY: 62,
+            head: [['Campo', 'Detalle']],
+            body: tableData,
+            theme: 'grid',
+            headStyles: { fillColor: [0, 167, 157] }
+        });
+
+        doc.setFontSize(10);
+        doc.setTextColor(100, 100, 100);
+        doc.text("Hospired - Accesibilidad Universal y Salud Digital en El Salvador.", 14, doc.lastAutoTable.finalY + 15);
+
+        doc.save(`Comprobante_Cita_${apt.id}.pdf`);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        sessionStorage.setItem('hospired_active_role', 'patient');
+        setNotifCopy();
+        window.addEventListener('hospired-language-change', setNotifCopy);
+
+        const profile = JSON.parse(localStorage.getItem('hospired_patient_profile') || 'null') || JSON.parse(localStorage.getItem('hospired_logged_user') || 'null') || {};
+        const name = profile.fullName || profile.name || profile.nombre || profile.institutionName || 'Usuario';
+        if (name) {
+            document.getElementById('userNameLabel').textContent = name;
+            const initials = name.split(' ').map(n => n[0]).join('').slice(0,2).toUpperCase();
+            document.getElementById('userAvatar').textContent = initials;
+            document.getElementById('userProfileHint').textContent = 'Perfil';
+        }
+        loadAppointments('todas');
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hospired | Acceso y Registro</title>
+<link rel="stylesheet" href="login.css">
+<link rel="stylesheet" href="../accesibilidad-global.css">
+<script src="../accesibilidad-global.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+<div class="background-overlay"></div>
+
+<!-- 1. Pantalla de Transición de Entrada (Splash Screen) -->
+<div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+        <img src="Hospired.logo.png" alt="Hospired Logo" class="splash-logo">
+        <div class="splash-loader"></div>
+        <p class="splash-text">Cargando Hospired...</p>
+    </div>
+</div>
+
+<!-- 2. Pantalla de Bienvenida / Transición de Salida (Post-Login) -->
+<div id="welcomeScreen" class="welcome-screen hidden">
+    <div class="welcome-content">
+        <img src="Hospired.logo.png" alt="Hospired Logo" class="welcome-logo">
+        <div class="welcome-badge">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h2 class="welcome-title">¡Bienvenido/a!</h2>
+        <h3 class="welcome-user-name" id="welcomeUserName"></h3>
+        <p class="welcome-subtitle">Ingresando a la plataforma Hospired...</p>
+    </div>
+</div>
+
+<!-- 3. Formulario Centrado y Compacto -->
+<main class="login-wrapper">
+<div class="login-container">
+
+<section class="right-panel">
+    <div class="login-card">
+        <div class="brand-header">
+            <img src="Hospired.logo.png" alt="Hospired Logo" class="card-logo">
+        </div>
+
+        <header class="card-header">
+            <h2 id="cardTitle">Iniciar Sesión</h2>
+            <p id="cardSubtitle">Ingresa a tu cuenta de Hospired o crea una nueva.</p>
+        </header>
+
+        <div id="notification" class="notification hidden">
+            <div id="notificationIcon" class="notification-icon">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <div class="notification-text">
+                <h4 id="notificationTitle">Aviso</h4>
+                <p id="notificationMessage">Proceso completado.</p>
+            </div>
+        </div>
+
+        <!-- Selector de Tipo de Usuario (Paciente / Institución) -->
+        <div class="user-selector" style="margin-bottom: 10px;">
+            <button id="patientTab" class="tab-button active" type="button" data-user="patient">
+                Paciente
+            </button>
+            <button id="institutionTab" class="tab-button" type="button" data-user="institution">
+                Hospital / Laboratorio
+            </button>
+        </div>
+
+        <div class="forms">
+            <!-- Formulario de Paciente -->
+            <form id="patientForm" autocomplete="off" novalidate>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" id="patientEmail" required placeholder="ejemplo@correo.com">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="patientPassword" required placeholder="••••••••">
+                    </div>
+
+                    <!-- Campos dinámicos para Registro -->
+                    <div class="input-group register-only hidden">
+                        <label for="patientName">Nombre Completo</label>
+                        <input type="text" id="patientName" placeholder="Tu nombre completo">
+                    </div>
+
+                    <div class="input-group register-only hidden">
+                        <label for="patientPhone">Número de Teléfono</label>
+                        <input type="tel" id="patientPhone" placeholder="2222-2222">
+                    </div>
+
+                    <div class="input-group register-only hidden">
+                        <label for="patientAge">Edad</label>
+                        <input type="number" id="patientAge" min="1" max="120" placeholder="Ej. 28">
+                    </div>
+
+                    <div class="input-group register-only hidden">
+                        <label for="previousHospital">Hospital o Centro de Referencia Previo</label>
+                        <input type="text" id="previousHospital" placeholder="Nombre del centro anterior (Opcional)">
+                    </div>
+                </div>
+
+                <button id="patientSubmit" class="primary-button" type="submit" style="margin-top: 10px;">
+                    Iniciar Sesión
+                </button>
+            </form>
+
+            <!-- Formulario de Hospital / Laboratorio -->
+            <form id="institutionForm" class="hidden" autocomplete="off" novalidate>
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label>Correo Institucional</label>
+                        <input type="email" id="institutionEmail" required placeholder="contacto@hospital.com">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="institutionPassword" required placeholder="••••••••">
+                    </div>
+
+                    <!-- Campos dinámicos para Registro Institucional -->
+                    <div class="input-group register-only hidden">
+                        <label>Nombre de la Institución</label>
+                        <input type="text" id="institutionName" placeholder="Ej: Hospital Metropolitano o Lab Biolab">
+                    </div>
+
+                    <div class="input-group register-only hidden">
+                        <label>Código de Institución</label>
+                        <input type="text" id="institutionCode" placeholder="Código oficial otorgado">
+                    </div>
+
+                    <div class="input-group register-only hidden">
+                        <label>Tipo de Institución</label>
+                        <select id="institutionType">
+                            <option value="Hospital">Hospital</option>
+                            <option value="Clínica">Clínica</option>
+                            <option value="Centro de Diagnóstico">Centro de Diagnóstico</option>
+                            <option value="Laboratorio Médico">Laboratorio Médico</option>
+                            <option value="Centro de Rehabilitación">Centro de Rehabilitación</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group register-only hidden">
+                        <label>Licencia Oficial (Archivo)</label>
+                        <input type="file" id="institutionLicense">
+                    </div>
+                </div>
+
+                <button id="institutionSubmit" class="primary-button" type="submit" style="margin-top: 10px;">
+                    Iniciar Sesión
+                </button>
+            </form>
+        </div>
+
+        <!-- Botones para alternar entre Iniciar Sesión y Crear Cuenta -->
+        <div class="mode-selector" style="margin-top: 10px; display: flex; gap: 10px; justify-content: center;">
+            <button id="toggleAuthModeBtn" type="button" class="text-button" style="color: var(--primary); font-weight: bold; cursor: pointer; background: none; border: none; font-size: 0.9rem;">
+                ¿No tienes cuenta? Regístrate aquí
+            </button>
+        </div>
+
+        <div class="bottom-links" style="margin-top: 6px; text-align: center;">
+            <button id="supportButton" type="button" class="text-button" onclick="goHomeGuest()">
+                Volver al Inicio
+            </button>
+        </div>
+
+    </div>
+</section>
+
+</div>
+</main>
+
+<!-- Filtros SVG ocultos para Daltonismo (Añadir al final del <body> en todas las páginas) -->
+<svg aria-hidden="true" focusable="false" style="display:none;">
+  <filter id="protanopia-filter">
+    <feColorMatrix type="matrix" values="0.567, 0.433, 0,     0, 0,
+                                       0.558, 0.442, 0,     0, 0,
+                                       0,     0.242, 0.758, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+  <filter id="deuteranopia-filter">
+    <feColorMatrix type="matrix" values="0.625, 0.375, 0,   0, 0,
+                                       0.7,   0.3,   0,   0, 0,
+                                       0,     0.3,   0.7, 0, 0,
+                                       0,     0,     0,   1, 0"/>
+  </filter>
+  <filter id="tritanopia-filter">
+    <feColorMatrix type="matrix" values="0.95,  0.05,  0,     0, 0,
+                                       0,     0.433, 0.567, 0, 0,
+                                       0,     0.475, 0.525, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+</svg>
+
+<script>
+    // Antes ambos roles escribian en la misma clave (PROFILE_KEY compartida), por lo que
+    // guardar el perfil de un paciente sobreescribia el de una institucion (y viceversa).
+    // Ahora cada rol tiene su propia clave de almacenamiento.
+    const PATIENT_PROFILE_KEY = 'hospired_patient_profile';
+    const INSTITUTION_PROFILE_KEY = 'hospired_institution_profile';
+    const INSTITUTION_AFFILIATION_KEY = 'hospired_institution_affiliation';
+    let isRegisterMode = false;
+
+    function goHomeGuest() {
+        localStorage.removeItem(PATIENT_PROFILE_KEY);
+        localStorage.removeItem(INSTITUTION_PROFILE_KEY);
+        localStorage.removeItem('hospired_logged_user');
+        localStorage.removeItem(INSTITUTION_AFFILIATION_KEY);
+        localStorage.removeItem('hospired_user_session');
+        sessionStorage.removeItem('hospired_active_role');
+        window.location.href = '../index.html';
+    }
+
+    // 1. Transición de Entrada (Splash Screen)
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const splash = document.getElementById('splashScreen');
+            if (splash) splash.classList.add('splash-hidden');
+        }, 1200);
+    });
+
+    function getProfileFromStorage() {
+        try {
+            // ?edit=1 solo lo dispara el flujo de edicion de paciente (index.html); si no hay
+            // perfil de paciente se intenta el institucional como respaldo.
+            const raw = localStorage.getItem(PATIENT_PROFILE_KEY) || localStorage.getItem(INSTITUTION_PROFILE_KEY);
+            return raw ? JSON.parse(raw) : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function saveLoggedUser(profile) {
+        const currentUser = {
+            nombre: profile.fullName || profile.name || profile.institutionName || 'Usuario',
+            email: profile.email || '',
+            telefono: profile.phone || '',
+            role: profile.role || 'patient'
+        };
+        localStorage.setItem('hospired_logged_user', JSON.stringify(currentUser));
+        return currentUser;
+    }
+
+    // 2. Transición de Salida y Mensaje de Bienvenida Animado
+    function triggerWelcomeAndRedirect(userName, targetUrl) {
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const welcomeUser = document.getElementById('welcomeUserName');
+        if (welcomeUser) welcomeUser.textContent = userName;
+        
+        if (welcomeScreen) {
+            welcomeScreen.classList.remove('hidden');
+        }
+
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 1800);
+    }
+
+    function populateEditProfile() {
+        const profile = getProfileFromStorage();
+        if (!profile || !new URLSearchParams(window.location.search).get('edit')) return;
+
+        const isInstitutionProfile = profile.role === 'institution' || profile.institutionName;
+
+        if (isInstitutionProfile) {
+            institutionTab.classList.add('active');
+            patientTab.classList.remove('active');
+            institutionForm.classList.remove('hidden');
+            patientForm.classList.add('hidden');
+        } else {
+            patientTab.classList.add('active');
+            institutionTab.classList.remove('active');
+            patientForm.classList.remove('hidden');
+            institutionForm.classList.add('hidden');
+        }
+
+        const institutionEmail = document.getElementById('institutionEmail');
+        const institutionName = document.getElementById('institutionName');
+        const institutionCode = document.getElementById('institutionCode');
+        const institutionType = document.getElementById('institutionType');
+
+        if (institutionEmail) institutionEmail.value = profile.email || '';
+        if (institutionName) institutionName.value = profile.institutionName || '';
+        if (institutionCode) institutionCode.value = profile.institutionCode || '';
+        if (institutionType) institutionType.value = profile.institutionType || 'Hospital';
+
+        const patientEmail = document.getElementById('patientEmail');
+        const patientPassword = document.getElementById('patientPassword');
+        const patientName = document.getElementById('patientName');
+        const patientPhone = document.getElementById('patientPhone');
+        const patientAge = document.getElementById('patientAge');
+        const previousHospital = document.getElementById('previousHospital');
+
+        if (patientEmail) patientEmail.value = profile.email || '';
+        if (patientPassword) patientPassword.value = '';
+        if (patientName) patientName.value = profile.fullName || profile.name || '';
+        if (patientPhone) patientPhone.value = profile.phone || '';
+        if (patientAge) patientAge.value = profile.age || profile.edad || '';
+        if (previousHospital) previousHospital.value = profile.previousHospital || '';
+
+        if (cardTitle) cardTitle.textContent = 'Editar perfil';
+        if (cardSubtitle) cardSubtitle.textContent = 'Actualiza la información de tu cuenta.';
+        if (patientSubmit) patientSubmit.textContent = 'Guardar cambios';
+        if (institutionSubmit) institutionSubmit.textContent = 'Guardar cambios';
+    }
+
+    // Control de Pestañas (Paciente / Institución)
+    const patientTab = document.getElementById('patientTab');
+    const institutionTab = document.getElementById('institutionTab');
+    const patientForm = document.getElementById('patientForm');
+    const institutionForm = document.getElementById('institutionForm');
+
+    patientTab.addEventListener('click', () => {
+        patientTab.classList.add('active');
+        institutionTab.classList.remove('active');
+        patientForm.classList.remove('hidden');
+        institutionForm.classList.add('hidden');
+    });
+
+    institutionTab.addEventListener('click', () => {
+        institutionTab.classList.add('active');
+        patientTab.classList.remove('active');
+        institutionForm.classList.remove('hidden');
+        patientForm.classList.add('hidden');
+    });
+
+    // Alternar entre Iniciar Sesión y Crear Cuenta
+    const toggleAuthBtn = document.getElementById('toggleAuthModeBtn');
+    const cardTitle = document.getElementById('cardTitle');
+    const cardSubtitle = document.getElementById('cardSubtitle');
+    const patientSubmit = document.getElementById('patientSubmit');
+    const institutionSubmit = document.getElementById('institutionSubmit');
+    const registerOnlyFields = document.querySelectorAll('.register-only');
+
+    toggleAuthBtn.addEventListener('click', () => {
+        isRegisterMode = !isRegisterMode;
+        
+        registerOnlyFields.forEach(field => {
+            if (isRegisterMode) {
+                field.classList.remove('hidden');
+            } else {
+                field.classList.add('hidden');
+            }
+        });
+
+        if (isRegisterMode) {
+            cardTitle.textContent = 'Crear Cuenta';
+            cardSubtitle.textContent = 'Completa tus datos para registrarte en Hospired.';
+            patientSubmit.textContent = 'Registrarse y Crear Perfil';
+            institutionSubmit.textContent = 'Registrar Institución';
+            toggleAuthBtn.textContent = '¿Ya tienes una cuenta? Inicia sesión';
+        } else {
+            cardTitle.textContent = 'Iniciar Sesión';
+            cardSubtitle.textContent = 'Ingresa a tu cuenta de Hospired o crea una nueva.';
+            patientSubmit.textContent = 'Iniciar Sesión';
+            institutionSubmit.textContent = 'Iniciar Sesión';
+            toggleAuthBtn.textContent = '¿No tienes cuenta? Regístrate aquí';
+        }
+    });
+
+    // Manejo del Envío del Formulario de Paciente
+    patientForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('patientEmail').value.trim();
+        const password = document.getElementById('patientPassword').value.trim();
+        const fullName = document.getElementById('patientName').value.trim() || email.split('@')[0];
+        const phone = document.getElementById('patientPhone').value.trim();
+        const age = document.getElementById('patientAge')?.value.trim();
+        const previousHospital = document.getElementById('previousHospital').value.trim();
+
+        if (!email || !password) {
+            alert('Por favor, completa los campos obligatorios de correo y contraseña.');
+            return;
+        }
+
+        const userProfile = {
+            role: 'patient',
+            fullName: fullName,
+            email: email,
+            phone: phone || 'No especificado',
+            age: age || '',
+            edad: age || '',
+            previousHospital: previousHospital || 'Ninguno'
+        };
+
+        localStorage.setItem(PATIENT_PROFILE_KEY, JSON.stringify(userProfile));
+        saveLoggedUser(userProfile);
+        sessionStorage.setItem('hospired_active_role', 'patient');
+
+        triggerWelcomeAndRedirect(fullName, '../index.html?profile=1');
+    });
+
+    // Manejo del Envío del Formulario de Institución (Hospital / Laboratorio)
+    institutionForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('institutionEmail').value.trim();
+        const password = document.getElementById('institutionPassword').value.trim();
+        const institutionName = document.getElementById('institutionName').value.trim() || email.split('@')[0];
+        const institutionCode = document.getElementById('institutionCode').value.trim();
+        const institutionType = document.getElementById('institutionType').value;
+
+        if (!email || !password) {
+            alert('Por favor, completa los campos obligatorios institucionales.');
+            return;
+        }
+
+        const institutionProfile = {
+            role: 'institution',
+            institutionName: institutionName,
+            fullName: institutionName,
+            name: institutionName,
+            email: email,
+            phone: '2222-1111',
+            institutionCode: institutionCode || 'INST-000',
+            institutionType: institutionType
+        };
+
+        localStorage.setItem(INSTITUTION_PROFILE_KEY, JSON.stringify(institutionProfile));
+        saveLoggedUser(institutionProfile);
+        sessionStorage.setItem('hospired_active_role', 'institution');
+
+        localStorage.setItem(INSTITUTION_AFFILIATION_KEY, JSON.stringify({
+            name: institutionName,
+            type: institutionType,
+            location: "San Salvador, El Salvador",
+            contact: institutionName,
+            email: email,
+            phone: "2222-1111",
+            message: "Acceso como Institución Médica"
+        }));
+
+        triggerWelcomeAndRedirect(institutionName, '../Panel.De.Instituciones/panel-hospital (2).html');
+    });
+
+    populateEditProfile();
+
+    // ...existing code...
+
+const LOGIN_TRANSLATIONS = {
+  'Cargando Hospired...': 'Loading Hospired...',
+  '¡Bienvenido/a!': 'Welcome!',
+  'Usuario': 'User',
+  'Ingresando a la plataforma Hospired...': 'Entering the Hospired platform...',
+  'Iniciar Sesión': 'Log In',
+  'Editar perfil': 'Edit profile',
+  'Guardar cambios': 'Save changes',
+  'Crear Cuenta': 'Create Account',
+  'Paciente': 'Patient',
+  'Hospital / Laboratorio': 'Hospital / Laboratory',
+  'Correo Electrónico': 'Email Address',
+  'Correo Institucional': 'Institutional Email',
+  'Contraseña': 'Password',
+  'Nombre Completo': 'Full Name',
+  'Número de Teléfono': 'Phone Number',
+  'Edad': 'Age',
+  'Hospital o Centro de Referencia Previo': 'Previous Hospital or Referral Center',
+  'Nombre de la Institución': 'Institution Name',
+  'Código de Institución': 'Institution Code',
+  'Tipo de Institución': 'Institution Type',
+  'Licencia Oficial (Archivo)': 'Official License (File)',
+  '¿No tienes cuenta? Regístrate aquí': 'Do not have an account? Register here',
+  '¿Ya tienes una cuenta? Inicia sesión': 'Already have an account? Log in',
+  'Volver al Inicio': 'Back to Home',
+  'Ingresa a tu cuenta de Hospired o crea una nueva.':
+    'Log in to your Hospired account or create a new one.',
+  'Actualiza la información de tu cuenta.':
+    'Update your account information.',
+  'Completa tus datos para registrarte en Hospired.':
+    'Complete your information to register with Hospired.',
+  'Aviso': 'Notice',
+  'Proceso completado.': 'Process completed.',
+  'Registrarse y Crear Perfil': 'Register and Create Profile',
+  'Registrar Institución': 'Register Institution',
+  'Por favor, completa los campos obligatorios de correo y contraseña.':
+    'Please complete the required email and password fields.',
+  'Por favor, completa los campos obligatorios institucionales.':
+    'Please complete the required institutional fields.',
+  'ejemplo@correo.com': 'example@email.com',
+  'Tu nombre completo': 'Your full name',
+  'Nombre del centro anterior (Opcional)': 'Previous center name (Optional)',
+  'Código oficial otorgado': 'Official assigned code',
+  'Acceso como Institución Médica': 'Access as Medical Institution',
+  
+};
+
+function getLoginLanguage() {
+  const savedLanguage =
+    localStorage.getItem('hospired_language') ||
+    localStorage.getItem('language') ||
+    document.documentElement.lang ||
+    'es';
+
+  return savedLanguage.toLowerCase().startsWith('en') ? 'en' : 'es';
+}
+
+function addTranslationAttributes() {
+  document.querySelectorAll('body *').forEach(element => {
+    if (['SCRIPT', 'STYLE', 'SVG', 'PATH'].includes(element.tagName)) return;
+
+    const text = Array.from(element.childNodes)
+      .filter(node => node.nodeType === Node.TEXT_NODE)
+      .map(node => node.textContent.trim())
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (text && !element.dataset.es) {
+      element.dataset.es = text;
+      element.dataset.en = LOGIN_TRANSLATIONS[text] || text;
+    }
+
+    ['placeholder', 'title', 'aria-label', 'alt'].forEach(attribute => {
+      const value = element.getAttribute(attribute);
+      if (!value) return;
+
+      const esAttribute = `data-es-${attribute}`;
+      const enAttribute = `data-en-${attribute}`;
+
+      if (!element.hasAttribute(esAttribute)) {
+        element.setAttribute(esAttribute, value);
+        element.setAttribute(
+          enAttribute,
+          LOGIN_TRANSLATIONS[value] || value
+        );
+      }
+    });
+  });
+}
+
+function applyLoginLanguage() {
+  const language = getLoginLanguage();
+
+  document.documentElement.lang = language;
+
+  document.querySelectorAll('[data-es]').forEach(element => {
+    const value = element.dataset[language];
+    if (!value) return;
+
+    const textNodes = Array.from(element.childNodes)
+      .filter(node => node.nodeType === Node.TEXT_NODE);
+
+    if (textNodes.length === 1) {
+      textNodes[0].textContent = value;
+    } else if (textNodes.length === 0 && element.children.length === 0) {
+      element.textContent = value;
+    }
+  });
+
+  document.querySelectorAll('*').forEach(element => {
+    ['placeholder', 'title', 'aria-label', 'alt'].forEach(attribute => {
+      const value = element.dataset[`${language}${attribute
+        .charAt(0).toUpperCase() + attribute.slice(1)}`];
+
+      if (value) element.setAttribute(attribute, value);
+    });
+  });
+}
+
+function announceForScreenReader(element) {
+  const screenReaderEnabled =
+    document.body.classList.contains('screen-reader-active') ||
+    localStorage.getItem('hospired_screen_reader') === 'true';
+
+  if (!screenReaderEnabled || !element) return;
+
+  const text =
+    element.dataset[getLoginLanguage()] ||
+    element.getAttribute('aria-label') ||
+    element.textContent.trim();
+
+  if (!text) return;
+
+  let liveRegion = document.getElementById('loginScreenReaderLiveRegion');
+
+  if (!liveRegion) {
+    liveRegion = document.createElement('div');
+    liveRegion.id = 'loginScreenReaderLiveRegion';
+    liveRegion.setAttribute('aria-live', 'polite');
+    liveRegion.setAttribute('aria-atomic', 'true');
+    liveRegion.style.cssText =
+      'position:fixed;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);';
+    document.body.appendChild(liveRegion);
+  }
+
+  liveRegion.textContent = '';
+  setTimeout(() => {
+    liveRegion.textContent = text;
+  }, 30);
+}
+
+function enableLoginScreenReader(enabled = true) {
+  document.body.classList.toggle('screen-reader-active', enabled);
+  localStorage.setItem('hospired_screen_reader', String(enabled));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  addTranslationAttributes();
+  applyLoginLanguage();
+
+  document.querySelectorAll(
+    'button, input, select, textarea, label, h1, h2, h3, h4, p, option'
+  ).forEach(element => {
+    element.addEventListener('focus', () => announceForScreenReader(element));
+    element.addEventListener('mouseenter', () => announceForScreenReader(element));
+  });
+});
+
+document.addEventListener('languagechange', applyLoginLanguage);
+
+new MutationObserver(() => {
+  const language = getLoginLanguage();
+
+  if (document.documentElement.lang !== language) {
+    applyLoginLanguage();
+  }
+}).observe(document.documentElement, {
+  attributes: true,
+  attributeFilter: ['lang']
+});
+
+// ...existing code...
+
+// ...existing code...
+
+function setLoginText(element, spanish, english) {
+    if (!element) return;
+
+    element.dataset.es = spanish;
+    element.dataset.en = english;
+    element.textContent =
+        getLoginLanguage() === 'en' ? english : spanish;
+}
+
+// Ejemplo dentro del evento de registro:
+setLoginText(cardTitle, 'Crear Cuenta', 'Create Account');
+setLoginText(
+    cardSubtitle,
+    'Completa tus datos para registrarte en Hospired.',
+    'Complete your information to register with Hospired.'
+);
+setLoginText(
+    patientSubmit,
+    'Registrarse y Crear Perfil',
+    'Register and Create Profile'
+);
+setLoginText(
+    institutionSubmit,
+    'Registrar Institución',
+    'Register Institution'
+);
+
+// ...existing code...
+</script>
+</body>
+</html>

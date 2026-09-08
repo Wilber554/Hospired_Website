@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Ayuda y Soporte - Hospired</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="perfil.js"></script>
+    <link rel="stylesheet" href="accesibilidad-global.css">
+    <script src="accesibilidad-global.js"></script>
+    <style>
+        /* ==========================================================================
+           1. VARIABLES DE MARCA Y CONFIGURACIÓN GENERAL (Heredado de index.css)
+           ========================================================================== */
+        :root {
+            --color-primary: #00A79D;
+            --color-primary-dark: #007F78;
+            --color-primary-light: #00c2b6;
+            --color-border: #dfe5ef;
+            --color-surface: #ffffff;
+            --color-bg-light: #f8fafc;
+            --color-text-main: #1e293b;
+            --color-text-muted: #475569;
+            --sidebar-width: 195px;
+            --shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            color: var(--color-text-main);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            min-height: 100vh;
+            width: 100%;
+            /* FONDO GEOMÉTRICO DETALLADO */
+            background-color: #f3f7f9;
+            background-image:
+                linear-gradient(rgba(0, 167, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 167, 157, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        :focus-visible {
+            outline: 3px solid #ee9b00;
+            outline-offset: 2px;
+        }
+
+        /* Formas decorativas del fondo */
+        .shape-decor {
+            position: fixed;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.15;
+        }
+        .shape-1 {
+            top: 15%; left: 5%; width: 180px; height: 200px;
+            background: var(--color-primary);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        /* ==========================================================================
+           2. MENÚ LATERAL VERTICAL (SIDEBAR)
+           ========================================================================== */
+        
+
+        
+
+        .brand img {
+            width: 105px;
+            height: auto;
+            display: inline-block;
+            filter: brightness(0) invert(1);
+        }
+
+        
+
+        .menu-item {
+            padding: 10px 8px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.83rem !important;
+            line-height: normal;
+            transition: background-color 0.25s ease, color 0.25s ease;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            transform: none;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: var(--color-surface);
+            color: var(--color-primary-dark);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+            transform: none;
+        }
+
+        .institution-only { display: none; }
+
+        .menu-item-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.95rem;
+        }
+
+        .sidebar-logo-container {
+            padding: 12px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-badge {
+            width: 105px;
+            height: auto;
+            display: block;
+            filter: brightness(0) invert(1);
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 14px 18px;
+            border-radius: 14px;
+            text-align: left;
+           
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            margin-right: 10px;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        .nav-btn-content {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .nav-btn:hover,
+        .nav-btn.active {
+            background-color: #ffffff;
+            color: var(--color-primary-dark);
+        }
+
+        .nav-section-label {
+            margin: 16px 16px 8px;
+            color: #ffffff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-btn svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        /* ==========================================================================
+           3. ESTRUCTURA Y BARRA SUPERIOR (TOP NAVBAR)
+           ========================================================================== */
+        .main-container {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .top-navbar {
+            background: transparent;
+            padding: 15px 24px 0px 40px; 
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; /* Alineado a la derecha ya que el buscador principal está en el hero */
+            gap: 24px;
+            width: 100%;
+        }
+
+        .right-utilities {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: var(--color-primary-dark);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            order: 2; 
+        }
+
+        .account {
+            text-align: right;
+        }
+
+        .account .name {
+            font-weight: bold;
+            display: block;
+            color: var(--color-text-main);
+            font-size: 0.9rem;
+        }
+
+        .account .hint {
+            font-size: 0.78rem;
+            color: var(--color-text-muted);
+        }
+
+        .content-body {
+            padding: 10px 24px 40px 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ==========================================================================
+           4. HERO DE SOPORTE Y BÚSQUEDA
+           ========================================================================== */
+        .support-hero {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .support-hero h1 { 
+            font-size: 2.2rem; 
+            color: var(--color-text-main); 
+            margin-bottom: 10px; 
+            font-weight: 800;
+        }
+        
+        .support-hero p { 
+            font-size: 1.1rem; 
+            color: var(--color-text-muted); 
+            margin-bottom: 24px; 
+        }
+
+        /* ==========================================================================
+           5. CONTENIDO PRINCIPAL (SECCIONES)
+           ========================================================================== */
+        .section-box {
+            background: var(--color-surface); 
+            border-radius: 16px; 
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02); 
+            padding: 35px 30px; 
+        }
+
+        .section-title {
+            font-size: 1.5rem; 
+            color: var(--color-text-main); 
+            margin-bottom: 24px;
+            border-left: 5px solid var(--color-primary); 
+            padding-left: 12px;
+            font-weight: 800;
+        }
+
+        /* Tarjetas de Video */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .video-card {
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            overflow: hidden;
+            background: var(--color-bg-light);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .video-placeholder {
+    width: 100%;
+    height: 190px;
+    background-color: var(--color-text-main);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Ajusta el reproductor para que no desborde la tarjeta */
+.video-placeholder video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background-color: #000;
+}
+
+        .video-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .video-info h3 {
+            font-size: 1.1rem;
+            color: var(--color-text-main);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .video-info p {
+            font-size: 0.92rem;
+            color: var(--color-text-muted);
+            line-height: 1.5;
+        }
+
+        /* Preguntas Frecuentes (FAQ) */
+        .faq-list { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+        }
+
+        .faq-item {
+            background: var(--color-bg-light); 
+            border: 1px solid var(--color-border);
+            border-radius: 12px; 
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .faq-item:hover {
+            border-color: var(--color-primary-light);
+        }
+
+        .faq-item summary {
+            padding: 18px 20px; 
+            font-weight: 700; 
+            color: var(--color-text-main);
+            cursor: pointer; 
+            font-size: 1.05rem; 
+            list-style: none;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        .faq-item summary::after { 
+            content: "▼"; 
+            font-size: 0.8rem; 
+            color: var(--color-primary);
+            transition: transform 0.2s; 
+        }
+        .faq-item[open] summary::after { 
+            transform: rotate(180deg); 
+        }
+        .faq-item summary::-webkit-details-marker { display: none; }
+
+        .faq-content {
+            padding: 0 20px 20px 20px; 
+            color: var(--color-text-muted);
+            font-size: 0.95rem; 
+            line-height: 1.6;
+        }
+
+        /* Formulario de Contacto */
+        .form-group { margin-bottom: 20px; }
+        
+        .form-group label { 
+            display: block; 
+            font-weight: 700; 
+            margin-bottom: 8px; 
+            color: var(--color-text-main); 
+            font-size: 0.95rem;
+        }
+        
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%; 
+            padding: 14px; 
+            border: 2px solid var(--color-border);
+            border-radius: 10px; 
+            font-size: 1rem; 
+            outline: none; 
+            font-family: inherit;
+            background-color: var(--color-bg-light);
+            color: var(--color-text-main);
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: var(--color-primary);
+        }
+
+        .btn-submit {
+            background-color: var(--color-primary);
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .alert-success {
+            display: none; 
+            background: #e6f4f3; 
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary-dark); 
+            padding: 16px; 
+            border-radius: 10px;
+            font-weight: bold; 
+            margin-top: 20px; 
+            text-align: center;
+        }
+
+        /* ==========================================================================
+           6. RESPONSIVE (Móviles)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                bottom: auto;
+                border-radius: 0 0 16px 16px;
+                padding: 12px 0;
+            }
+
+            .sidebar-logo-container {
+                justify-content: flex-start;
+                padding: 0 12px 0 60px;
+            }
+
+            .sidebar-menu {
+                
+                flex-wrap: wrap;
+                max-height: 0;
+                opacity: 0;
+                overflow: hidden;
+                padding: 0 10px;
+                gap: 6px;
+                transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
+            }
+
+            .sidebar.sidebar-open .sidebar-menu {
+                max-height: 480px;
+                opacity: 1;
+                padding: 10px;
+            }
+
+            .sidebar-menu .nav-btn {
+                flex: 1 1 auto;
+                width: auto;
+                margin-right: 0;
+                white-space: nowrap;
+            }
+
+            .nav-section-label {
+                display: none;
+            }
+
+            .main-container {
+                margin-left: 0;
+            }
+            .content-body {
+                padding: 10px 20px 40px 20px;
+            }
+            .section-box { 
+                padding: 24px 20px; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="shape-decor shape-1"></div>
+    <div class="shape-decor shape-2"></div>
+    <div class="shape-decor shape-3"></div>
+
+    <aside class="sidebar">
+        <div>
+            <div class="sidebar-logo-container">
+                <a href="/Panel.De.Instituciones/panel-hospital (2).html" aria-label="Inicio Hospired">
+                    <img class="logo-badge" src="login/Hospired.logo.png" alt="Logo de Hospired">
+                </a>
+            </div>
+            <nav class="sidebar-menu vertical-menu">
+<button class="nav-btn" onclick="location.href='Panel.De.Instituciones/panel-hospital (2).html#inicio'">                    <div class="nav-btn-content"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span data-en="Central Dashboard" data-es="Panel Central">Panel Central</span></div>
+                </button>
+<button class="nav-btn" onclick="location.href='Panel.De.Instituciones/panel-hospital (2).html#perfil'">                    <div class="nav-btn-content"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span data-en="Hospital Profile" data-es="Perfil del Hospital">Perfil del Hospital</span></div>
+                </button>
+<button class="nav-btn" onclick="location.href='Panel.De.Instituciones/panel-hospital (2).html#pacientes'">                    <div class="nav-btn-content"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a2 2 0 0 0-2 2v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span data-en="Patient Control" data-es="Control de Pacientes" >Control de Pacientes</span></div>
+                </button>
+<button class="nav-btn" onclick="location.href='Panel.De.Instituciones/panel-hospital (2).html#agenda'">                    <div class="nav-btn-content"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span data-en="Agenda & Consultations" data-es="Agenda y Consultas">Agenda y Consultas</span></div>
+                </button>
+            </nav>
+            <div class="nav-section-label" data-en="Technical Support"data-es="Soporte Técnico">Soporte Técnico</div>
+            <nav class="sidebar-menu vertical-menu">
+                <button class="nav-btn active" onclick="location.href='soporte-y-ayuda-hsp.html'">
+                    <div class="nav-btn-content"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span data-en="Help and support" data-es="Ayuda y Soporte">Soporte y Ayuda</span></div>
+                </button>
+            </nav>
+        </div>
+    </aside>
+
+    <div class="main-container">
+        
+        <header class="top-navbar" role="banner">
+            <div class="right-utilities">
+                <button type="button" class="profile" id="sharedProfileTrigger" aria-label="Abrir perfil del usuario" onclick="openSharedProfileModal()">
+                    <div class="avatar" id="sharedProfileAvatar" aria-hidden="true">MJ</div>
+                    <div class="account">
+                        <span class="name" id="sharedProfileName">Perfil</span>
+                        <span class="hint" id="sharedProfileHint">Perfil</span>
+                    </div>
+                </button>
+            </div>
+        </header>
+
+        <main class="content-body" role="main">
+            
+            <section class="support-hero">
+                <h1>Centro de Ayuda Hospired</h1>
+                <p>Encuentra respuestas rápidas, guías en video y resuelve tus dudas sobre la plataforma.</p>
+            </section>
+
+            <section class="section-box" id="generalidades" aria-labelledby="generalidades-heading">
+                <h2 class="section-title" id="generalidades-heading">Generalidades y Guías en Video</h2>
+                
+             <div class="video-grid">
+    <article class="video-card">
+        <div class="video-placeholder">
+            <video controls playsinline>
+                <source src="Videos-Soporte-y-ayuda/Perfil-pacientes.mp4" type="video/mp4">
+                Tu navegador no soporta el reproductor de video.
+            </video>
+        </div>
+        <div class="video-info">
+            <h3>Perfil de paciente</h3>
+            <p>Aprende a explorar hospitales, clínicas y laboratorios desde el directorio interactivo.</p>
+        </div>
+    </article>
+
+    <article class="video-card">
+        <div class="video-placeholder">
+            <video controls playsinline>
+                <source src="Videos-Soporte-y-ayuda/Agendar-Cita.mp4" type="video/mp4">
+                Tu navegador no soporta el reproductor de video.
+            </video>
+        </div>
+        <div class="video-info">
+            <h3>Agendamiento de citas</h3>
+            <p>Aprende a programar, modificar y cancelar tus citas médicas de manera eficiente.</p>
+        </div>
+    </article>
+
+    <article class="video-card">
+        <div class="video-placeholder">
+            <video controls playsinline>
+                <source src="Videos-Soporte-y-ayuda/Instituciones-Afiliadas.mp4" type="video/mp4">
+                Tu navegador no soporta el reproductor de video.
+            </video>
+        </div>
+        <div class="video-info">
+            <h3>Perfil para instituciones</h3>
+            <p>Aprende a gestionar y actualizar la información de tu institución dentro de la plataforma.</p>
+        </div>
+    </article>
+</div>
+            </section>
+
+            <section class="section-box" id="faq" aria-labelledby="faq-heading">
+                <h2 class="section-title" id="faq-heading">Preguntas Frecuentes (FAQ)</h2>
+                
+                <div class="faq-list">
+                    <details class="faq-item">
+                        <summary>¿Cómo busco una especialidad médica o un examen específico?</summary>
+                        <div class="faq-content">
+                            Puedes escribir el nombre de la especialidad, enfermedad o examen en la barra de búsqueda superior del directorio principal. También puedes hacer clic en el botón "Ver información completa" de cualquier tarjeta para desplegar el catálogo detallado de servicios con sus definiciones médicas.
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Cómo funciona el lector automático de voz en las tarjetas?</summary>
+                        <div class="faq-content">
+                            Hospired cuenta con un sistema de accesibilidad por voz. Al pasar el cursor del mouse sobre cualquier tarjeta de hospital o laboratorio, o al desplazarte utilizando la tecla <strong>Tab</strong> de tu teclado, la plataforma leerá en voz alta el nombre del establecimiento, su ubicación y su calificación.
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Es obligatorio crear una cuenta para consultar el directorio?</summary>
+                        <div class="faq-content">
+                            No. Toda la información sobre hospitales, laboratorios, ubicaciones, especialidades y el glosario clínico está abierta y disponible para consulta de forma gratuita sin necesidad de registro previo.
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Cómo agendo una cita médica desde Hospired?</summary>
+                        <div class="faq-content">
+                            En el menú lateral puedes hacer clic en la opción <strong>"Mis Citas"</strong> para acceder al portal de gestión de citas, o dentro de la ficha completa del centro médico seleccionando el botón directo de contacto o agendamiento en línea.
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Qué significan los conceptos desplegables dentro de cada hospital?</summary>
+                        <div class="faq-content">
+                            Son un glosario clínico accesible pensado para orientar a los usuarios. Al hacer clic o presionar <strong>Enter</strong> en cualquier especialidad (ej. <em>Cardiología</em>, <em>Neurología</em>, <em>Pruebas PCR</em>), se desplegará una breve explicación redactada en lenguaje sencillo sobre en qué consiste ese área médica.
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿La plataforma es compatible con lectores de pantalla externos?</summary>
+                        <div class="faq-content">
+                            Sí. Hospired está construida bajo estándares de accesibilidad web (WCAG 2.1). Incluye marcas de roles ARIA, textos alternativos en todas las imágenes y un foco visualizado en color naranja para navegación exclusiva con teclado.
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Cómo reportar datos equivocados o desactualizados?</summary>
+                        <div class="faq-content">
+                            Si detectas una dirección o número de teléfono incorrecto, puedes llenar el formulario que se encuentra más abajo en esta misma página seleccionando la opción "Duda o corrección sobre un Hospital/Laboratorio".
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>¿Cómo se garantiza la privacidad de mis datos personales?</summary>
+                        <div class="faq-content">
+                            Hospired no vende ni comparte información con terceros. Los datos de perfil o los tickets enviados mediante el soporte técnico se procesan con fines exclusivos de atención al paciente bajo normativas de protección de datos de salud.
+                        </div>
+                    </details>
+                </div>
+            </section>
+
+            <section class="section-box" id="contacto" aria-labelledby="contact-heading">
+                <h2 class="section-title" id="contact-heading">Enviar un Ticket de Soporte Técnico</h2>
+                
+                <form onsubmit="submitSupportTicket(event)">
+                    <div class="form-group">
+                        <label for="userName">Nombre completo *</label>
+                        <input type="text" id="userName" required placeholder="Ej. Maria Juárez">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userEmail">Correo electrónico de contacto *</label>
+                        <input type="email" id="userEmail" required placeholder="correo@ejemplo.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="topic">Tipo de consulta *</label>
+                        <select id="topic" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="duda">Duda o actualización de un Hospital/Laboratorio</option>
+                            <option value="accesibilidad">Sugerencia sobre Lectura por Voz o Accesibilidad</option>
+                            <option value="falla">Falla técnica o error en la plataforma</option>
+                            <option value="otro">Otro asunto</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userMessage">Mensaje o descripción detallada *</label>
+                        <textarea id="userMessage" rows="5" required placeholder="Describe los detalles de tu consulta o inconveniente..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Enviar Ticket de Atención</button>
+                </form>
+
+                <div id="successMessage" class="alert-success" role="alert">
+                    ¡Gracias por contactarnos! Tu ticket de soporte ha sido registrado con éxito. Te responderemos al correo proporcionado en un plazo máximo de 24 horas.
+                </div>
+            </section>
+
+
+            <!-- Sección de Vista Previa de Términos y Condiciones -->
+<section class="section-box" id="terminos-previa" aria-labelledby="terms-preview-heading">
+    <h2 class="section-title" id="terms-preview-heading" data-es="Términos y Condiciones de Uso" data-en="Terms and Conditions of Use">
+        Términos y Condiciones de Uso
+    </h2>
+
+    <div class="terms-preview-card">
+        <p id="terms-preview-desc" class="terms-preview-desc" data-es="Al utilizar la plataforma Hospired, aceptas nuestros términos y condiciones de servicio. Hospired opera como un intermediario tecnológico para la gestión y agendamiento de citas médicas. Consulta las normas de uso, privacidad de datos y responsabilidad del usuario." data-en="By using the Hospired platform, you agree to our terms and conditions of service. Hospired operates as a technological intermediary for medical appointment management. Please review the usage guidelines, data privacy, and user responsibilities.">
+            Al utilizar la plataforma Hospired, aceptas nuestros términos y condiciones de servicio. Hospired opera como un intermediario tecnológico para la gestión y agendamiento de citas médicas. Consulta las normas de uso, privacidad de datos y responsabilidad del usuario.
+        </p>
+        <br>
+        <div class="terms-highlights-box">
+            <strong id="terms-preview-highlights-title" class="terms-highlights-title" data-es="Puntos clave de nuestras políticas:" data-en="Key Points of Our Policies:">Puntos clave de nuestras políticas:</strong>
+            <ul id="terms-preview-list" class="terms-list" data-es="• Naturaleza del servicio: Intermediación digital (no atiende urgencias vitales).
+Protección estricta de la privacidad y confidencialidad de tus datos médicos.
+Compromiso con la accesibilidad digital e inclusión de todos los usuarios." data-en="Service Nature: Digital intermediary (does not handle vital emergencies).
+Strict Protection of Privacy and Confidentiality of Your Medical Data.
+Commitment to Digital Accessibility and Inclusion of All Users.">
+                <li>Naturaleza del servicio: Intermediación digital (no atiende urgencias vitales).</li>
+                <li>Protección estricta de la privacidad y confidencialidad de tus datos médicos.</li>
+                <li>Compromiso con la accesibilidad digital e inclusión de todos los usuarios.</li>
+            </ul>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="terms-actions">
+            <a href="/terminos-condiciones-hsp.html"
+   id="btn-terms-more"
+   class="btn-submit btn-terms-more"
+   data-es="Ver más información"
+   data-en="See full information">
+    <span id="btn-terms-more-text">Ver más información</span>
+    <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"
+         fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14"></path>
+        <path d="M12 5l7 7-7 7"></path>
+    </svg>
+</a>
+        </div>
+    </div>
+</section>
+
+        </main>
+    </div>
+
+    <footer class="site-footer" role="contentinfo">
+        <div class="footer-content">
+            <div class="footer-links-container footer-vertical">
+                <nav class="footer-column" aria-label="Navegación del pie de página: Nosotros">
+                    <h4>Nosotros</h4>
+                    <ul>
+                        <li><a href="index.html#quienes-somos">¿Quiénes somos?</a></li>
+                        <li><a href="index.html#mision">Nuestra Misión</a></li>
+                        <li><a href="index.html#vision">Nuestra Visión</a></li>
+                        <li><a href="index.html#flujo-atencion-section">Cómo funciona</a></li>
+                    </ul>
+                </nav>
+
+                <nav class="footer-column" aria-label="Navegación del pie de página: Soporte y Legal">
+                    <h4>Ayuda y Legal</h4>
+                    <ul>
+                        <li><a href="soporte_y_ayuda.html#contacto">Soporte Técnico</a></li>
+                        <li><a href="soporte_y_ayuda.html#contacto">Ayuda Urgente</a></li>
+                        <li><a href="terminos-condiciones.html">Términos y condiciones</a></li>
+                        <li><a href="index.html#privacidad">Política de privacidad</a></li>
+                    </ul>
+                </nav>
+
+                <div class="footer-column">
+                    <h4>Contáctanos</h4>
+                    <ul class="contact-list">
+                        <li>
+                            <a href="tel:22222222" aria-label="Llamar al teléfono fijo de atención 2 2 2 2, 2 2 2 2">
+                                <span class="phone-icon" aria-hidden="true">&#9742;</span>
+                                2222 - 2222
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:23237898" aria-label="Llamar al teléfono celular de asistencia 2 3 2 3, 7 8 9 8">
+                                <span class="phone-icon" aria-hidden="true">&#9743;</span>
+                                2323 - 7898
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="social-icons-container social-icons-inline">
+                        <a href="https://www.instagram.com/hospired_es?igsh=YXN0dHFocnF6NTZh" target="_blank" rel="noopener" aria-label="Visitar nuestro perfil oficial de Instagram (abre en una nueva pestaña)">
+                            <img src="instagram-8203531_1280.png" alt="Instagram de Hospired">
+                        </a>
+                        <a href="https://facebook.com/hospired" target="_blank" rel="noopener" aria-label="Visitar nuestra página oficial de Facebook (abre en una nueva pestaña)">
+                            <img src="image-removebg-preview.png" alt="Facebook de Hospired">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2026 Hospired. Todos los derechos reservados. Diseñado con enfoque en accesibilidad universal.</p>
+        </div>
+    </footer>
+
+ 
+    <!-- Filtros SVG ocultos para Daltonismo (Añadir al final del <body> en todas las páginas) -->
+<svg aria-hidden="true" focusable="false" style="display:none;">
+  <filter id="protanopia-filter">
+    <feColorMatrix type="matrix" values="0.567, 0.433, 0,     0, 0,
+                                       0.558, 0.442, 0,     0, 0,
+                                       0,     0.242, 0.758, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+  <filter id="deuteranopia-filter">
+    <feColorMatrix type="matrix" values="0.625, 0.375, 0,   0, 0,
+                                       0.7,   0.3,   0,   0, 0,
+                                       0,     0.3,   0.7, 0, 0,
+                                       0,     0,     0,   1, 0"/>
+  </filter>
+  <filter id="tritanopia-filter">
+    <feColorMatrix type="matrix" values="0.95,  0.05,  0,     0, 0,
+                                       0,     0.433, 0.567, 0, 0,
+                                       0,     0.475, 0.525, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+</svg>
+
+    <script>
+        function getPreferredLanguage() {
+            try {
+                return JSON.parse(localStorage.getItem('hospired_accessibility_preferences') || '{}').language || 'es';
+            } catch (error) {
+                return 'es';
+            }
+        }
+
+        function setSupportCopy() {
+    const isEnglish = getPreferredLanguage() === 'en';
+
+    // Encabezados principales
+    document.querySelector('.support-hero h1')?.replaceChildren(document.createTextNode(isEnglish ? 'Hospired Help Center' : 'Centro de Ayuda Hospired'));
+    document.querySelector('.support-hero p')?.replaceChildren(document.createTextNode(isEnglish ? 'Find quick answers, video guides and resolve your questions about the platform.' : 'Encuentra respuestas rápidas, guías en video y resuelve tus dudas sobre la plataforma.'));
+    document.querySelector('#generalidades-heading')?.replaceChildren(document.createTextNode(isEnglish ? 'Overview and Video Guides' : 'Generalidades y Guías en Video'));
+    document.querySelector('#faq-heading')?.replaceChildren(document.createTextNode(isEnglish ? 'Frequently Asked Questions (FAQ)' : 'Preguntas Frecuentes (FAQ)'));
+    document.querySelector('#contact-heading')?.replaceChildren(document.createTextNode(isEnglish ? 'Send a Technical Support Ticket' : 'Enviar un Ticket de Soporte Técnico'));
+  
+
+    
+    // Títulos de videos (alineados con el HTML)
+    const titleLabels = document.querySelectorAll('.video-info h3');
+    titleLabels[0] && (titleLabels[0].textContent = isEnglish ? 'Patient Profile' : 'Perfil de paciente');
+    titleLabels[1] && (titleLabels[1].textContent = isEnglish ? 'Appointment Scheduling' : 'Agendamiento de citas');
+    titleLabels[2] && (titleLabels[2].textContent = isEnglish ? 'Institution Profile' : 'Perfil para instituciones');
+
+    // Descripciones de videos (alineadas con el HTML)
+    const videoTexts = document.querySelectorAll('.video-info p');
+    videoTexts[0] && (videoTexts[0].textContent = isEnglish ? 'Learn how to explore hospitals, clinics, and laboratories from the interactive directory.' : 'Aprende a explorar hospitales, clínicas y laboratorios desde el directorio interactivo.');
+    videoTexts[1] && (videoTexts[1].textContent = isEnglish ? 'Learn how to schedule, modify, and cancel your medical appointments efficiently.' : 'Aprende a programar, modificar y cancelar tus citas médicas de manera eficiente.');
+    videoTexts[2] && (videoTexts[2].textContent = isEnglish ? 'Learn how to manage and update your institution information within the platform.' : 'Aprende a gestionar y actualizar la información de tu institución dentro de la plataforma.');
+
+            const faqsData = [
+                {
+                    q: isEnglish ? 'How do I search for a medical specialty or a specific exam?' : '¿Cómo busco una especialidad médica o un examen específico?',
+                    a: isEnglish ? 'You can type the name of the specialty, disease, or exam in the main search bar of the directory. You can also click on "View full information" on any card to display the detailed catalog of services.' : 'Puedes escribir el nombre de la especialidad, enfermedad o examen en la barra de búsqueda superior del directorio principal. También puedes hacer clic en el botón "Ver información completa" de cualquier tarjeta para desplegar el catálogo detallado de servicios con sus definiciones médicas.'
+                },
+                {
+                    q: isEnglish ? 'How does the automatic voice reader work on cards?' : '¿Cómo funciona el lector automático de voz en las tarjetas?',
+                    a: isEnglish ? 'Hospired features a voice accessibility system. Hovering over any hospital or laboratory card, or navigating using the Tab key, reads aloud the facility name, location, and rating.' : 'Hospired cuenta con un sistema de accesibilidad por voz. Al pasar el cursor del mouse sobre cualquier tarjeta de hospital o laboratorio, o al desplazarte utilizando la tecla Tab de tu teclado, la plataforma leerá en voz alta el nombre del establecimiento, su ubicación y su calificación.'
+                },
+                {
+                    q: isEnglish ? 'Is creating an account required to browse the directory?' : '¿Es obligatorio crear una cuenta para consultar el directorio?',
+                    a: isEnglish ? 'No. All information regarding hospitals, laboratories, locations, specialties, and the clinical glossary is freely accessible without prior registration.' : 'No. Toda la información sobre hospitales, laboratorios, ubicaciones, especialidades y el glosario clínico está abierta y disponible para consulta de forma gratuita sin necesidad de registro previo.'
+                },
+                {
+                    q: isEnglish ? 'How do I schedule a medical appointment on Hospired?' : '¿Cómo agendo una cita médica desde Hospired?',
+                    a: isEnglish ? 'In the side menu, click on "My Appointments" to access the appointment management portal, or click the direct booking button inside any medical center\'s details card.' : 'En el menú lateral puedes hacer clic en la opción "Mis Citas" para acceder al portal de gestión de citas, o dentro de la ficha completa del centro médico seleccionando el botón directo de contacto o agendamiento en línea.'
+                },
+                {
+                    q: isEnglish ? 'What do the expandable terms inside each hospital mean?' : '¿Qué significan los conceptos desplegables dentro de cada hospital?',
+                    a: isEnglish ? 'They form an accessible clinical glossary designed to guide users. Clicking or pressing Enter on any specialty expands a simple explanation of that medical area.' : 'Son un glosario clínico accesible pensado para orientar a los usuarios. Al hacer clic o presionar Enter en cualquier especialidad (ej. Cardiología, Neurología, Pruebas PCR), se desplegará una breve explicación redactada en lenguaje sencillo sobre en qué consiste ese área médica.'
+                },
+                {
+                    q: isEnglish ? 'Is the platform compatible with external screen readers?' : '¿La plataforma es compatible con lectores de pantalla externos?',
+                    a: isEnglish ? 'Yes. Hospired is built following web accessibility standards (WCAG 2.1). It includes ARIA roles, alt text on all images, and an orange focus outline for keyboard navigation.' : 'Sí. Hospired está construida bajo estándares de accesibilidad web (WCAG 2.1). Incluye marcas de roles ARIA, textos alternativos en todas las imágenes y un foco visualizado en color naranja para navegación exclusiva con teclado.'
+                },
+                {
+                    q: isEnglish ? 'How do I report incorrect or outdated information?' : '¿Cómo reportar datos equivocados o desactualizados?',
+                    a: isEnglish ? 'If you notice an incorrect address or phone number, fill out the form further down on this page selecting "Question or update about a Hospital/Laboratory".' : 'Si detectas una dirección o número de teléfono incorrecto, puedes llenar el formulario que se encuentra más abajo en esta misma página seleccionando la opción "Duda o corrección sobre un Hospital/Laboratorio".'
+                },
+                {
+                    q: isEnglish ? 'How is the privacy of my personal data guaranteed?' : '¿Cómo se garantiza la privacidad de mis datos personales?',
+                    a: isEnglish ? 'Hospired does not sell or share information with third parties. Profile data and support tickets are processed exclusively for patient care under health data protection regulations.' : 'Hospired no vende ni comparte información con terceros. Los datos de perfil o los tickets enviados mediante el soporte técnico se procesan con fines exclusivos de atención al paciente bajo normativas de protección de datos de salud.'
+                }
+            ];
+
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach((item, idx) => {
+                if (faqsData[idx]) {
+                    const summary = item.querySelector('summary');
+                    const content = item.querySelector('.faq-content');
+                    if (summary) summary.textContent = faqsData[idx].q;
+                    if (content) content.textContent = faqsData[idx].a;
+                }
+            });
+
+            const fields = document.querySelectorAll('.form-group label');
+            if (fields[0]) fields[0].textContent = isEnglish ? 'Full name *' : 'Nombre completo *';
+            if (fields[1]) fields[1].textContent = isEnglish ? 'Email for contact *' : 'Correo electrónico de contacto *';
+            if (fields[2]) fields[2].textContent = isEnglish ? 'Query type *' : 'Tipo de consulta *';
+            if (fields[3]) fields[3].textContent = isEnglish ? 'Message or detailed description *' : 'Mensaje o descripción detallada *';
+            document.querySelector('#userName')?.setAttribute('placeholder', isEnglish ? 'Example: Maria Juárez' : 'Ej. Maria Juárez');
+            document.querySelector('#userEmail')?.setAttribute('placeholder', isEnglish ? 'email@example.com' : 'correo@ejemplo.com');
+            const topic = document.getElementById('topic');
+            if (topic) {
+                const options = topic.querySelectorAll('option');
+                if (options[0]) options[0].textContent = isEnglish ? 'Select an option' : 'Selecciona una opción';
+                if (options[1]) options[1].textContent = isEnglish ? 'Question or update about a hospital/laboratory' : 'Duda o actualización de un Hospital/Laboratorio';
+                if (options[2]) options[2].textContent = isEnglish ? 'Suggestion about voice reading or accessibility' : 'Sugerencia sobre Lectura por Voz o Accesibilidad';
+                if (options[3]) options[3].textContent = isEnglish ? 'Technical failure or platform error' : 'Falla técnica o error en la plataforma';
+                if (options[4]) options[4].textContent = isEnglish ? 'Other matter' : 'Otro asunto';
+            }
+            document.querySelector('#userMessage')?.setAttribute('placeholder', isEnglish ? 'Describe the details of your question or problem...' : 'Describe los detalles de tu consulta o inconveniente...');
+            const submitBtn = document.querySelector('.btn-submit');
+            if (submitBtn) submitBtn.textContent = isEnglish ? 'Send support ticket' : 'Enviar Ticket de Atención';
+            const successAlert = document.getElementById('successMessage');
+            if (successAlert) successAlert.textContent = isEnglish ? 'Thank you for contacting us! Your support ticket has been registered successfully. We will respond to the provided email within a maximum of 24 hours.' : '¡Gracias por contactarnos! Tu ticket de soporte ha sido registrado con éxito. Te responderemos al correo proporcionado en un plazo máximo de 24 horas.';
+        }
+
+        function syncSharedProfile() {
+            // Esta pagina es compartida por pacientes e instituciones (a diferencia de las demas,
+            // que son exclusivas de un rol), asi que el rol activo se determina por la sesion
+            // (hospired_active_role, guardado al iniciar sesion) y no por cual perfil "existe".
+            const activeRole = sessionStorage.getItem('hospired_active_role');
+            const patientProfile = JSON.parse(localStorage.getItem('hospired_patient_profile') || 'null');
+            const institutionProfile = JSON.parse(localStorage.getItem('hospired_institution_profile') || 'null');
+            const data = activeRole === 'institution'
+                ? (institutionProfile || patientProfile || {})
+                : (patientProfile || institutionProfile || {});
+            const name = data.fullName || data.name || data.nombre || data.institutionName || 'Usuario';
+            const avatar = document.getElementById('sharedProfileAvatar');
+            const nameLabel = document.getElementById('sharedProfileName');
+            const emailLabel = document.getElementById('sharedProfileHint');
+
+            if (avatar) {
+                avatar.textContent = (name.split(' ').map(word => word.charAt(0)).join('').slice(0, 2) || 'U').toUpperCase();
+            }
+            if (nameLabel) nameLabel.textContent = name;
+            if (emailLabel) emailLabel.textContent = 'Perfil';
+
+            const isInstitution = data.role === 'institution' || Boolean(data.institutionName);
+            document.querySelectorAll('.patient-only').forEach(el => { el.style.display = isInstitution ? 'none' : ''; });
+            document.querySelectorAll('.institution-only').forEach(el => { el.style.display = isInstitution ? 'flex' : 'none'; });
+            const brandLink = document.getElementById('brandHomeLink');
+            if (brandLink) brandLink.href = isInstitution ? 'Panel.De.Instituciones/panel-hospital (2).html' : 'index.html';
+        }
+
+        syncSharedProfile();
+        setSupportCopy();
+        window.addEventListener('hospired-language-change', () => setSupportCopy());
+
+        const searchInput = document.getElementById('searchInput');
+        const searchResultsDropdown = document.getElementById('searchResultsDropdown');
+        const dataSources = [
+            'Hospital Internacional San Jude',
+            'Hospital Metropolitano del Norte',
+            'Laboratorios Clínicos Biolab',
+            'Laboratorios Diagnóstica Express',
+            'Citas médicas',
+            'Exámenes de sangre',
+            'Atención urgente',
+            'Consulta general',
+            'Soporte y ayuda',
+            'Notificaciones'
+        ];
+
+        searchInput?.addEventListener('input', () => {
+            const query = searchInput.value.toLowerCase().trim();
+            searchResultsDropdown.innerHTML = '';
+
+            if (query.length > 1) {
+                const filteredResults = dataSources.filter(item => item.toLowerCase().includes(query));
+                if (filteredResults.length > 0) {
+                    filteredResults.forEach(result => {
+                        const resultItem = document.createElement('a');
+                        resultItem.href = '#';
+                        resultItem.classList.add('search-result-item');
+                        resultItem.textContent = result;
+                        resultItem.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            searchInput.value = result;
+                            searchResultsDropdown.classList.remove('show');
+                        });
+                        searchResultsDropdown.appendChild(resultItem);
+                    });
+                    searchResultsDropdown.classList.add('show');
+                } else {
+                    const noResult = document.createElement('div');
+                    noResult.classList.add('search-result-item');
+                    noResult.textContent = 'No se encontraron resultados';
+                    searchResultsDropdown.appendChild(noResult);
+                    searchResultsDropdown.classList.add('show');
+                }
+            } else {
+                searchResultsDropdown.classList.remove('show');
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!event.target.closest('.search-container')) {
+                searchResultsDropdown?.classList.remove('show');
+            }
+        });
+        // Búsqueda interactiva en la lista de Preguntas Frecuentes
+        function searchHelp(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const faqs = document.querySelectorAll('.faq-item');
+
+            if (!query) {
+                faqs.forEach(faq => faq.style.display = 'block');
+                return;
+            }
+
+            faqs.forEach(faq => {
+                const text = faq.innerText.toLowerCase();
+                if (text.includes(query)) {
+                    faq.style.display = 'block';
+                    faq.open = true; // Despliega la pregunta coincidente automáticamente
+                } else {
+                    faq.style.display = 'none';
+                }
+            });
+        }
+
+        // Envío simulado del formulario de soporte
+        function submitSupportTicket(event) {
+            event.preventDefault();
+            const successAlert = document.getElementById('successMessage');
+            successAlert.style.display = 'block';
+            event.target.reset();
+
+            successAlert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Agrega estas líneas dentro de la función setSupportCopy():
+// Vista previa de Términos y Condiciones
+const termsHeading = document.getElementById('terms-preview-heading');
+
+if (termsHeading) {
+    termsHeading.textContent = isEnglish
+        ? 'Terms and Conditions of Use'
+        : 'Términos y Condiciones de Uso';
+}
+
+const termsDesc = document.getElementById('terms-preview-desc');
+
+if (termsDesc) {
+    termsDesc.textContent = isEnglish
+        ? 'By using the Hospired platform, you accept our terms and conditions of service. Hospired operates as a technological intermediary for medical appointment management. Review our usage rules, data privacy, and user responsibilities.'
+        : 'Al utilizar la plataforma Hospired, aceptas nuestros términos y condiciones de servicio. Hospired opera como un intermediario tecnológico para la gestión y agendamiento de citas médicas. Consulta las normas de uso, privacidad de datos y responsabilidad del usuario.';
+}
+
+const termsHighlights = document.getElementById('terms-preview-highlights-title');
+
+if (termsHighlights) {
+    termsHighlights.textContent = isEnglish
+        ? 'Key policy highlights:'
+        : 'Puntos clave de nuestras políticas:';
+}
+
+const termsList = document.getElementById('terms-preview-list');
+
+if (termsList) {
+    termsList.innerHTML = isEnglish
+        ? `
+            <li>Service nature: Digital intermediary (does not handle emergency care).</li>
+            <li>Strict protection and privacy of your medical and personal data.</li>
+            <li>Commitment to digital accessibility and inclusion for all users.</li>
+          `
+        : `
+            <li>Naturaleza del servicio: Intermediación digital (no atiende urgencias vitales).</li>
+            <li>Protección estricta de la privacidad y confidencialidad de tus datos médicos.</li>
+            <li>Compromiso con la accesibilidad digital e inclusión de todos los usuarios.</li>
+          `;
+}
+
+const btnTermsMore = document.getElementById('btn-terms-more');
+
+if (btnTermsMore) {
+    btnTermsMore.textContent = isEnglish
+        ? 'See full information'
+        : 'Ver más información';
+}
+
+
+    </script>
+</body>
+</html>

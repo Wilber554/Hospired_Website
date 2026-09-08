@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospired - Inicio Seguro y Accesible</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="accesibilidad-global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="perfil.js"></script>
+    <script src="accesibilidad-global.js" defer></script>
+</head>
+
+<!-- Colocar justo antes de </body> Animación de carga -->
+<script>
+    window.addEventListener('load', () => {
+        const intro = document.getElementById('intro-screen');
+        if (intro) {
+            // Tiempo en pantalla de la animación (1.8 segundos)
+            setTimeout(() => {
+                intro.classList.add('fade-out');
+            }, 1800);
+        }
+    });
+</script>
+<body id="page-body">
+  <!-- Pantalla de bienvenida / Animación de entrada -->
+<div id="splash-screen" class="splash-screen" aria-hidden="true">
+    <div class="splash-content">
+        <img src="login/Hospired.logo.png" alt="Hospired Logo" class="splash-logo">
+        <div class="splash-loader"></div>
+    </div>
+</div>
+
+<div class="shape-decor shape-1"></div>
+<div class="shape-decor shape-2"></div>
+<div class="shape-decor shape-3"></div>
+
+<aside class="sidebar" role="navigation" aria-label="Navegación lateral">
+    <div class="brand-container">
+        <a class="brand" href="index.html" aria-label="Inicio Hospired">
+            <img src="login/Hospired.logo.png" alt="Logo de Hospired">
+        </a>
+    </div>
+
+    <nav class="vertical-menu">
+        <button class="menu-item active" onclick="location.href='index.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span>
+            <span>Inicio</span>
+        </button>
+        
+        <button class="menu-item" onclick="location.href='citas.unificado.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+            <span>Mis Citas</span>
+        </button>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin: 6px 8px;">
+
+        <button class="menu-item" onclick="location.href='laboratorios.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.75 18.1A2 2 0 0 0 6.47 21h11.06a2 2 0 0 0 1.72-2.9L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line></svg></span>
+            <span>Laboratorios</span>
+        </button>
+        <button class="menu-item" onclick="location.href='hospitales.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path><line x1="10" y1="9" x2="14" y2="9"></line><line x1="12" y1="7" x2="12" y2="11"></line></svg></span>
+            <span>Hospitales</span>
+        </button>
+        <button class="menu-item" onclick="location.href='Notificaciones.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span>
+            <span>Notificaciones</span>
+        </button>
+
+        <button class="menu-item" onclick="location.href='soporte_y_ayuda.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg></span>
+            <span>Soporte y ayuda</span>
+        </button>
+
+        <a class="menu-item" href="index.html#quienes-somos">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+            <span>Sobre nosotros</span>
+        </a>
+    </nav>
+</aside>
+
+<div class="main-container">
+    
+    <header class="top-navbar" role="banner">
+        <div class="search-container">
+            <form class="search-form" role="search" onsubmit="event.preventDefault();">
+                <input type="search" id="searchInput" name="query" placeholder="Buscar servicios..." aria-label="Buscar servicios médicos" autocomplete="off">
+                <button type="submit" aria-label="Ejecutar búsqueda">Buscar</button>
+            </form>
+            <div id="searchResultsDropdown" class="search-results-dropdown"></div>
+        </div>
+
+        <div class="right-utilities">
+            <button type="button" class="profile" id="profileTrigger" aria-label="Abrir perfil del usuario">
+                <div class="avatar" aria-hidden="true" id="profileAvatar">MJ</div>
+                <div class="account">
+                    <span class="name" id="profileNameLabel">Perfil</span>
+                    <span class="hint" id="profileHintLabel">Perfil</span>
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-body page-content-transition">
+        
+        <section class="carousel" aria-label="Galería de imágenes de Hospired" id="main-carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="img-1-Near.png" alt="Médicos especialistas analizando datos clínicos de innovación tecnológica">
+                    <div class="carousel-caption">
+                        <h2 data-es='"Más cerca"' data-en='"Closer"'>"Más cerca"</h2>
+                        <p data-es="Conectamos pacientes con los mejores servicios de salud a tu alcance de manera inmediata." data-en="We connect patients with the best healthcare services within reach immediately.">Conectamos pacientes con los mejores servicios de salud a tu alcance de manera inmediata.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="img-2-accesible.jpg" alt="Paciente agendando su cita médica de manera rápida desde su dispositivo">
+                    <div class="carousel-caption">
+                        <h2 data-es='"Más accesible"' data-en='"More accessible"'>"Más accesible"</h2>
+                        <p data-es="Acceso fácil, digital y rápido a consultas, laboratorios y expedientes médicos integrales." data-en="Easy, digital and fast access to consultations, laboratories and comprehensive medical records.">Acceso fácil, digital y rápido a consultas, laboratorios y expedientes médicos integrales.</p>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="img-3-human.jpg" alt="Equipo médico multidisciplinario atendiendo con calidez humana">
+                    <div class="carousel-caption">
+                        <h2 data-es='"Más humano"' data-en='"More human"'>"Más humano"</h2>
+                        <p data-es="Atención personalizada centrada en la empatía, el respeto y la máxima calidad médica." data-en="Personalized care focused on empathy, respect and top medical quality.">Atención personalizada centrada en la empatía, el respeto y la máxima calidad médica.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-control-prev" type="button" aria-label="Fotografía anterior" id="prevBtn">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" aria-label="Fotografía siguiente" id="nextBtn">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+            
+            <div class="carousel-indicators" role="tablist" aria-label="Puntos de navegación del carrusel">
+                <button type="button" class="active" data-slide-to="0" role="tab" aria-label="Ir a diapositiva 1"></button>
+                <button type="button" data-slide-to="1" role="tab" aria-label="Ir a diapositiva 2"></button>
+                <button type="button" data-slide-to="2" role="tab" aria-label="Ir a diapositiva 3"></button>
+            </div>
+        </section>
+
+        <section class="process-section flujo-atencion" id="flujo-atencion-section" aria-labelledby="process-main-title">
+            <div class="process-header">
+                <div>
+                 
+                    <h2 class="process-title" id="process-main-title" data-i18n="proceso_titulo" data-default="¿Cómo funciona nuestra plataforma?">¿Cómo funciona nuestra plataforma?</h2>
+                </div>
+                <p class="process-summary" data-i18n="proceso_resumen" data-default="Conecta tu bienestar con una experiencia clara, rápida y pensada para cada paciente.">Conecta tu bienestar con una experiencia clara, rápida y pensada para cada paciente.</p>
+            </div>
+            
+            <div class="process-carousel-wrapper" id="processCarouselWrapper">
+                <button type="button" class="process-nav-btn prev" id="processPrevBtn" aria-label="Tarjeta anterior">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+
+                <div class="process-stage-container" id="processStageContainer">
+                    <div class="process-card card-center" tabindex="0" data-index="0" data-i18n-attr="aria-label:paso1_aria" aria-label="Paso 1: Registro. Regístrate en la plataforma completando tus datos personales básicos de manera segura.">
+                        <div class="step-icon-container">
+                            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <line x1="20" y1="8" x2="20" y2="14"></line>
+                                <line x1="17" y1="11" x2="23" y2="11"></line>
+                            </svg>
+                        </div>
+                        <h3 class="step-title" data-i18n="paso1_titulo" data-default="Registro">Registro</h3>
+                        <p class="step-description" data-i18n="paso1_desc" data-default="Regístrate en la plataforma completando tus datos personales básicos de manera rápida y segura.">Regístrate en la plataforma completando tus datos personales básicos de manera rápida y segura.</p>
+                    </div>
+
+                    <div class="process-card card-right" tabindex="0" data-index="1" aria-label="Paso 2: Búsqueda. Encuentra médicos especialistas, laboratorios clínicos y centros de atención cercanos a tu ubicación.">
+                        <div class="step-icon-container">
+                            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </div>
+                        <h3 class="step-title" data-es="Búsqueda" data-en="Search">Búsqueda</h3>
+                        <p class="step-description" data-es="Encuentra médicos especialistas, laboratorios clínicos y centros de atención cercanos a tu ubicación de forma fácil." data-en="Find medical specialists, clinical laboratories, and nearby care centers easily.">Encuentra médicos especialistas, laboratorios clínicos y centros de atención cercanos a tu ubicación de forma fácil.</p>
+                    </div>
+
+                    <div class="process-card card-hidden" tabindex="0" data-index="2" aria-label="Paso 3: Reserva. Agenda tu cita médica digital en el horario y fecha de tu conveniencia en pocos pasos.">
+                        <div class="step-icon-container">
+                            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </div>
+                        <h3 class="step-title" data-es="Reserva" data-en="Booking">Reserva</h3>
+                        <p class="step-description" data-es="Agenda tu cita médica digital en el horario y fecha de tu conveniencia en pocos pasos." data-en="Schedule your digital medical appointment at your preferred date and time in just a few steps.">Agenda tu cita médica digital en el horario y fecha de tu conveniencia en pocos pasos.</p>
+                    </div>
+
+                    <div class="process-card card-left" tabindex="0" data-index="3" aria-label="Paso 4: Atención. Recibe atención profesional, humana y con la calidad médica garantizada que tú mereces.">
+                        <div class="step-icon-container">
+                            <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                            </svg>
+                        </div>
+                        <h3 class="step-title" data-es="Atención" data-en="Care">Atención</h3>
+                        <p class="step-description" data-es="Recibe atención profesional, humana y con la calidad médica garantizada que tú mereces." data-en="Receive professional, humane care with guaranteed medical quality that you deserve.">Recibe atención profesional, humana y con la calidad médica garantizada que tú mereces.</p>
+                    </div>
+                </div>
+
+                <button type="button" class="process-nav-btn next" id="processNextBtn" aria-label="Siguiente tarjeta">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+            </div>
+
+            <div class="process-dots" id="processDots" role="tablist" aria-label="Puntos de navegación del flujo de atención">
+                <button type="button" class="process-dot active" data-slide-to="0" aria-label="Ir a paso 1"></button>
+                <button type="button" class="process-dot" data-slide-to="1" aria-label="Ir a paso 2"></button>
+                <button type="button" class="process-dot" data-slide-to="2" aria-label="Ir a paso 3"></button>
+                <button type="button" class="process-dot" data-slide-to="3" aria-label="Ir a paso 4"></button>
+            </div>
+        </section>
+
+    </main>
+
+    <section id="quienes-somos" class="about-corporate-section" aria-labelledby="about-heading">
+        <div class="about-container">
+            
+            <div class="about-hero-block">
+                <div class="about-hero-text">
+                    <span class="about-badge" data-es="Sobre Nosotros" data-en="About Us">Sobre Nosotros</span>
+                    <h2 id="about-heading" class="about-main-title" data-es="Líderes en Conectividad y Ecosistema de Salud Digital" data-en="Leaders in Connectivity and Digital Health Ecosystem">Líderes en Conectividad y Ecosistema de Salud Digital</h2>
+                    <p class="about-lead" data-es="En Hospired, transformamos la experiencia de acceso a los servicios de salud mediante una plataforma robusta, inclusiva y transparente. Consolidamos en un solo lugar la oferta de clínicas, laboratorios y médicos profesionales para brindar un control absoluto a los pacientes." data-en="At Hospired, we transform access to healthcare services through a robust, inclusive, and transparent platform. We consolidate clinics, labs, and doctors in one place for absolute patient control.">
+                        En <strong>Hospired</strong>, transformamos la experiencia de acceso a los servicios de salud mediante una plataforma robusta, inclusiva y transparente. Consolidamos en un solo lugar la oferta de clínicas, laboratorios y médicos profesionales para brindar un control absoluto a los pacientes.
+                    </p>
+                </div>
+                <div class="about-hero-graphic">
+                    <img src="Sobre.Nosotros.jpg" alt="Equipo de Hospired">
+                </div>
+            </div>
+
+            <div class="mv-cards-grid">
+                <div class="mv-card scheme-mission" tabindex="0">
+                    <div class="mv-card-header">
+                        <div class="mv-icon-shape" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L12 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                        </div>
+                        <h3 class="mv-card-title" id="mision" data-es="Nuestra Misión" data-en="Our Mission">Nuestra Misión</h3>
+                    </div>
+                    <p class="mv-card-description" data-es="Hospired existe para eliminar las barreras que impiden el acceso a la salud en El Salvador. Somos una plataforma digital que conecta a las personas con clínicas, hospitales y laboratorios cercanos, confiables y asequibles, facilitando el agendamiento autónomo y la accesibilidad tecnológica para todos." data-en="Hospired exists to eliminate healthcare access barriers in El Salvador. We connect people with nearby, reliable, and affordable clinics, hospitals, and labs.">
+                        Hospired existe para eliminar las barreras que impiden el acceso a la salud en El Salvador. Somos una plataforma digital que conecta a las personas con clínicas, hospitales y laboratorios cercanos, confiables y asequibles, facilitando el agendamiento autónomo y la accesibilidad tecnológica para todos.
+                    </p>
+                </div>
+
+                <div class="mv-card scheme-vision" tabindex="0">
+                    <div class="mv-card-header">
+                        <div class="mv-icon-shape" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                        </div>
+                        <h3 class="mv-card-title" id="vision" data-es="Nuestra Visión" data-en="Our Vision">Nuestra Visión</h3>
+                    </div>
+                    <p class="mv-card-description" data-es="Ser la plataforma de salud más accesible e inclusiva de El Salvador, reconocida nacionalmente por garantizar que toda persona, sin importar sus capacidades o condición socioeconómica, pueda recibir atención médica de calidad cerca de su hogar." data-en="To be the most accessible and inclusive health platform in El Salvador, ensuring everyone receives quality medical care near home.">
+                        Ser la plataforma de salud más accesible e inclusiva de El Salvador, reconocida nacionalmente por garantizar que toda persona, sin importar sus capacidades o condición socioeconómica, pueda recibir atención médica de calidad cerca de su hogar.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div id="profileModal" class="profile-modal" aria-hidden="true">
+    <div class="profile-modal-backdrop" data-close="profile"></div>
+    <div class="profile-modal-panel" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+        <button type="button" class="profile-modal-close" id="closeProfileModal" aria-label="Cerrar perfil">×</button>
+        <div class="profile-modal-header">
+            <div class="profile-avatar-wrap">
+                <div class="profile-modal-avatar" id="profileModalAvatar">M</div>
+                <button type="button" class="profile-avatar-upload-btn" id="profileAvatarUploadBtn" aria-label="Adjuntar imagen de perfil" title="Adjuntar imagen"><i class="fa-solid fa-camera" aria-hidden="true"></i></button>
+                <input type="file" id="profileAvatarInput" accept="image/*" hidden>
+            </div>
+            <div>
+                <p class="profile-modal-kicker">Mi cuenta</p>
+                <h3 id="profileModalTitle">Perfil del paciente</h3>
+            </div>
+        </div>
+
+        <div class="profile-card-body">
+            <div class="profile-field">
+                <span>Nombre completo</span>
+                <strong id="profileNameValue">—</strong>
+            </div>
+            <div class="profile-field">
+                <span>Email</span>
+                <strong id="profileEmailValue">—</strong>
+            </div>
+            <div class="profile-field">
+                <span>Teléfono</span>
+                <strong id="profilePhoneValue">—</strong>
+            </div>
+            <div class="profile-field">
+                <span>Edad</span>
+                <strong id="profileAgeValue">—</strong>
+            </div>
+            <div class="profile-field">
+                <span>Hospital anterior</span>
+                <strong id="profileHospitalValue">—</strong>
+            </div>
+        </div>
+
+        <div class="profile-modal-footer">
+            <button type="button" class="profile-action secondary" id="editProfileBtn">Editar información</button>
+            <button type="button" class="profile-action secondary" id="logoutProfileBtn">Cerrar sesión</button>
+            <button type="button" class="profile-action primary" id="continueProfileBtn">Continuar</button>
+        </div>
+    </div>
+</div>
+
+<div class="accessibility-wrapper">
+    <button id="accessibilityBtn" class="accessibility-trigger-btn" type="button" aria-label="Abrir opciones de accesibilidad" aria-haspopup="true" aria-expanded="false" aria-controls="accessibilityMenu">
+        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="26" height="26" fill="currentColor">
+            <path d="M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M256,472c-119.1,0-216-96.9-216-216S136.9,40,256,40s216,96.9,216,216S375.1,472,256,472z M256,72c19.9,0,36,16.1,36,36s-16.1,36-36,36s-36-16.1-36-36S236.1,72,256,72z M392,184c0,13.2-10.8,24-24,24h-64v208c0,13.2-10.8,24-24,24h-16c-13.2,0-24-10.8-24-24V288h-16v128c0,13.2-10.8,24-24,24h-16c-13.2,0-24-10.8-24-24V208h-64c-13.2,0-24-10.8-24-24v-16c0-13.2,10.8-24,24-24h216c13.2,0,24,10.8,24,24V184z"/>
+        </svg>
+    </button>
+
+    <div id="accessibilityMenu" class="accessibility-panel" role="region" aria-label="Herramientas de accesibilidad">
+        <div class="accessibility-header">
+            <p class="accessibility-kicker">Preferencias</p>
+            <h3>Ajustes de accesibilidad</h3>
+            <p class="accessibility-subtitle">Activa las opciones que mejoran la lectura y el uso del sitio.</p>
+        </div>
+        <div class="accessibility-grid">
+            <button type="button" id="opt-contrast" class="access-option-btn" onclick="toggleAccessibility('high-contrast')" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"></path></svg></span>
+                <span class="access-option-label">Contraste alto</span>
+            </button>
+            <button type="button" id="opt-text-plus" class="access-option-btn" onclick="adjustText(1)" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>
+                <span class="access-option-label">Aumentar texto</span>
+            </button>
+            <button type="button" id="opt-text-minus" class="access-option-btn" onclick="adjustText(-1)" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>
+                <span class="access-option-label">Disminuir texto</span>
+            </button>
+            <button type="button" id="opt-spacing" class="access-option-btn" onclick="toggleAccessibility('spacing-active')" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 8 21 12 17 16"></polyline><polyline points="7 8 3 12 7 16"></polyline><line x1="3" y1="12" x2="21" y2="12"></line></svg></span>
+                <span class="access-option-label">Espaciado</span>
+            </button>
+            <button type="button" id="opt-dyslexia" class="access-option-btn" onclick="toggleAccessibility('dyslexia-font')" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></span>
+                <span class="access-option-label">Fuente dislexia</span>
+            </button>
+            <button type="button" id="opt-colorblind" class="access-option-btn" onclick="activateColorblind()" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg></span>
+                <span class="access-option-label">Daltonismo</span>
+            </button>
+            <button type="button" id="opt-cursor" class="access-option-btn" onclick="toggleAccessibility('cursor-plus')" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7 18 3-7 7-3L3 3z"></path></svg></span>
+                <span class="access-option-label">Cursor grande</span>
+            </button>
+            <button type="button" id="opt-onehand" class="access-option-btn" onclick="toggleAccessibility('onehand-active')" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-4 0v5"></path><path d="M14 10V4a2 2 0 0 0-4 0v6"></path><path d="M10 10.5V6a2 2 0 0 0-4 0v9"></path><path d="M18 8a2 2 0 0 1 4 0v6a8 8 0 0 1-16 0v-2"></path></svg></span>
+                <span class="access-option-label">Modo a una mano</span>
+            </button>
+            <button type="button" id="opt-screenreader" class="access-option-btn" onclick="activateScreenreader()" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+                <span class="access-option-label">Lector de pantalla</span>
+            </button>
+            <button type="button" id="opt-darkmode" class="access-option-btn" onclick="toggleAccessibility('dark-mode')" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+                <span class="access-option-label">Modo oscuro</span>
+            </button>
+            <button type="button" id="opt-monochrome" class="access-option-btn" onclick="toggleAccessibility('monochrome-active')" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle></svg></span>
+                <span class="access-option-label">Monocromático</span>
+            </button>
+            <button type="button" id="opt-language" class="access-option-btn" onclick="changeLanguage()" aria-pressed="false">
+                <span class="access-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></span>
+                <span class="access-option-label">Cambiar idioma</span>
+            </button>
+        </div>
+        <div class="accessibility-footer">
+            <button type="button" class="access-option-btn" id="opt-reset" onclick="resetAccessibility()">
+                Restablecer ajustes
+            </button>
+        </div>
+    </div>
+</div>
+<div id="accessibilityLiveRegion" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<!---RUTA GUIADA-->
+
+      <section class="wizard-trigger-section wizard-vertical" style="padding: 40px 20px; text-align: center;">
+    <h2 style="color: var(--color-text-main); margin-bottom: 10px;">¿Listo para agendar tu cita médica?</h2>
+    <p style="color: var(--color-text-muted); margin-bottom: 25px; font-size: 1.1rem;">
+        Si te cuesta navegar por menús tradicionales, prueba nuestro asistente interactivo guiado paso a paso.
+    </p>
+    <button id="startWizardBtn" class="btn-wizard-trigger" type="button" aria-haspopup="dialog" aria-controls="wizardModal">
+        ✨ ¿Te ayudamos a encontrar tu cita? (Ruta Guiada)
+    </button>
+</section>
+
+<div id="wizardModal" class="wizard-modal" role="dialog" aria-modal="true" aria-labelledby="wizardTitle" aria-hidden="true" style="display: none;">
+    <div class="wizard-container">
+        
+        <header class="wizard-header">
+            <h2 id="wizardTitle" class="wizard-main-title" tabindex="-1">Asistente de Ruta Guiada</h2>
+            <button id="closeWizardBtn" class="btn-close-wizard" type="button" aria-label="Cerrar asistente y volver a la página">✕</button>
+            
+            <div class="progress-bar-container" aria-hidden="true">
+                <div id="wizardProgress" class="progress-bar-fill" style="width: 33.33%;"></div>
+            </div>
+            <div class="progress-status-text">
+                <span>Progreso de búsqueda:</span>
+                <strong id="progressStepText">Paso 1 de 3</strong>
+            </div>
+        </header>
+
+        <div id="wizardLiveAnnouncer" class="sr-only" aria-live="polite"></div>
+
+        <form id="wizardForm" onsubmit="event.preventDefault();">
+            
+            <section id="step1" class="wizard-step step-active" aria-labelledby="step1Title">
+                <h3 id="step1Title" class="step-question" tabindex="-1">¿Qué servicio necesitas hoy?</h3>
+                <p class="step-hint">Selecciona una de las siguientes opciones gigantes:</p>
+                
+                <div class="giant-cards-grid">
+                    <button type="button" class="giant-card-btn" data-value="clinica" aria-describedby="descClinica">
+                        <span class="giant-card-icon" aria-hidden="true">🏥</span>
+                        <span class="giant-card-title">Clínicas Médicas</span>
+                        <span id="descClinica" class="giant-card-desc">Consultas con especialistas, médicos generales y atención ambulatoria.</span>
+                    </button>
+
+                    <button type="button" class="giant-card-btn" data-value="laboratorio" aria-describedby="descLab">
+                        <span class="giant-card-icon" aria-hidden="true">🧪</span>
+                        <span class="giant-card-title">Laboratorios Clínicos</span>
+                        <span id="descLab" class="giant-card-desc">Exámenes de sangre, radiografías, ultrasonidos y análisis médicos.</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="step2" class="wizard-step" aria-labelledby="step2Title">
+                <h3 id="step2Title" class="step-question" tabindex="-1">¿En qué departamento de El Salvador te encuentras?</h3>
+                <p class="step-hint">Elige tu ubicación para mostrarte opciones cercanas:</p>
+                
+                <div class="select-accessible-wrap">
+                    <select id="wizardDeptSelect" class="wizard-select" aria-label="Seleccionar Departamento">
+                        <option value="" disabled selected>-- Selecciona un departamento --</option>
+                        <optgroup label="Zona Central">
+                            <option value="san-salvador">San Salvador</option>
+                            <option value="la-libertad">La Libertad</option>
+                            <option value="chalatenango">Chalatenango</option>
+                            <option value="cuscatlan">Cuscatlán</option>
+                        </optgroup>
+                        <optgroup label="Zona Occidental">
+                            <option value="santa-ana">Santa Ana</option>
+                            <option value="ahachapan">Ahuachapán</option>
+                            <option value="sonsonate">Sonsonate</option>
+                        </optgroup>
+                        <optgroup label="Zona Paracentral">
+                            <option value="la-paz">La Paz</option>
+                            <option value="cabanas">Cabañas</option>
+                            <option value="san-vicente">San Vicente</option>
+                        </optgroup>
+                        <optgroup label="Zona Oriental">
+                            <option value="usulutan">Usulután</option>
+                            <option value="san-miguel">San Miguel</option>
+                            <option value="morazan">Morazán</option>
+                            <option value="la-union">La Unión</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="wizard-actions-row">
+                    <button type="button" class="btn-wizard-nav btn-wizard-back">⬅ Volver</button>
+                    <button type="button" class="btn-wizard-nav btn-wizard-next" id="btnNextStep2" disabled>Continuar ➡</button>
+                </div>
+            </section>
+
+            <section id="step3" class="wizard-step" aria-labelledby="step3Title">
+                <h3 id="step3Title" class="step-question" tabindex="-1">¿Qué especialidad o examen específico buscas?</h3>
+                <p class="step-hint">Escribe o selecciona de la lista asistida:</p>
+                
+                <div class="search-assistant-wrap">
+                    <input type="text" id="wizardSearchInput" class="wizard-input-text" 
+                           placeholder="Ej: Pediatría, Hemograma, Odontología..." 
+                           aria-label="Escribe la especialidad o examen" autocomplete="off" list="wizardSuggestions">
+                    
+                    <datalist id="wizardSuggestions">
+                        <option value="Medicina General">
+                        <option value="Pediatría">
+                        <option value="Ginecología y Obstetricia">
+                        <option value="Cardiología">
+                        <option value="Odontología">
+                        <option value="Hemograma Completo">
+                        <option value="Examen de Orina Completo">
+                        <option value="Perfil Lipídico">
+                        <option value="Ultrasonido Abdominal">
+                        <option value="Radiografía de Tórax">
+                    </datalist>
+                </div>
+
+                <div class="wizard-actions-row">
+                    <button type="button" class="btn-wizard-nav btn-wizard-back">⬅ Volver</button>
+                    <button type="submit" class="btn-wizard-nav btn-wizard-submit" id="btnSubmitWizard" disabled>✨ ¡Buscar Centros Disponibles!</button>
+                </div>
+            </section>
+
+        </form>
+    </div>
+</div>
+
+<!-- MODAL DE DETALLES DEL CENTRO MÉDICO Barra de busqueda -->
+<div id="centerDetailModal" class="profile-modal" aria-hidden="true">
+    <div class="profile-modal-backdrop" data-close="center-modal"></div>
+    <div class="profile-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalCenterTitle">
+        <button type="button" class="profile-modal-close" id="closeCenterModal" aria-label="Cerrar detalles">×</button>
+        <div class="profile-modal-header">
+            <div class="profile-modal-avatar" id="modalCenterIcon"></div>
+            <div>
+                <p class="profile-modal-kicker" id="modalCenterType">Información del Centro</p>
+                <h3 id="modalCenterTitle">Nombre del Hospital</h3>
+            </div>
+        </div>
+
+        <div class="profile-card-body">
+            <div class="profile-field">
+                <span>Dirección</span>
+                <strong id="modalCenterAddress">—</strong>
+            </div>
+            <div class="profile-field">
+                <span>Teléfono de Contacto</span>
+                <strong id="modalCenterPhone">—</strong>
+            </div>
+            <div class="profile-field">
+                <span>Horarios de Atención</span>
+                <strong id="modalCenterHours">—</strong>
+            </div>
+            <div class="profile-field">
+                <span>Servicios y Especialidades</span>
+                <strong id="modalCenterServices">—</strong>
+            </div>
+        </div>
+
+        <div class="profile-modal-footer">
+            <button type="button" class="profile-action secondary" data-close="center-modal">Cerrar</button>
+            <button type="button" class="profile-action primary" id="modalReserveBtn">Reservar Cita Aquí</button>
+        </div>
+    </div>
+</div>
+
+<!--FOOTER-->
+
+<footer class="site-footer" role="contentinfo">
+    <div class="footer-content">
+        <div class="footer-links-container footer-vertical">
+            
+            <nav class="footer-column" aria-label="Navegación del pie de página: Nosotros">
+                <h4>Nosotros</h4>
+                <ul>
+                    <li><a href="#quienes-somos">¿Quiénes somos?</a></li>
+                    <li><a href="#mision">Nuestra Misión</a></li>
+                    <li><a href="#vision">Nuestra Visión</a></li>
+                    <li><a href="#como-funciona">Cómo funciona</a></li>
+                </ul>
+            </nav>
+            
+            <nav class="footer-column" aria-label="Navegación del pie de página: Soporte y Legal">
+                <h4>Ayuda y Legal</h4>
+                <ul>
+                    <li><a href="#soporte">Soporte Técnico</a></li>
+                    <li><a href="#ayuda-urgente">Ayuda Urgente</a></li>
+                    <li><a href="#terminos">Términos y condiciones</a></li>
+                    <li><a href="#privacidad">Política de privacidad</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-column">
+                <h4>Contáctanos</h4>
+                <ul class="contact-list">
+                    <li>
+                        <a href="tel:22222222" aria-label="Llamar al teléfono fijo de atención 2 2 2 2, 2 2 2 2">
+                            <span class="phone-icon" aria-hidden="true">📞</span> 2222 - 2222
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:23237898" aria-label="Llamar al teléfono celular de asistencia 2 3 2 3, 7 8 9 8">
+                            <span class="phone-icon" aria-hidden="true">📱</span> 2323 - 7898
+                        </a>
+                    </li>
+                </ul>
+                <div class="social-icons-container social-icons-inline">
+                    <a href="https://www.instagram.com/hospired_es?igsh=YXN0dHFocnF6NTZh" target="_blank" rel="noopener" aria-label="Visitar nuestro perfil oficial de Instagram (abre en una nueva pestaña)"> 
+                        <img src="instagram-8203531_1280.png" alt="Instagram de Hospired">
+                    </a>
+                    <a href="https://facebook.com/hospired" target="_blank" rel="noopener" aria-label="Visitar nuestra página oficial de Facebook (abre en una nueva pestaña)"> 
+                        <img src="image-removebg-preview.png" alt="Facebook de Hospired"> 
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>&copy; 2026 Hospired. Todos los derechos reservados. Diseñado con enfoque en accesibilidad universal.</p>
+    </div>
+</footer>
+
+
+<script>
+
+    // Splash screen logic for first-time visitors
+    document.addEventListener("DOMContentLoaded", () => {
+        const splash = document.getElementById("splash-screen");
+        if (!splash) return;
+
+        // Comprueba si la animación ya se mostró durante la sesión actual
+        const isFirstVisit = !sessionStorage.getItem("hospired_intro_shown");
+
+        if (!isFirstVisit) {
+            // Si ya la vio, oculta la pantalla inmediatamente sin animación
+            splash.style.display = "none";
+            return;
+        }
+
+        // Si es la primera vez, ejecuta la animación y guarda la marca en la sesión
+        setTimeout(() => {
+            splash.classList.add("hidden");
+            
+            // Elimina la pantalla del DOM al finalizar la transición de desvanecimiento
+            setTimeout(() => {
+                splash.remove();
+            }, 600);
+
+            sessionStorage.setItem("hospired_intro_shown", "true");
+        }, 2000); // Duración de la pantalla de bienvenida (2 segundos)
+    });
+
+
+    // index.html es una pagina exclusiva de pacientes: usa la clave segregada de paciente
+    // (antes compartia 'hospiredProfile' con el panel de instituciones y se pisaban entre si).
+    const PROFILE_KEY = 'hospired_patient_profile';
+
+    function getStoredProfile() {
+        try {
+            const profile = localStorage.getItem(PROFILE_KEY);
+            return profile ? JSON.parse(profile) : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function updateProfileHeader(profile) {
+        const trigger = document.getElementById('profileTrigger');
+        const avatar = document.getElementById('profileAvatar');
+        const nameLabel = document.getElementById('profileNameLabel');
+        const hintLabel = document.getElementById('profileHintLabel');
+
+        if (!trigger || !avatar || !nameLabel || !hintLabel) return;
+
+        if (!profile) {
+            avatar.textContent = 'U';
+            nameLabel.textContent = 'Iniciar Sesión';
+            hintLabel.textContent = 'Perfil';
+            trigger.setAttribute('aria-label', 'Iniciar sesión o ver perfil del usuario');
+            return;
+        }
+
+        const profileName = profile.fullName || profile.name || profile.institutionName || 'Usuario';
+        const initials = profileName
+            .split(' ')
+            .map(word => word.charAt(0))
+            .join('')
+            .slice(0, 2)
+            .toUpperCase();
+
+        avatar.textContent = initials || 'U';
+        if (profile.photo) {
+            avatar.style.backgroundImage = `url('${profile.photo}')`;
+            avatar.style.backgroundSize = 'cover';
+            avatar.style.backgroundPosition = 'center';
+            avatar.textContent = '';
+        } else {
+            avatar.style.backgroundImage = '';
+        }
+        nameLabel.textContent = profileName;
+        hintLabel.textContent = 'Perfil';
+        trigger.setAttribute('aria-label', 'Perfil del usuario abierto');
+    }
+
+    let isIndexProfileEditing = false;
+    let attachImageFlowActive = false;
+
+    function renderIndexProfileModal(profile = getStoredProfile()) {
+        if (!profile) return;
+        const profileName = profile.fullName || profile.name || profile.institutionName || 'Usuario';
+        const initials = profileName
+            .split(' ')
+            .map(word => word.charAt(0))
+            .join('')
+            .slice(0, 2)
+            .toUpperCase();
+
+        const isInst = profile.role === 'institution' || Boolean(profile.institutionName);
+        const titleEl = document.getElementById('profileModalTitle');
+        const avatarEl = document.getElementById('profileModalAvatar');
+        if (titleEl) titleEl.textContent = isInst ? 'Perfil de Institución Médica' : 'Perfil del paciente';
+        if (avatarEl) {
+            if (profile.photo) {
+                avatarEl.style.backgroundImage = `url('${profile.photo}')`;
+                avatarEl.textContent = '';
+            } else {
+                avatarEl.style.backgroundImage = '';
+                avatarEl.textContent = initials || 'U';
+            }
+        }
+
+        const cardBody = document.querySelector('#profileModal .profile-card-body');
+        const footer = document.querySelector('#profileModal .profile-modal-footer');
+        if (!cardBody || !footer) return;
+
+        cardBody.classList.remove('content-transition');
+        footer.classList.remove('content-transition');
+        void cardBody.offsetWidth;
+        cardBody.classList.add('content-transition');
+        footer.classList.add('content-transition');
+
+        if (isIndexProfileEditing) {
+            if (isInst) {
+                cardBody.innerHTML = `
+                    <div class="profile-field">
+                        <span>Nombre Institución</span>
+                        <input type="text" id="idxInstName" value="${profile.institutionName || profile.fullName || ''}">
+                    </div>
+                    <div class="profile-field">
+                        <span>Email Institucional</span>
+                        <input type="email" id="idxInstEmail" value="${profile.email || ''}">
+                    </div>
+                    <div class="profile-field">
+                        <span>Código Registro</span>
+                        <input type="text" id="idxInstCode" value="${profile.institutionCode || 'INST-101'}">
+                    </div>
+                    <div class="profile-field">
+                        <span>Tipo de Centro</span>
+                        <input type="text" id="idxInstType" value="${profile.institutionType || 'Hospital / Clínica'}">
+                    </div>
+                    <div class="profile-field">
+                        <span>Teléfono</span>
+                        <input type="tel" id="idxInstPhone" value="${profile.phone || ''}">
+                    </div>
+                `;
+            } else {
+                cardBody.innerHTML = `
+                    <div class="profile-field">
+                        <span>Nombre completo</span>
+                        <input type="text" id="idxPatientName" value="${profile.fullName || profile.name || ''}">
+                    </div>
+                    <div class="profile-field">
+                        <span>Email</span>
+                        <input type="email" id="idxPatientEmail" value="${profile.email || ''}">
+                    </div>
+                    <div class="profile-field">
+                        <span>Teléfono</span>
+                        <input type="tel" id="idxPatientPhone" value="${profile.phone || ''}">
+                    </div>
+                    <div class="profile-field">
+                        <span>Edad</span>
+                        <input type="number" id="idxPatientAge" value="${profile.age || profile.edad || ''}" placeholder="Ej. 28">
+                    </div>
+                    <div class="profile-field">
+                        <span>Hospital anterior</span>
+                        <input type="text" id="idxPatientHospital" value="${profile.previousHospital || ''}">
+                    </div>
+                `;
+            }
+
+            footer.innerHTML = `
+                <button type="button" class="profile-action secondary" id="cancelIndexEditBtn">Cancelar</button>
+                <button type="button" class="profile-action primary" id="saveIndexEditBtn">Guardar cambios</button>
+            `;
+
+            document.getElementById('cancelIndexEditBtn').onclick = () => {
+                isIndexProfileEditing = false;
+                renderIndexProfileModal(getStoredProfile());
+            };
+
+            document.getElementById('saveIndexEditBtn').onclick = () => {
+                const currentProf = getStoredProfile() || {};
+                if (isInst) {
+                    const instName = document.getElementById('idxInstName')?.value.trim() || currentProf.institutionName;
+                    const instEmail = document.getElementById('idxInstEmail')?.value.trim() || currentProf.email;
+                    const instCode = document.getElementById('idxInstCode')?.value.trim() || currentProf.institutionCode;
+                    const instType = document.getElementById('idxInstType')?.value.trim() || currentProf.institutionType;
+                    const instPhone = document.getElementById('idxInstPhone')?.value.trim() || currentProf.phone;
+
+                    currentProf.institutionName = instName;
+                    currentProf.fullName = instName;
+                    currentProf.name = instName;
+                    currentProf.email = instEmail;
+                    currentProf.institutionCode = instCode;
+                    currentProf.institutionType = instType;
+                    currentProf.phone = instPhone;
+                } else {
+                    const name = document.getElementById('idxPatientName')?.value.trim() || currentProf.fullName;
+                    const email = document.getElementById('idxPatientEmail')?.value.trim() || currentProf.email;
+                    const phone = document.getElementById('idxPatientPhone')?.value.trim() || currentProf.phone;
+                    const age = document.getElementById('idxPatientAge')?.value.trim();
+                    const hospital = document.getElementById('idxPatientHospital')?.value.trim() || currentProf.previousHospital;
+
+                    currentProf.fullName = name;
+                    currentProf.name = name;
+                    currentProf.email = email;
+                    currentProf.phone = phone;
+                    currentProf.age = age;
+                    currentProf.edad = age;
+                    currentProf.previousHospital = hospital;
+                }
+
+                localStorage.setItem(PROFILE_KEY, JSON.stringify(currentProf));
+                saveLoggedUser(currentProf);
+                updateProfileHeader(currentProf);
+                isIndexProfileEditing = false;
+                renderIndexProfileModal(currentProf);
+            };
+        } else {
+            const ageVal = profile.age || profile.edad;
+            if (isInst) {
+                cardBody.innerHTML = `
+                    <div class="profile-field">
+                        <span>Nombre Institución</span>
+                        <strong id="profileNameValue">${profileName}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Email Institucional</span>
+                        <strong id="profileEmailValue">${profile.email || 'No disponible'}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Código Registro</span>
+                        <strong>${profile.institutionCode || 'INST-101'}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Tipo de Centro</span>
+                        <strong>${profile.institutionType || 'Hospital / Clínica'}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Teléfono</span>
+                        <strong id="profilePhoneValue">${profile.phone || 'No disponible'}</strong>
+                    </div>
+                `;
+                footer.innerHTML = `
+                    <button type="button" class="profile-action secondary" id="editProfileBtn">Editar información</button>
+                    <button type="button" class="profile-action secondary" id="logoutProfileBtn">Cerrar sesión</button>
+                `;
+            } else {
+                cardBody.innerHTML = `
+                    <div class="profile-field">
+                        <span>Nombre completo</span>
+                        <strong id="profileNameValue">${profileName}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Email</span>
+                        <strong id="profileEmailValue">${profile.email || 'No disponible'}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Teléfono</span>
+                        <strong id="profilePhoneValue">${profile.phone || 'No disponible'}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Edad</span>
+                        <strong id="profileAgeValue">${ageVal ? ageVal + ' años' : 'No especificada'}</strong>
+                    </div>
+                    <div class="profile-field">
+                        <span>Hospital anterior</span>
+                        <strong id="profileHospitalValue">${profile.previousHospital || 'No disponible'}</strong>
+                    </div>
+                `;
+                footer.innerHTML = `
+                    <button type="button" class="profile-action secondary" id="editProfileBtn">Editar información</button>
+                    <button type="button" class="profile-action secondary" id="logoutProfileBtn">Cerrar sesión</button>
+                    <button type="button" class="profile-action primary" id="continueProfileBtn">Continuar</button>
+                `;
+            }
+
+            document.getElementById('editProfileBtn')?.addEventListener('click', () => {
+                isIndexProfileEditing = true;
+                renderIndexProfileModal(getStoredProfile());
+            });
+
+            document.getElementById('logoutProfileBtn')?.addEventListener('click', logoutProfile);
+            document.getElementById('continueProfileBtn')?.addEventListener('click', closeProfileModal);
+        }
+    }
+
+    function openProfileModal(profile = getStoredProfile()) {
+        const modal = document.getElementById('profileModal');
+        if (!modal) return;
+
+        if (!profile) {
+            window.location.href = 'login/login (1).html';
+            return;
+        }
+
+        isIndexProfileEditing = false;
+        renderIndexProfileModal(profile);
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeProfileModal() {
+        const modal = document.getElementById('profileModal');
+        if (!modal) return;
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+        if (attachImageFlowActive) {
+            attachImageFlowActive = false;
+            window.location.href = 'index.html';
+        }
+    }
+
+    function saveLoggedUser(profile) {
+        const currentUser = {
+            nombre: profile.fullName || profile.name || profile.institutionName || 'Usuario',
+            email: profile.email || '',
+            telefono: profile.phone || '',
+            role: profile.role || 'patient'
+        };
+        localStorage.setItem('hospired_logged_user', JSON.stringify(currentUser));
+        return currentUser;
+    }
+
+    function logoutProfile() {
+        localStorage.removeItem(PROFILE_KEY);
+        localStorage.removeItem('hospired_logged_user');
+        sessionStorage.removeItem('hospired_active_role');
+        updateProfileHeader(null);
+        closeProfileModal();
+        window.location.href = 'login/login (1).html';
+    }
+
+    document.getElementById('profileTrigger').addEventListener('click', () => {
+        const profile = getStoredProfile();
+        if (profile) {
+            openProfileModal(profile);
+        } else {
+            window.location.href = 'login/login (1).html';
+        }
+    });
+
+    document.getElementById('closeProfileModal').addEventListener('click', closeProfileModal);
+    document.querySelector('[data-close="profile"]').addEventListener('click', closeProfileModal);
+    document.getElementById('logoutProfileBtn').addEventListener('click', logoutProfile);
+    document.getElementById('editProfileBtn').addEventListener('click', () => {
+        closeProfileModal();
+        window.location.href = 'login/login (1).html?edit=1';
+    });
+    document.getElementById('continueProfileBtn').addEventListener('click', closeProfileModal);
+
+    document.getElementById('profileAvatarUploadBtn')?.addEventListener('click', () => {
+        attachImageFlowActive = true;
+        const modal = document.getElementById('profileModal');
+        modal?.classList.remove('active');
+        modal?.setAttribute('aria-hidden', 'true');
+        window.openProfilePhotoModal({
+            onClose: () => {
+                openProfileModal(getStoredProfile());
+            }
+        });
+    });
+
+    document.getElementById('profileAvatarInput')?.addEventListener('change', (event) => {
+        const file = event.target.files && event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+            const currentProf = getStoredProfile() || {};
+            currentProf.photo = reader.result;
+            localStorage.setItem(PROFILE_KEY, JSON.stringify(currentProf));
+            saveLoggedUser(currentProf);
+            updateProfileHeader(currentProf);
+            renderIndexProfileModal(currentProf);
+        };
+        reader.readAsDataURL(file);
+    });
+
+    const existingProfile = getStoredProfile();
+    if (existingProfile) {
+        saveLoggedUser(existingProfile);
+        sessionStorage.setItem('hospired_active_role', 'patient');
+    }
+
+    updateProfileHeader(existingProfile);
+    if (window.location.search.includes('profile=1') && existingProfile) {
+        openProfileModal(existingProfile);
+    }
+
+    // ========================================================================
+    // LÓGICA DE NAVEGACIÓN ACCESIBLE Y DINÁMICA (MODAL WIZARD)
+    // ========================================================================
+    const startBtn = document.getElementById('startWizardBtn');
+    const closeBtn = document.getElementById('closeWizardBtn');
+    const modal = document.getElementById('wizardModal');
+    const liveAnnouncer = document.getElementById('wizardLiveAnnouncer');
+    const progressBar = document.getElementById('wizardProgress');
+    const progressText = document.getElementById('progressStepText');
+
+    const steps = [document.getElementById('step1'), document.getElementById('step2'), document.getElementById('step3')];
+    let currentStepIndex = 0;
+    let originalFocusedElement;
+
+    // Almacenamiento de respuestas del usuario
+    let wizardData = { service: '', department: '', query: '' };
+
+    // Abrir Modal de manera Inclusiva
+    startBtn.addEventListener('click', () => {
+        originalFocusedElement = document.activeElement; 
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        currentStepIndex = 0;
+        updateWizardUI();
+        document.getElementById('wizardTitle').focus();
+    });
+
+    // Cerrar Modal
+    const closeModal = () => {
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+        if (originalFocusedElement) originalFocusedElement.focus(); 
+    };
+    closeBtn.addEventListener('click', closeModal);
+
+    // Selección de Tarjetas Gigantes (Paso 1) - Avanza automáticamente al interactuar
+    const giantCards = document.querySelectorAll('.giant-card-btn');
+    giantCards.forEach(card => {
+        card.addEventListener('click', () => {
+            wizardData.service = card.getAttribute('data-value');
+            currentStepIndex = 1; 
+            updateWizardUI();
+        });
+    });
+
+    // Control de validación del Paso 2 (Ubicación)
+    const deptSelect = document.getElementById('wizardDeptSelect');
+    const btnNextStep2 = document.getElementById('btnNextStep2');
+    deptSelect.addEventListener('change', () => {
+        wizardData.department = deptSelect.value;
+        btnNextStep2.disabled = !wizardData.department;
+    });
+    btnNextStep2.addEventListener('click', () => {
+        currentStepIndex = 2; 
+        updateWizardUI();
+    });
+
+    // Control de validación del Paso 3 (Búsqueda por texto largo)
+    const wizardSearchInput = document.getElementById('wizardSearchInput');
+    const btnSubmitWizard = document.getElementById('btnSubmitWizard');
+    wizardSearchInput.addEventListener('input', () => {
+        wizardData.query = wizardSearchInput.value.trim();
+        btnSubmitWizard.disabled = wizardData.query.length < 3;
+    });
+
+    // Botones de Navegación "Volver Atrás"
+    const backButtons = document.querySelectorAll('.btn-wizard-back');
+    backButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                updateWizardUI();
+            }
+        });
+    });
+
+    // Envío del Formulario Completo
+    document.getElementById('wizardForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('¡Ruta Completada con éxito! Buscando resultados en El Salvador para:\\n• Servicio: ' + wizardData.service.toUpperCase() + '\\n• Departamento: ' + wizardData.department + '\\n• Especialidad/Examen: ' + wizardData.query);
+        closeModal();
+    });
+
+    // Función Central para actualizar la Interfaz y el estado de accesibilidad
+    function updateWizardUI() {
+        steps.forEach((step, idx) => {
+            if (idx === currentStepIndex) {
+                step.classList.add('step-active');
+            } else {
+                step.classList.remove('step-active');
+            }
+        });
+
+        // Actualizar barra de nivel/progreso de forma visual
+        const progressPercent = ((currentStepIndex + 1) / steps.length) * 100;
+        progressBar.style.width = progressPercent + '%';
+        progressText.textContent = `Paso ${currentStepIndex + 1} de 3`;
+
+        // Informar por audio a lectores de pantalla (Screen readers)
+        const currentStepTitle = steps[currentStepIndex].querySelector('h3').textContent;
+        liveAnnouncer.textContent = `Cargado Paso ${currentStepIndex + 1} de 3. Pregunta: ${currentStepTitle}`;
+
+        // Mover foco del teclado de manera inteligente a la nueva pregunta activa
+        setTimeout(() => {
+            steps[currentStepIndex].querySelector('h3').focus();
+        }, 150);
+    }
+
+    // Cumplir criterio WCAG: cerrar con tecla Escape
+    window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeModal();
+        }
+    });
+
+    // ========================================================================
+    // LÓGICA DEL CARRUSEL
+    // ========================================================================
+    let currentCarouselIndex = 0;
+    const carouselItems = document.querySelectorAll('.carousel-item');
+    const carouselIndicators = document.querySelectorAll('.carousel-indicators button');
+    const carouselPrevBtn = document.querySelector('.carousel-control-prev');
+    const carouselNextBtn = document.querySelector('.carousel-control-next');
+    const totalCarouselItems = carouselItems.length;
+    let carouselAutoplayInterval;
+
+    // Función para mostrar el item del carrusel en el índice especificado
+    function showCarouselItem(index) {
+        // Normalizar el índice (circular)
+        if (index >= totalCarouselItems) {
+            currentCarouselIndex = 0;
+        } else if (index < 0) {
+            currentCarouselIndex = totalCarouselItems - 1;
+        } else {
+            currentCarouselIndex = index;
+        }
+
+        // Remover clase active de todos los items
+        carouselItems.forEach((item) => item.classList.remove('active'));
+        carouselIndicators.forEach((indicator) => indicator.classList.remove('active'));
+
+        // Agregar clase active al item y indicador actual
+        carouselItems[currentCarouselIndex].classList.add('active');
+        carouselIndicators[currentCarouselIndex].classList.add('active');
+    }
+
+    // Botones de control anterior/siguiente
+    carouselPrevBtn.addEventListener('click', () => {
+        showCarouselItem(currentCarouselIndex - 1);
+        resetCarouselAutoplay();
+    });
+
+    carouselNextBtn.addEventListener('click', () => {
+        showCarouselItem(currentCarouselIndex + 1);
+        resetCarouselAutoplay();
+    });
+
+    // Indicadores (puntos de navegación)
+    carouselIndicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            showCarouselItem(index);
+            resetCarouselAutoplay();
+        });
+    });
+
+    // Auto-rotación del carrusel cada 2 minutos
+    function startCarouselAutoplay() {
+        carouselAutoplayInterval = setInterval(() => {
+            showCarouselItem(currentCarouselIndex + 1);
+        }, 120000);
+    }
+
+    // Reiniciar el autoplay cuando el usuario interactúa
+    function resetCarouselAutoplay() {
+        clearInterval(carouselAutoplayInterval);
+        startCarouselAutoplay();
+    }
+
+    // Iniciar autoplay cuando carga la página
+    startCarouselAutoplay();
+
+    // ========================================================================
+    // LÓGICA DEL CARRUSEL 3D DE CARDS (FLUJO DE ATENCIÓN EN 3 POSICIONES)
+    // ========================================================================
+    (function initProcessCarousel() {
+        const section = document.getElementById('flujo-atencion-section');
+        const cards = document.querySelectorAll('#processStageContainer .process-card');
+        const dots = document.querySelectorAll('#processDots .process-dot');
+        const prevBtn = document.getElementById('processPrevBtn');
+        const nextBtn = document.getElementById('processNextBtn');
+
+        if (cards.length === 0) return;
+
+        let activeIndex = 0;
+        const totalCards = cards.length;
+        const ROTATION_INTERVAL = 4000; // 4 segundos por giro automático
+        let autoTimer = null;
+
+        function updatePositions() {
+            cards.forEach((card, index) => {
+                let diff = index - activeIndex;
+                if (diff < -Math.floor(totalCards / 2)) diff += totalCards;
+                if (diff > Math.floor(totalCards / 2)) diff -= totalCards;
+
+                card.classList.remove('card-center', 'card-left', 'card-right', 'card-hidden');
+
+                if (diff === 0) {
+                    card.classList.add('card-center');
+                } else if (diff === -1 || (diff === totalCards - 1 && totalCards === 3)) {
+                    card.classList.add('card-left');
+                } else if (diff === 1 || (diff === -(totalCards - 1) && totalCards === 3)) {
+                    card.classList.add('card-right');
+                } else {
+                    card.classList.add('card-hidden');
+                }
+            });
+
+            dots.forEach((dot, idx) => {
+                dot.classList.toggle('active', idx === activeIndex);
+            });
+        }
+
+        function nextCard() {
+            activeIndex = (activeIndex + 1) % totalCards;
+            updatePositions();
+        }
+
+        function prevCard() {
+            activeIndex = (activeIndex - 1 + totalCards) % totalCards;
+            updatePositions();
+        }
+
+        function startAutoplay() {
+            stopAutoplay();
+            autoTimer = setInterval(nextCard, ROTATION_INTERVAL);
+        }
+
+        function stopAutoplay() {
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+        }
+
+        cards.forEach((card, idx) => {
+            card.addEventListener('click', () => {
+                activeIndex = idx;
+                updatePositions();
+                startAutoplay();
+            });
+        });
+
+        nextBtn?.addEventListener('click', () => {
+            nextCard();
+            startAutoplay();
+        });
+
+        prevBtn?.addEventListener('click', () => {
+            prevCard();
+            startAutoplay();
+        });
+
+        dots.forEach((dot, idx) => {
+            dot.addEventListener('click', () => {
+                activeIndex = idx;
+                updatePositions();
+                startAutoplay();
+            });
+        });
+
+        if (section) {
+            section.addEventListener('mouseenter', stopAutoplay);
+            section.addEventListener('mouseleave', startAutoplay);
+            section.addEventListener('focusin', stopAutoplay);
+            section.addEventListener('focusout', startAutoplay);
+        }
+
+        updatePositions();
+        startAutoplay();
+    })();
+
+    const accessibilityBtn = document.getElementById('accessibilityBtn');
+    const accessibilityMenu = document.getElementById('accessibilityMenu');
+    const searchForm = document.querySelector('.search-form');
+    const searchInput = document.getElementById('searchInput');
+    const searchResultsDropdown = document.getElementById('searchResultsDropdown');
+    const htmlElement = document.documentElement;
+    const accessibilityLiveRegion = document.getElementById('accessibilityLiveRegion');
+
+    const translations = {
+        es: {
+            searchPlaceholder: 'Buscar servicios...',
+            searchAria: 'Buscar servicios médicos',
+            accessibilityButtonAria: 'Abrir opciones de accesibilidad'
+        },
+        en: {
+            searchPlaceholder: 'Search services...',
+            searchAria: 'Search medical services',
+            accessibilityButtonAria: 'Open accessibility options'
+        }
+    };
+
+
+
+    const announceAccessibility = (message) => {
+        if (accessibilityLiveRegion) {
+            accessibilityLiveRegion.textContent = message;
+        }
+    };
+
+    accessibilityBtn?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const isOpen = accessibilityMenu?.classList.contains('show');
+        searchResultsDropdown?.classList.remove('show');
+        if (!isOpen) {
+            accessibilityMenu?.classList.add('show');
+            accessibilityBtn?.setAttribute('aria-expanded', 'true');
+        } else {
+            accessibilityMenu?.classList.remove('show');
+            accessibilityBtn?.setAttribute('aria-expanded', 'false');
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.accessibility-wrapper')) {
+            accessibilityMenu?.classList.remove('show');
+            accessibilityBtn?.setAttribute('aria-expanded', 'false');
+        }
+        if (!event.target.closest('.search-container')) {
+            searchResultsDropdown?.classList.remove('show');
+        }
+    });
+
+    searchInput?.addEventListener('focus', () => {
+        searchForm?.classList.add('typing');
+    });
+
+    searchInput?.addEventListener('blur', () => {
+        if (!searchInput.value.trim()) {
+            searchForm?.classList.remove('typing');
+        }
+    });
+
+    let textAdjustLevel = 0;
+
+    function setAccessibilityClass(className, isActive) {
+        htmlElement.classList.toggle(className, isActive);
+        document.body.classList.toggle(className, isActive);
+    }
+
+    function applyAccessibilityTheme() {
+        const rootStyle = htmlElement.style;
+        const bodyStyle = document.body.style;
+
+        if (htmlElement.classList.contains('high-contrast')) {
+            rootStyle.setProperty('--color-primary', '#ffffff');
+            rootStyle.setProperty('--color-primary-dark', '#ffe066');
+            rootStyle.setProperty('--color-primary-light', '#fff3b0');
+            rootStyle.setProperty('--color-border', '#ffffff');
+            rootStyle.setProperty('--color-surface', '#000000');
+            rootStyle.setProperty('--color-bg-light', '#111111');
+            rootStyle.setProperty('--color-text-main', '#ffffff');
+            rootStyle.setProperty('--color-text-muted', '#f5f5f5');
+        } else if (htmlElement.classList.contains('dark-mode')) {
+            rootStyle.setProperty('--color-primary', '#2dd4bf');
+            rootStyle.setProperty('--color-primary-dark', '#14b8a6');
+            rootStyle.setProperty('--color-primary-light', '#5eead4');
+            rootStyle.setProperty('--color-border', '#334155');
+            rootStyle.setProperty('--color-surface', '#111827');
+            rootStyle.setProperty('--color-bg-light', '#1f2937');
+            rootStyle.setProperty('--color-text-main', '#f8fafc');
+            rootStyle.setProperty('--color-text-muted', '#cbd5e1');
+        } else {
+            rootStyle.setProperty('--color-primary', '#00A79D');
+            rootStyle.setProperty('--color-primary-dark', '#007F78');
+            rootStyle.setProperty('--color-primary-light', '#00c2b6');
+            rootStyle.setProperty('--color-border', '#dfe5ef');
+            rootStyle.setProperty('--color-surface', '#ffffff');
+            rootStyle.setProperty('--color-bg-light', '#f8fafc');
+            rootStyle.setProperty('--color-text-main', '#1e293b');
+            rootStyle.setProperty('--color-text-muted', '#475569');
+        }
+
+        if (htmlElement.classList.contains('spacing-active')) {
+            bodyStyle.lineHeight = '1.95';
+            bodyStyle.letterSpacing = '0.12em';
+            bodyStyle.wordSpacing = '0.18em';
+        } else {
+            bodyStyle.lineHeight = '';
+            bodyStyle.letterSpacing = '';
+            bodyStyle.wordSpacing = '';
+        }
+
+        if (htmlElement.classList.contains('dyslexia-font')) {
+            bodyStyle.fontFamily = '"Comic Sans MS", "Trebuchet MS", Arial, sans-serif';
+        } else {
+            bodyStyle.fontFamily = '';
+        }
+
+        if (htmlElement.classList.contains('cursor-plus')) {
+            bodyStyle.cursor = 'pointer';
+        } else {
+            bodyStyle.cursor = '';
+        }
+
+        if (textAdjustLevel === 0) {
+            rootStyle.fontSize = '';
+            bodyStyle.fontSize = '';
+        } else {
+            const scale = 1 + (textAdjustLevel * 0.1);
+            rootStyle.fontSize = `${16 * scale}px`;
+            bodyStyle.fontSize = `${16 * scale}px`;
+        }
+    }
+
+    function toggleAccessibility(className) {
+        const activeClass = !htmlElement.classList.contains(className);
+        setAccessibilityClass(className, activeClass);
+
+        if (className === 'high-contrast' && activeClass) {
+            setAccessibilityClass('dark-mode', false);
+        } else if (className === 'dark-mode' && activeClass) {
+            setAccessibilityClass('high-contrast', false);
+        }
+
+        const button = document.getElementById({
+            'high-contrast': 'opt-contrast',
+            'spacing-active': 'opt-spacing',
+            'dyslexia-font': 'opt-dyslexia',
+            'cursor-plus': 'opt-cursor',
+            'onehand-active': 'opt-onehand',
+            'dark-mode': 'opt-darkmode',
+            'monochrome-active': 'opt-monochrome',
+            'colorblind-mode': 'opt-colorblind',
+            'screenreader-active': 'opt-screenreader'
+        }[className]);
+        if (button) {
+            button.classList.toggle('active', activeClass);
+            button.setAttribute('aria-pressed', String(activeClass));
+        }
+
+        applyAccessibilityTheme();
+        announceAccessibility(activeClass ? 'Opción activada' : 'Opción desactivada');
+    }
+
+    function adjustText(direction) {
+        htmlElement.classList.remove('text-plus-1', 'text-plus-2', 'text-minus-1', 'text-minus-2');
+        document.body.classList.remove('text-plus-1', 'text-plus-2', 'text-minus-1', 'text-minus-2');
+        textAdjustLevel = Math.max(-2, Math.min(2, textAdjustLevel + direction));
+        if (textAdjustLevel > 0) {
+            setAccessibilityClass(`text-plus-${textAdjustLevel}`, true);
+        } else if (textAdjustLevel < 0) {
+            setAccessibilityClass(`text-minus-${Math.abs(textAdjustLevel)}`, true);
+        }
+
+        applyAccessibilityTheme();
+        document.getElementById('opt-text-plus')?.setAttribute('aria-pressed', String(textAdjustLevel > 0));
+        document.getElementById('opt-text-minus')?.setAttribute('aria-pressed', String(textAdjustLevel < 0));
+    }
+
+    function resetAccessibility() {
+        ['high-contrast', 'spacing-active', 'dyslexia-font', 'cursor-plus', 'onehand-active', 'dark-mode', 'monochrome-active', 'colorblind-mode', 'screenreader-active', 'text-plus-1', 'text-plus-2', 'text-minus-1', 'text-minus-2'].forEach(className => {
+            setAccessibilityClass(className, false);
+        });
+        textAdjustLevel = 0;
+        applyAccessibilityTheme();
+        ['opt-contrast', 'opt-text-plus', 'opt-text-minus', 'opt-spacing', 'opt-dyslexia', 'opt-cursor', 'opt-onehand', 'opt-darkmode', 'opt-monochrome', 'opt-colorblind', 'opt-screenreader'].forEach(id => {
+            const btn = document.getElementById(id);
+            btn?.classList.remove('active');
+            btn?.setAttribute('aria-pressed', 'false');
+        });
+        announceAccessibility('Ajustes restablecidos');
+    }
+
+    function activateColorblind() {
+        const button = document.getElementById('opt-colorblind');
+        const isActive = !htmlElement.classList.contains('colorblind-mode');
+        setAccessibilityClass('colorblind-mode', isActive);
+        button?.classList.toggle('active', isActive);
+        button?.setAttribute('aria-pressed', String(isActive));
+        announceAccessibility(isActive ? 'Daltonismo activado' : 'Daltonismo desactivado');
+    }
+
+    function activateScreenreader() {
+        const button = document.getElementById('opt-screenreader');
+        const isActive = !htmlElement.classList.contains('screenreader-active');
+        setAccessibilityClass('screenreader-active', isActive);
+        button?.classList.toggle('active', isActive);
+        button?.setAttribute('aria-pressed', String(isActive));
+        if (!isActive) {
+            window.speechSynthesis?.cancel();
+            announceAccessibility('Lector de pantalla desactivado');
+            return;
+        }
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance('Lector activado');
+            window.speechSynthesis.speak(utterance);
+        }
+        announceAccessibility('Lector de pantalla activado');
+    }
+
+    function changeLanguage() {
+        const currentLang = document.documentElement.lang || 'es';
+        const nextLang = currentLang === 'es' ? 'en' : 'es';
+        document.documentElement.lang = nextLang;
+        if (searchInput) {
+            searchInput.placeholder = translations[nextLang].searchPlaceholder;
+            searchInput.setAttribute('aria-label', translations[nextLang].searchAria);
+        }
+        if (accessibilityBtn) {
+            accessibilityBtn.setAttribute('aria-label', translations[nextLang].accessibilityButtonAria);
+        }
+        announceAccessibility(nextLang === 'es' ? 'Idioma cambiado a español' : 'Language changed to English');
+    }
+
+    window.resetAccessibility = resetAccessibility;
+    window.toggleAccessibility = toggleAccessibility;
+    window.adjustText = adjustText;
+    window.activateColorblind = activateColorblind;
+    window.activateScreenreader = activateScreenreader;
+    window.changeLanguage = changeLanguage;
+
+ // Logica de la barra de busqueda 
+  // Base de datos enriquecida con información detallada para el modal
+    const dataSources = [
+        {
+            name: 'Hospital Internacional San Jude',
+            type: 'Hospital General',
+            icon: '<svg class="search-result-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path><line x1="10" y1="9" x2="14" y2="9"></line><line x1="12" y1="7" x2="12" y2="11"></line></svg>',
+            address: 'Final Boulevard de los Héroes, San Salvador',
+            phone: '2222-1111',
+            hours: '24 horas / Emergencias habilitadas',
+            services: 'Medicina General, Pediatría, Cardiología, Cirugía General'
+        },
+        {
+            name: 'Hospital Metropolitano del Norte',
+            type: 'Centro Médico Especializado',
+            icon: '<svg class="search-result-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path><line x1="10" y1="9" x2="14" y2="9"></line><line x1="12" y1="7" x2="12" y2="11"></line></svg>',
+            address: 'Carretera Troncal del Norte, Apopa, San Salvador',
+            phone: '2233-4455',
+            hours: 'Lunes a Domingo: 6:00 AM - 10:00 PM',
+            services: 'Ginecología, Traumatología, Medicina Interna, Laboratorio'
+        },
+        {
+            name: 'Laboratorios Clínicos Biolab',
+            type: 'Laboratorio Clínico',
+            icon: '<svg class="search-result-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 2v7.31L4.75 18.1A2 2 0 0 0 6.47 21h11.06a2 2 0 0 0 1.72-2.9L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line></svg>',
+            address: 'Alameda Juan Pablo II, San Salvador',
+            phone: '2266-7788',
+            hours: 'Lunes a Sábado: 6:00 AM - 4:00 PM',
+            services: 'Hemograma Completo, Perfil Lipídico, Exámenes de Orina y Glucosa'
+        }
+    ];
+
+    // Función para abrir el modal con los datos específicos del centro seleccionado
+    function openCenterDetailModal(center) {
+        const modal = document.getElementById('centerDetailModal');
+        if (!modal) return;
+
+        document.getElementById('modalCenterTitle').textContent = center.name;
+        document.getElementById('modalCenterType').textContent = center.type;
+        document.getElementById('modalCenterIcon').textContent = center.icon;
+        document.getElementById('modalCenterAddress').textContent = center.address;
+        document.getElementById('modalCenterPhone').textContent = center.phone;
+        document.getElementById('modalCenterHours').textContent = center.hours;
+        document.getElementById('modalCenterServices').textContent = center.services;
+
+        modal.classList.add('active');
+        modal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCenterDetailModal() {
+        const modal = document.getElementById('centerDetailModal');
+        if (!modal) return;
+        modal.classList.remove('active');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    // Event listeners para cerrar el modal de detalles
+    document.getElementById('closeCenterModal')?.addEventListener('click', closeCenterDetailModal);
+    document.querySelectorAll('[data-close="center-modal"]').forEach(el => {
+        el.addEventListener('click', closeCenterDetailModal);
+    });
+
+    // Modificar la lógica del input de búsqueda para disparar el modal
+    searchInput?.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        searchForm?.classList.toggle('typing', query.length > 0);
+        searchResultsDropdown.innerHTML = '';
+
+        if (query.length > 1) {
+            const filteredResults = dataSources.filter(item => item.name.toLowerCase().includes(query));
+            if (filteredResults.length > 0) {
+                filteredResults.forEach(result => {
+                    const resultItem = document.createElement('a');
+                    resultItem.href = '#';
+                    resultItem.classList.add('search-result-item');
+                    resultItem.innerHTML = `${result.icon}<span>${result.name}</span>`;
+                    
+                    // Al hacer clic, evitamos ir a otra página y abrimos el modal de este hospital/laboratorio
+                    resultItem.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        searchInput.value = result.name;
+                        searchForm?.classList.remove('typing');
+                        searchResultsDropdown.classList.remove('show');
+                        openCenterDetailModal(result); // Abre el modal con su información exacta
+                    });
+
+                    searchResultsDropdown.appendChild(resultItem);
+                });
+                searchResultsDropdown.classList.add('show');
+            } else {
+                const noResult = document.createElement('div');
+                noResult.classList.add('search-result-item');
+                noResult.textContent = 'No se encontraron resultados';
+                searchResultsDropdown.appendChild(noResult);
+                searchResultsDropdown.classList.add('show');
+            }
+        } else {
+            searchResultsDropdown.classList.remove('show');
+        }
+    });
+
+    function reservarCitaCentro(nombreCentro, tipoCentro, direccionCentro) {
+    const datosCentro = {
+        nombre: nombreCentro,
+        tipo: tipoCentro,
+        direccion: direccionCentro
+    };
+    
+    // Almacenar en localStorage para recuperarlo en citas.unificado.html
+    localStorage.setItem('hospired_centro_seleccionado', JSON.stringify(datosCentro));
+    
+    // Redirigir a la vista unificada de citas
+    window.location.href = 'citas.unificado.html';
+}
+
+document.getElementById('modalReserveBtn').addEventListener('click', () => {
+    const nombre = document.getElementById('modalCenterTitle').textContent;
+    const tipo = document.getElementById('modalCenterType').textContent;
+    const direccion = document.getElementById('modalCenterAddress').textContent;
+
+    reservarCitaCentro(nombre, tipo, direccion);
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospired - Directorio de Hospitales</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="centro-detalle.js"></script>
+    <link rel="stylesheet" href="accesibilidad-global.css">
+    <script src="accesibilidad-global.js"></script>
+    <script src="centro-seleccionado.js"></script>
+    <script src="perfil.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            background-color: #f3f7f9;
+            background-image:
+                linear-gradient(rgba(0, 167, 157, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 167, 157, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-attachment: fixed;
+            color: var(--color-text-main);
+        }
+
+        body {
+            display: flex;
+            align-items: flex-start;
+            position: relative;
+            isolation: isolate;
+        }
+
+        .directory-header { margin-bottom: 30px; margin-left: 200px;}
+        .directory-header h1 { color: var(--color-primary-dark); font-size: 2.2rem; margin-bottom: 10px; }
+        .directory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; 
+        margin-left: 200px;}
+        .directory-card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.2s; }
+        .directory-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        
+        .card-img-frame { width: 100%; height: 160px; background: #e2e8f0; border-radius: 8px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 0.85rem; border: 2px dashed #cbd5e1; overflow: hidden; }
+        
+        .card-title { font-size: 1.2rem; font-weight: 700; color: #0f172a; margin-bottom: 6px; }
+        .card-address { font-size: 0.85rem; color: var(--color-text-muted); margin-bottom: 12px; }
+        .card-rating { font-size: 0.9rem; font-weight: bold; color: #b91c1c; margin-bottom: 15px; display: flex; align-items: center; gap: 5px; }
+        
+        .btn-solid-dark { background: #00A79D; color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; text-align: center; }
+        .btn-solid-dark:hover { background: #007F78; }
+
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 3000; align-items: center; justify-content: center; overflow-y: auto; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--color-surface); width: 100%; max-width: 650px; border-radius: 16px; padding: 30px; position: relative; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-text-muted); }
+
+        .catalog-map { width: 100%; height: 200px; margin: 0 0 15px; overflow: hidden; border: 1px solid #cbd5e1; border-radius: 10px; background: #e2e8f0; }
+        .catalog-map iframe { width: 100%; height: 100%; border: 0; }
+        
+        .modal-section-title { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin: 20px 0 10px 0; display: flex; align-items: center; gap: 8px; }
+        
+        .service-dropdown-item { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 15px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; color: #0f172a; }
+        .service-price { background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; }
+
+        /* Sistema de Reseñas y Comentarios Interactivos */
+        .reviews-container { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .review-input-box { display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; }
+        .review-input-box textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #cbd5e1; resize: vertical; min-height: 60px; font-family: inherit; }
+        .star-rating-picker { display: flex; gap: 5px; font-size: 1.4rem; cursor: pointer; color: #cbd5e1; }
+        .star-rating-picker .star.selected, .star-rating-picker .star:hover { color: #f59e0b; }
+        .review-list { display: flex; flex-direction: column; gap: 10px; max-height: 180px; overflow-y: auto; }
+        .review-item { background: white; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 0.85rem; }
+    </style>
+</head>
+<body id="page-body">
+
+<div class="shape-decor shape-1"></div>
+<div class="shape-decor shape-2"></div>
+<div class="shape-decor shape-3"></div>
+
+<aside class="sidebar" role="navigation" aria-label="Navegación lateral">
+    <div class="brand-container">
+        <a class="brand" href="index.html" aria-label="Inicio Hospired">
+            <img src="login/Hospired.logo.png" alt="Logo de Hospired">
+        </a>
+    </div>
+
+    <nav class="vertical-menu">
+        <button class="menu-item" onclick="location.href='index.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></span>
+            <span>Inicio</span>
+        </button>
+
+        <button class="menu-item" onclick="location.href='citas.unificado.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg></span>
+            <span>Mis Citas</span>
+        </button>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.15); margin: 6px 8px;">
+
+        <button class="menu-item" onclick="location.href='laboratorios.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.75 18.1A2 2 0 0 0 6.47 21h11.06a2 2 0 0 0 1.72-2.9L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line></svg></span>
+            <span>Laboratorios</span>
+        </button>
+        <button class="menu-item active" onclick="location.href='hospitales.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path><line x1="10" y1="9" x2="14" y2="9"></line><line x1="12" y1="7" x2="12" y2="11"></line></svg></span>
+            <span>Hospitales</span>
+        </button>
+        <button class="menu-item" onclick="location.href='Notificaciones.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></span>
+            <span>Notificaciones</span>
+        </button>
+
+        <button class="menu-item" onclick="location.href='soporte_y_ayuda.html'">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line></svg></span>
+            <span>Soporte y ayuda</span>
+        </button>
+
+        <a class="menu-item" href="index.html#quienes-somos">
+            <span class="menu-item-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>
+            <span>Sobre nosotros</span>
+        </a>
+    </nav>
+</aside>
+
+<div class="main-container">
+    <header class="top-navbar" role="banner">
+        <div class="search-container">
+            <form class="search-form" role="search" onsubmit="event.preventDefault();">
+                <input type="search" id="searchInput" name="query" placeholder="Buscar servicios..." aria-label="Buscar servicios médicos" autocomplete="off">
+                <button type="submit" aria-label="Ejecutar búsqueda">Buscar</button>
+            </form>
+            <div id="searchResultsDropdown" class="search-results-dropdown"></div>
+        </div>
+
+        <div class="right-utilities">
+            <button type="button" class="profile" id="sharedProfileTrigger" aria-label="Abrir perfil del usuario" onclick="openSharedProfileModal()">
+                <div class="avatar" id="sharedProfileAvatar" aria-hidden="true">MJ</div>
+                <div class="account">
+                    <span class="name" id="sharedProfileName">Perfil</span>
+                    <span class="hint" id="sharedProfileHint">Perfil</span>
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <main class="content-body">
+        <div class="directory-header">
+            <h1>Red de Hospitales Afiliados</h1>
+            <p>Directorio con mapas interactivos, servicios y reseñas verificadas.</p>
+        </div>
+        <div class="directory-grid" id="hospital-grid"></div>
+    </main>
+</div>
+
+<!-- Modal -->
+<div id="infoModal" class="modal-overlay">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div id="modalBodyContent"></div>
+    </div>
+</div>
+
+<!-- Filtros SVG ocultos para Daltonismo (Añadir al final del <body> en todas las páginas) -->
+<svg aria-hidden="true" focusable="false" style="display:none;">
+  <filter id="protanopia-filter">
+    <feColorMatrix type="matrix" values="0.567, 0.433, 0,     0, 0,
+                                       0.558, 0.442, 0,     0, 0,
+                                       0,     0.242, 0.758, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+  <filter id="deuteranopia-filter">
+    <feColorMatrix type="matrix" values="0.625, 0.375, 0,   0, 0,
+                                       0.7,   0.3,   0,   0, 0,
+                                       0,     0.3,   0.7, 0, 0,
+                                       0,     0,     0,   1, 0"/>
+  </filter>
+  <filter id="tritanopia-filter">
+    <feColorMatrix type="matrix" values="0.95,  0.05,  0,     0, 0,
+                                       0,     0.433, 0.567, 0, 0,
+                                       0,     0.475, 0.525, 0, 0,
+                                       0,     0,     0,     1, 0"/>
+  </filter>
+</svg>
+
+<script>
+    const hospitales = [
+        { id: 1, nombre: "Hospital Nacional Rosales", dir: "Avenida España y Final 25 Calle Poniente, San Salvador", rating: 4.7, count: 98, lat: 13.6989, lng: -89.1914, imagen: "img.hospitales/Hospital.Nacional.Rosales.jpg", servicios: [{nombre: "Medicina Interna", precio: "$50.00"}, {nombre: "Urgencias 24/7", precio: "$40.00"}], comentarios: [{user: "Carlos M.", text: "Muy buena atención en urgencias.", rating: 5}] },
+        { id: 2, nombre: "Hospital Metropolitano del Norte", dir: "Bulevar de los Héroes #789, Zona Industrial", rating: 4.6, count: 94, lat: 13.7150, lng: -89.2050, imagen: "img.hospitales/Hospital.Metropolitano.Del.Norte.jpg", servicios: [{nombre: "Cardiología", precio: "$65.00"}, {nombre: "Pediatría", precio: "$45.00"}], comentarios: [{user: "Ana P.", text: "Instalaciones limpias y ordenadas.", rating: 4}] },
+        { id: 3, nombre: "Hospital El Salvador", dir: "Final Alameda Juan Pablo II, San Salvador", rating: 4.9, count: 210, lat: 13.7080, lng: -89.2120, imagen: "img.hospitales/Hospital.El.Salvador.jpg", servicios: [{nombre: "Cuidados Intensivos", precio: "$120.00"}], comentarios: [] },
+        { id: 4, nombre: "Hospital de la Mujer", dir: "Final Boulevard de los Héroes, San Salvador", rating: 4.8, count: 145, lat: 13.7180, lng: -89.2080, imagen: "img.hospitales/Hospital.De.La.Mujer.webp", servicios: [{nombre: "Ginecología", precio: "$50.00"}], comentarios: [] },
+        { id: 5, nombre: "Hospital Policlínico Zacamil", dir: "Urbanización Zacamil, Mejicanos", rating: 4.5, count: 82, lat: 13.7320, lng: -89.2220, imagen: "img.hospitales/Hospital.Policlinico.Zacamil.jpg", servicios: [{nombre: "Medicina General", precio: "$25.00"}], comentarios: [] },
+        { id: 6, nombre: "Hospital Diagnóstico", dir: "Colonia Médica, Pasaje Dr. Emilio Alvarez", rating: 4.9, count: 320, lat: 13.6995, lng: -89.1950, imagen: "img.hospitales/Hospital.Diagnostico.Escalon.png", servicios: [{nombre: "Neurocirugía", precio: "$150.00"}], comentarios: [] },
+        { id: 7, nombre: "Hospital Centro Ginecológico", dir: "25 Avenida Sur #640, San Salvador", rating: 4.6, count: 95, lat: 13.6920, lng: -89.1980, imagen: "img.hospitales/Centro.Ginecologico.jpeg", servicios: [{nombre: "Fertilidad", precio: "$130.00"}], comentarios: [] },
+        { id: 8, nombre: "Hospital Militar Central", dir: "Av. Bernal y Alameda Juan Pablo II", rating: 4.7, count: 150, lat: 13.7120, lng: -89.2150, imagen: "img.hospitales/Hospital.Militar.Central.webp", servicios: [{nombre: "Traumatología", precio: "$60.00"}], comentarios: [] },
+        { id: 9, nombre: "Hospital Profamilia", dir: "Calle Arce #1238, San Salvador", rating: 4.4, count: 64, lat: 13.6970, lng: -89.2010, imagen: "img.hospitales/Hospital.Profamilia.jpg", servicios: [{nombre: "Planificación", precio: "$30.00"}], comentarios: [] },
+        { id: 10, nombre: "Hospital San Francisco", dir: "Final 4a Calle Poniente, San Miguel", rating: 4.8, count: 112, lat: 13.4830, lng: -88.1750, imagen: "img.hospitales/Hospital.San.Francisco.San.Miguel.jpg", servicios: [{nombre: "Radiología", precio: "$75.00"}], comentarios: [] }
+    ];
+
+    let currentSelectedRating = 5;
+
+    const hospitalDetails = {
+        1: { phone: '2222-1111', hours: '24 horas / Emergencias habilitadas' },
+        2: { phone: '2233-4455', hours: 'Lunes a Domingo: 6:00 AM - 10:00 PM' },
+        3: { phone: '2244-5566', hours: '24 horas / Emergencias habilitadas' },
+        4: { phone: '2255-6677', hours: 'Lunes a Domingo: 7:00 AM - 8:00 PM' },
+        5: { phone: '2266-7788', hours: 'Lunes a Viernes: 7:00 AM - 5:00 PM' },
+        6: { phone: '2277-8899', hours: '24 horas / Emergencias habilitadas' },
+        7: { phone: '2288-9900', hours: 'Lunes a Sábado: 7:00 AM - 6:00 PM' },
+        8: { phone: '2299-0011', hours: '24 horas / Emergencias habilitadas' },
+        9: { phone: '2211-2233', hours: 'Lunes a Sábado: 7:00 AM - 5:00 PM' },
+        10: { phone: '2200-3344', hours: 'Lunes a Domingo: 8:00 AM - 8:00 PM' }
+    };
+
+    const grid = document.getElementById('hospital-grid');
+
+    function getPreferredLanguage() {
+        try {
+            return JSON.parse(localStorage.getItem('hospired_accessibility_preferences') || '{}').language || 'es';
+        } catch (error) {
+            return 'es';
+        }
+    }
+
+    function getCatalogCopy() {
+        const isEnglish = getPreferredLanguage() === 'en';
+        return {
+            viewDetails: isEnglish ? 'View full information' : 'Ver información completa',
+            reviewsLabel: isEnglish ? 'reviews' : 'reseñas',
+            reserve: isEnglish ? 'Book appointment' : 'Reservar Cita',
+            address: isEnglish ? 'Address' : 'Dirección',
+            phone: isEnglish ? 'Contact phone' : 'Teléfono de Contacto',
+            hours: isEnglish ? 'Opening hours' : 'Horarios de Atención',
+            services: isEnglish ? 'Medical services and rates' : 'Servicios y Tarifas Médicas',
+            reviews: isEnglish ? 'Patient reviews and comments' : 'Reseñas y Comentarios de Pacientes',
+            noReviews: isEnglish ? 'No comments yet. Be the first to share your opinion!' : 'Aún no hay comentarios. ¡Sé el primero en opinar!',
+            rateStars: isEnglish ? 'Rate with stars:' : 'Puntúa con estrellas:',
+            placeholder: isEnglish ? 'Write your comment or opinion about this hospital...' : 'Escribe tu comentario u opinión sobre este hospital...',
+            sendReview: isEnglish ? 'Send comment' : 'Enviar Comentario',
+            emptySearch: isEnglish ? 'No results found' : 'No se encontraron resultados',
+            pageHeader: isEnglish ? 'Affiliated Hospital Network' : 'Red de Hospitales Afiliados',
+            pageSubtitle: isEnglish ? 'Directory with interactive maps, services and verified reviews.' : 'Directorio con mapas interactivos, servicios y reseñas verificadas.',
+            profileLabel: isEnglish ? 'Profile' : 'Perfil',
+            menuInicio: isEnglish ? 'Home' : 'Inicio',
+            menuCitas: isEnglish ? 'My appointments' : 'Mis Citas',
+            menuLab: isEnglish ? 'Laboratories' : 'Laboratorios',
+            menuHospital: isEnglish ? 'Hospitals' : 'Hospitales',
+            menuNoti: isEnglish ? 'Notifications' : 'Notificaciones',
+            menuSupport: isEnglish ? 'Support and help' : 'Soporte y ayuda',
+            menuAbout: isEnglish ? 'About us' : 'Sobre nosotros',
+            searchPlaceholder: isEnglish ? 'Search medical services...' : 'Buscar servicios...'
+        };
+    }
+
+    function syncSharedProfile() {
+        sessionStorage.setItem('hospired_active_role', 'patient');
+        const profile = JSON.parse(localStorage.getItem('hospired_patient_profile') || 'null');
+        const saved = JSON.parse(localStorage.getItem('hospired_logged_user') || 'null');
+        const data = profile || saved || {};
+        const name = data.fullName || data.name || data.nombre || data.institutionName || 'Usuario';
+        const avatar = document.getElementById('sharedProfileAvatar');
+        const nameEl = document.getElementById('sharedProfileName');
+        const hintEl = document.getElementById('sharedProfileHint');
+        if (avatar && nameEl && hintEl) {
+            avatar.textContent = (name.split(' ').map(word => word.charAt(0)).join('').slice(0, 2) || 'M').toUpperCase();
+            nameEl.textContent = name;
+            hintEl.textContent = getCatalogCopy().profileLabel;
+        }
+    }
+
+    function applyHospitalLanguage() {
+        const copy = getCatalogCopy();
+        const title = document.querySelector('.directory-header h1');
+        const subtitle = document.querySelector('.directory-header p');
+        if (title) title.textContent = copy.pageHeader;
+        if (subtitle) subtitle.textContent = copy.pageSubtitle;
+
+        const input = document.getElementById('searchInput');
+        if (input) {
+            input.placeholder = copy.searchPlaceholder;
+            input.setAttribute('aria-label', copy.searchPlaceholder === 'Search medical services...' ? 'Search medical services' : 'Buscar servicios médicos');
+        }
+        renderGrid();
+    }
+
+    syncSharedProfile();
+    applyHospitalLanguage();
+    window.addEventListener('hospired-language-change', () => {
+        syncSharedProfile();
+        applyHospitalLanguage();
+    });
+
+    function renderGrid() {
+        const copy = getCatalogCopy();
+        grid.innerHTML = "";
+        hospitales.forEach(h => {
+            grid.innerHTML += `
+                <div class="directory-card">
+                    <div>
+                        <div class="card-img-frame">
+                            <img src="${h.imagen}" alt="${h.nombre}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <h3 class="card-title">${h.nombre}</h3>
+                        <div class="card-address">${h.dir}</div>
+                        <div class="card-rating">⭐ ${h.rating} (${h.count} ${copy.reviewsLabel})</div>
+                    </div>
+                    <button class="btn-solid-dark" onclick="openModal(${h.id})">${copy.viewDetails}</button>
+                </div>
+            `;
+        });
+    }
+    renderGrid();
+
+    const modal = document.getElementById('infoModal');
+    const modalBody = document.getElementById('modalBodyContent');
+
+    function openModal(id) {
+        const item = hospitales.find(x => x.id === id);
+        const details = hospitalDetails[item.id];
+        const copy = getCatalogCopy();
+        currentSelectedRating = 5;
+
+        let serviciosHtml = item.servicios.map(s => `
+            <div class="service-dropdown-item">
+                <span>${s.nombre}</span>
+                <span class="service-price">${s.precio} ▼</span>
+            </div>
+        `).join('');
+
+        let comentariosHtml = item.comentarios.length > 0 ? item.comentarios.map(c => `
+            <div class="review-item">
+                <strong>${c.user}</strong> (${c.rating} ⭐)<br>
+                <span>${c.text}</span>
+            </div>
+        `).join('') : `<p style="font-size:0.85rem; color:#64748b;">${copy.noReviews}</p>`;
+
+        modalBody.innerHTML = `
+            <h2 style="color:var(--color-primary-dark); margin-bottom:10px;">${item.nombre}</h2>
+            <div class="catalog-map">
+                <iframe src="https://maps.google.com/maps?q=${item.lat},${item.lng}&z=15&output=embed" title="Mapa de ubicación de ${item.nombre}" loading="lazy" allowfullscreen></iframe>
+            </div>
+            <button class="btn-solid-dark" type="button" onclick="reservarCitaCentro('${item.nombre}', 'hospital', '${item.dir}')">${copy.reserve}</button>
+
+            <div class="catalog-info-fields">
+                <div class="catalog-info-field"><span>${copy.address}</span><strong>${item.dir}</strong></div>
+                <div class="catalog-info-field"><span>${copy.phone}</span><strong>${details.phone}</strong></div>
+                <div class="catalog-info-field"><span>${copy.hours}</span><strong>${details.hours}</strong></div>
+            </div>
+
+            <div class="modal-section-title"> ${copy.services}</div>
+            ${serviciosHtml}
+
+            <div class="modal-section-title"> ${copy.reviews}</div>
+            <div class="reviews-container">
+                <div class="review-input-box">
+                    <label style="font-size:0.85rem; font-weight:600; color:#0f172a;">${copy.rateStars}</label>
+                    <div class="star-rating-picker" id="starPicker">
+                        <span class="star selected" onclick="setRating(1)">★</span>
+                        <span class="star selected" onclick="setRating(2)">★</span>
+                        <span class="star selected" onclick="setRating(3)">★</span>
+                        <span class="star selected" onclick="setRating(4)">★</span>
+                        <span class="star selected" onclick="setRating(5)">★</span>
+                    </div>
+                    <textarea id="reviewText" placeholder="${copy.placeholder}"></textarea>
+                    <button class="btn-solid-dark" onclick="enviarResena(${item.id})">${copy.sendReview}</button>
+                </div>
+                <div class="review-list" id="reviewListContainer">
+                    ${comentariosHtml}
+                </div>
+            </div>
+        `;
+        modal.classList.add('active');
+    }
+
+    function setRating(val) {
+        currentSelectedRating = val;
+        const stars = document.querySelectorAll('#starPicker .star');
+        stars.forEach((s, idx) => {
+            if(idx < val) s.classList.add('selected');
+            else s.classList.remove('selected');
+        });
+    }
+
+    function enviarResena(id) {
+        const text = document.getElementById('reviewText').value.trim();
+        if(!text) { alert("Por favor, escribe un comentario."); return; }
+        
+        let item = hospitales.find(x => x.id === id);
+        item.comentarios.unshift({ user: "Tú (Paciente)", text: text, rating: currentSelectedRating });
+        item.count += 1;
+        
+        // Recalcular promedio simulado
+        let suma = item.comentarios.reduce((acc, curr) => acc + curr.rating, currentSelectedRating);
+        item.rating = ((suma / (item.comentarios.length)) ).toFixed(1);
+
+        renderGrid();
+        openModal(id); // Refrescar modal
+    }
+
+    function closeModal() { modal.classList.remove('active'); }
+    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+
+    const searchInput = document.getElementById('searchInput');
+    const searchResultsDropdown = document.getElementById('searchResultsDropdown');
+    const dataSources = [
+        'Hospital Internacional San Jude',
+        'Hospital Metropolitano del Norte',
+        'Hospital de Especialidades San Rafael',
+        'Centro Médico Alborada',
+        'Laboratorios Clínicos Biolab',
+        'Laboratorios Diagnóstica Express',
+        'Citas médicas',
+        'Exámenes de sangre',
+        'Atención urgente',
+        'Consulta general'
+    ];
+
+    searchInput?.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase().trim();
+        searchResultsDropdown.innerHTML = '';
+
+        if (query.length > 1) {
+            const filteredResults = dataSources.filter(item => item.toLowerCase().includes(query));
+            if (filteredResults.length > 0) {
+                filteredResults.forEach(result => {
+                    const resultItem = document.createElement('a');
+                    resultItem.href = '#';
+                    resultItem.classList.add('search-result-item');
+                    resultItem.textContent = result;
+                    resultItem.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        searchInput.value = result;
+                        searchResultsDropdown.classList.remove('show');
+                    });
+                    searchResultsDropdown.appendChild(resultItem);
+                });
+                searchResultsDropdown.classList.add('show');
+            } else {
+                const noResult = document.createElement('div');
+                noResult.classList.add('search-result-item');
+                noResult.textContent = 'No se encontraron resultados';
+                searchResultsDropdown.appendChild(noResult);
+                searchResultsDropdown.classList.add('show');
+            }
+        } else {
+            searchResultsDropdown.classList.remove('show');
+        }
+    });
+
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.search-container')) {
+            searchResultsDropdown?.classList.remove('show');
+        }
+    });
+
+</script>
+
+<footer class="site-footer" role="contentinfo">
+    <div class="footer-content">
+        <div class="footer-links-container footer-vertical">
+            <nav class="footer-column" aria-label="Navegación del pie de página: Nosotros">
+                <h4>Nosotros</h4>
+                <ul>
+                    <li><a href="index.html#quienes-somos">¿Quiénes somos?</a></li>
+                    <li><a href="index.html#mision">Nuestra Misión</a></li>
+                    <li><a href="index.html#vision">Nuestra Visión</a></li>
+                    <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+                </ul>
+            </nav>
+            <nav class="footer-column" aria-label="Navegación del pie de página: Soporte y Legal">
+                <h4>Ayuda y Legal</h4>
+                <ul>
+                    <li><a href="soporte_y_ayuda.html">Soporte Técnico</a></li>
+                    <li><a href="index.html#ayuda-urgente">Ayuda Urgente</a></li>
+                    <li><a href="index.html#terminos">Términos y condiciones</a></li>
+                    <li><a href="index.html#privacidad">Política de privacidad</a></li>
+                </ul>
+            </nav>
+            <div class="footer-column">
+                <h4>Contáctanos</h4>
+                <ul class="contact-list">
+                    <li><a href="tel:22222222"><span class="phone-icon" aria-hidden="true">📞</span> 2222 - 2222</a></li>
+                    <li><a href="tel:23237898"><span class="phone-icon" aria-hidden="true">📱</span> 2323 - 7898</a></li>
+                </ul>
+                <div class="social-icons-container social-icons-inline">
+                    <a href="https://www.instagram.com/hospired_es?igsh=YXN0dHFocnF6NTZh" target="_blank" rel="noopener" aria-label="Visitar nuestro perfil oficial de Instagram (abre en una nueva pestaña)">
+                        <img src="instagram-8203531_1280.png" alt="Instagram de Hospired">
+                    </a>
+                    <a href="https://facebook.com/hospired" target="_blank" rel="noopener" aria-label="Visitar nuestra página oficial de Facebook (abre en una nueva pestaña)">
+                        <img src="image-removebg-preview.png" alt="Facebook de Hospired">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 Hospired. Todos los derechos reservados. Diseñado con enfoque en accesibilidad universal.</p>
+    </div>
+</footer>
+</body>
+</html>

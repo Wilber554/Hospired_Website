@@ -1,0 +1,3743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospired - Integrated Hospital Management Platform</title>
+  <link rel="stylesheet" href="../accesibilidad-global.css">
+  <script src="../accesibilidad-global.js" defer></script>
+  <script src="../perfil.js" defer></script>
+  <style>
+    /* ==========================================================================
+       1. OFFICIAL HOSPIRED COLOR PALETTE & GLOBAL VARIABLES
+       ========================================================================== */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+    :root {
+
+      --hospired-dark: #1e293b;      
+      --hospired-green: #509C81;     
+      --hospired-blue: #509C81 ;      
+      --hospired-white: #FFFFFF;     
+      --hospired-gray: #E8ECEF;      
+      /* Blanco literal fijo: para texto/iconos/bordes decorativos sobre fondos de color
+         que NO deben oscurecerse en modo oscuro (a diferencia de --hospired-white). */
+      --literal-white: #FFFFFF;
+      --neon-cyan: #00E5FF;
+      --neon-green: #39FF14;
+      --neon-pink: #FF2FD0;
+      
+      --bg-main: #EFEFEE;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F4F7F9;
+      --text-main:  #1e293b;
+      --text-muted: #475569;
+      --border-color: #D3DFE6;
+      
+    
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+     
+
+      /* Base Accessibility */
+      --base-font-size: 16px;
+    }
+
+    html {
+      font-size: var(--base-font-size);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--hospired-gray);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      transition: filter 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    }
+
+    svg {
+      width: 20px; height: 20px;
+      stroke: currentColor; stroke-width: 2;
+      stroke-linecap: round; stroke-linejoin: round;
+      fill: none; flex-shrink: 0;
+    }
+
+    /* Animación suave de escala y desvanecimiento al cargar el contenido */
+@keyframes fadeInScale {
+    0% { 
+        opacity: 0; 
+        transform: scale(0.98) translateY(15px); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: scale(1) translateY(0); 
+    }
+}
+
+/* Clase aplicada al contenedor principal de la página */
+.content-body.page-content-transition {
+    animation: fadeInScale 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Accesibilidad: Desactiva animación para usuarios con reducción de movimiento activada */
+@media (prefers-reduced-motion: reduce) {
+    .content-body.page-content-transition {
+        animation: none;
+    }
+}
+
+/* Transición de suavizado para estado normal y hover en ítems del menú */
+.menu-item {
+    transition: background-color 0.25s ease, color 0.25s ease;
+    transform: none;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    transform: none;
+}
+
+/* Transición fluida para la apertura/cierre del menú desplegable en móviles */
+.vertical-menu {
+    transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
+}
+
+
+    /* ==========================================================================
+       2. GLOBAL ACCESSIBILITY MODES
+       ========================================================================== */
+    body.a11y-high-contrast {
+      background-color: #0d0d0d !important;
+      color: #ffff00 !important;
+    }
+    body.a11y-high-contrast .top-navbar,
+    body.a11y-high-contrast .sidebar,
+    body.a11y-high-contrast .card-panel,
+    body.a11y-high-contrast .stat-card,
+    body.a11y-high-contrast .hero-banner,
+    body.a11y-high-contrast .notif-dropdown,
+    body.a11y-high-contrast .network-modal,
+    body.a11y-high-contrast .a11y-menu,
+    body.a11y-high-contrast .patient-profile-card {
+      background-color: #1a1a1a !important;
+      border-color: #ffff00 !important;
+      color: #ffff00 !important;
+    }
+    body.a11y-high-contrast button,
+    body.a11y-high-contrast input,
+    body.a11y-high-contrast textarea,
+    body.a11y-high-contrast td,
+    body.a11y-high-contrast th,
+    body.a11y-high-contrast span,
+    body.a11y-high-contrast div,
+    body.a11y-high-contrast a {
+      color: #ffff00 !important;
+      border-color: #ffff00 !important;
+    }
+    body.a11y-high-contrast .btn-primary {
+      background: #ffff00 !important;
+      color: #000000 !important;
+    }
+
+    body.a11y-grayscale {
+      filter: grayscale(100%);
+    }
+
+    body.a11y-invert {
+      filter: invert(100%) hue-rotate(180deg);
+    }
+    body.a11y-invert img {
+      filter: invert(100%) hue-rotate(180deg);
+    }
+
+    body.a11y-spacing {
+      letter-spacing: 0.12em !important;
+      word-spacing: 0.16em !important;
+      line-height: 1.8 !important;
+    }
+
+    body.a11y-underline a,
+    body.a11y-underline button,
+    body.a11y-underline .nav-btn,
+    body.a11y-underline .a11y-btn-option {
+      text-decoration: underline !important;
+      text-decoration-thickness: 2px !important;
+    }
+
+    /* Modo oscuro global: los paneles/tarjetas locales usan variables propias
+       (--bg-surface, --hospired-white, --text-main, --border-color, --hospired-dark)
+       que no coinciden con las del css compartido, por lo que quedaban blancos. */
+    html.global-dark-mode {
+      --bg-main: #0b1220 !important;
+      --bg-surface: #111827 !important;
+      --bg-subtle: #1e293b !important;
+      --hospired-white: #111827 !important;
+      --hospired-gray: #1e293b !important;
+      --text-main: #edf6ff !important;
+      --text-muted: #cbd5e1 !important;
+      --border-color: #334155 !important;
+      --hospired-dark: #edf6ff !important;
+    }
+
+    /* --hospired-dark pasa a ser un color claro para texto en modo oscuro;
+       estos elementos lo usaban como tono decorativo oscuro, se fija aparte. */
+    html.global-dark-mode .avatar,
+    html.global-dark-mode .profile-modal-avatar {
+      background: linear-gradient(135deg, var(--hospired-green), #0b1220) !important;
+    }
+    html.global-dark-mode .a11y-trigger-btn {
+      background: linear-gradient(135deg, #0b1220, var(--hospired-blue)) !important;
+    }
+    html.global-dark-mode .chart-bar {
+      background: linear-gradient(180deg, var(--hospired-blue) 0%, #0b1220 100%) !important;
+    }
+    html.global-dark-mode .chart-bar::after {
+      color: var(--text-main) !important;
+    }
+
+    /* El hero-content h1 usaba un fondo blanco fijo (rgba 255,255,255) con texto
+       en --text-main; al aclararse --text-main en modo oscuro quedaba texto claro
+       sobre caja blanca (ilegible). Se oscurece la caja y se fuerza texto claro. */
+    html.global-dark-mode .hero-content h1 {
+      background-color: rgba(11, 18, 32, 0.82) !important;
+      color: var(--literal-white) !important;
+      border: 1px solid var(--neon-cyan);
+    }
+
+    /* Acentos neón para botones e iconos del panel en modo oscuro. */
+    html.global-dark-mode .btn-primary {
+      background: linear-gradient(135deg, #0b1220, var(--hospired-green)) !important;
+      color: var(--literal-white) !important;
+      box-shadow: 0 0 14px rgba(0, 229, 255, 0.45);
+      border: 1px solid var(--neon-cyan);
+    }
+    html.global-dark-mode .btn-primary:hover {
+      box-shadow: 0 0 22px rgba(0, 229, 255, 0.75);
+    }
+    html.global-dark-mode .hero-tag {
+      background-color: transparent !important;
+      color: var(--neon-green) !important;
+      border: 1px solid var(--neon-green);
+      box-shadow: 0 0 10px rgba(57, 255, 20, 0.5);
+    }
+    html.global-dark-mode .nav-btn.active {
+      border-left: 4px solid var(--neon-cyan) !important;
+      box-shadow: inset 0 0 14px rgba(0, 229, 255, 0.25);
+    }
+    html.global-dark-mode .nav-btn:focus-visible,
+    html.global-dark-mode .profile-action:focus-visible,
+    html.global-dark-mode .profile-modal-close:focus-visible {
+      outline: 2px solid var(--neon-cyan) !important;
+      outline-offset: 2px;
+    }
+    html.global-dark-mode .profile-action.primary {
+      background: linear-gradient(135deg, var(--hospired-green), #0b1220) !important;
+      color: var(--literal-white) !important;
+      box-shadow: 0 0 12px rgba(57, 255, 20, 0.4);
+      border: 1px solid var(--neon-green);
+    }
+    html.global-dark-mode .a11y-trigger-btn {
+      border: 3px solid var(--neon-pink) !important;
+      box-shadow: 0 0 20px rgba(255, 47, 208, 0.55) !important;
+    }
+
+    /* ==========================================================================
+       3. GLOBAL ANIMATIONS
+       ========================================================================== */
+    @keyframes fadeInScale {
+      0% { opacity: 0; transform: scale(0.98) translateY(15px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(80, 156, 129, 0.4); }
+      50% { transform: scale(1.05); opacity: 0.85; box-shadow: 0 0 0 10px rgba(80, 156, 129, 0); }
+    }
+
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .animated-panel {
+      animation: fadeInScale 0.5s var(--transition-smooth) forwards;
+    }
+
+    /* ==========================================================================
+       4. CORPORATE HEADER, SEARCH & DROPDOWNS
+       ========================================================================== */
+    .top-navbar {
+      background-color: transparent;
+      border-bottom: none;
+      height: 90px;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+     
+      top: 0;
+      z-index: 100;
+      box-shadow: none;
+      margin-left: 195px;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-badge {
+      width: 105px;
+      height: auto;
+      display: block;
+      filter: brightness(0) invert(1);
+    }
+
+    .search-wrapper {
+      position: relative;
+    }
+
+    .nav-search-bar {
+      display: flex; align-items: center;
+      background-color: var(--hospired-gray);
+      border: 1px solid var(--border-color);
+      border-radius: 30px;
+      padding: 8px 20px;
+      width: 380px;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-search-bar:focus-within {
+      background-color: var(--hospired-white);
+      border-color: var(--hospired-blue);
+      box-shadow: 0 0 0 4px rgba(56, 141, 174, 0.15);
+      width: 420px;
+    }
+
+    .nav-search-bar input {
+      border: none; background: transparent;
+      width: 100%; margin-left: 10px;
+      font-size: 0.9rem; color: var(--text-main);
+      font-family: inherit; outline: none;
+    }
+
+    .search-results-dropdown {
+      position: absolute; top: 110%; left: 0; width: 100%;
+      background-color: var(--hospired-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      max-height: 320px; overflow-y: auto;
+      display: none; z-index: 200;
+    }
+
+    .search-results-dropdown.active { display: block; }
+
+    .search-result-item {
+      padding: 12px 16px; border-bottom: 1px solid var(--border-color);
+      cursor: pointer; transition: var(--transition-smooth);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .search-result-item:hover { background-color: var(--bg-subtle); }
+    .search-result-item:last-child { border-bottom: none; }
+
+    .nav-actions {
+      display: flex; align-items: center; gap: 24px;
+    }
+
+    /* Operational Network Status */
+    .status-container { position: relative; }
+
+    .status-pill {
+      display: flex; align-items: center; gap: 8px;
+      background-color: rgba(80, 156, 129, 0.12);
+      color: var(--hospired-green);
+      padding: 8px 16px; border-radius: 20px;
+      font-size: 0.8rem; font-weight: 700;
+      border: 1px solid rgba(80, 156, 129, 0.3);
+      cursor: pointer; transition: var(--transition-smooth);
+      user-select: none;
+    }
+    .status-pill:hover { background-color: rgba(80, 156, 129, 0.22); transform: translateY(-1px); }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      background-color: var(--hospired-green);
+      border-radius: 50%;
+      animation: pulseGlow 2s infinite;
+    }
+
+    .network-modal {
+      position: absolute; top: 120%; right: 0; width: 320px;
+      background-color: var(--hospired-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      padding: 20px; display: none; z-index: 200;
+    }
+    .network-modal.active { display: block; animation: fadeInScale 0.3s ease; }
+    .network-node {
+      padding: 10px; background-color: var(--bg-subtle);
+      border-radius: var(--radius-sm); margin-bottom: 8px;
+      font-size: 0.82rem; border-left: 3px solid var(--hospired-green);
+    }
+
+   
+    /* Interactive User Profile for Hospital Panel */
+    .user-profile {
+      display: flex; align-items: center; gap: 14px;
+      padding: 8px 12px; border-left: 2px solid var(--border-color);
+      cursor: pointer; border-radius: var(--radius-sm);
+      transition: var(--transition-smooth);
+    }
+    .user-profile:hover {
+      background-color: var(--bg-subtle);
+    }
+
+    .avatar {
+      width: 42px; height: 42px;
+      background: var(--hospired-primary-dark);
+      color: white; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .profile-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+    }
+    .profile-modal.active { display: flex; }
+    .profile-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.38);
+      backdrop-filter: blur(4px);
+    }
+    .profile-modal-panel {
+      position: relative;
+      width: min(92vw, 520px);
+      max-height: calc(100vh - 48px);
+      overflow-y: auto;
+      padding: 24px;
+      background: var(--hospired-white);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 24px 60px rgba(15, 23, 42, 0.2);
+      z-index: 1;
+    }
+    .profile-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      color: var(--text-main);
+      font-size: 1.6rem;
+      cursor: pointer;
+    }
+    .profile-modal-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-right: 36px;
+    }
+    .profile-modal-avatar {
+      width: 62px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--hospired-primary-dark);
+      color: white;
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+    .profile-modal-kicker {
+      margin: 0 0 6px;
+      color: var(--hospired-green);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .profile-card-body { display: grid; gap: 12px; }
+    .profile-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 12px 14px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+    }
+    .profile-field span {
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .profile-field strong { color: var(--text-main); word-break: break-word; }
+    .profile-field input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font: inherit;
+    }
+    .profile-action {
+      border: 0;
+      border-radius: var(--radius-sm);
+      padding: 11px 18px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .profile-action.primary { background: var(--hospired-green); color: white; }
+    .profile-action.secondary { background: var(--bg-subtle); color: var(--text-main); }
+
+    .a11y-widget-container { display: none; }
+
+    .site-footer {
+      --ft-bg: #0f3f5d;
+      --ft-text: #f1f5f9;
+      --ft-accent: #00d1c4;
+      --ft-border: rgba(255, 255, 255, 0.15);
+      --ft-focus-outline: #3b82f6;
+      width: calc(100% - 195px);
+      margin-left: 195px;
+      padding: 60px 20px 20px;
+      background-color: var(--ft-bg);
+      border-top: 5px solid #00A79D;
+      color: var(--ft-text);
+    }
+    .footer-content { max-width: 1080px; margin: 0 auto; }
+    .footer-links-container.footer-vertical {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      align-items: flex-start;
+    }
+    .footer-links-container.footer-vertical .footer-column {
+      flex: 1 1 220px;
+      min-width: 180px;
+    }
+    .footer-column h4 {
+      margin-bottom: 20px;
+      color: var(--ft-accent);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .footer-column ul { margin: 0; padding: 0; list-style: none; }
+    .footer-column li { margin-bottom: 12px; }
+    .footer-column a { color: var(--ft-text); text-decoration: none; }
+    .footer-column a:hover { color: var(--ft-accent); text-decoration: underline; }
+    .footer-column a:focus-visible {
+      outline: 3px solid var(--ft-focus-outline);
+      outline-offset: 4px;
+      border-radius: 4px;
+      color: var(--ft-accent);
+    }
+    /* En móvil el menú lateral pasa a ser una barra superior; el footer debe
+   recuperar todo el ancho y dejar de reservar espacio lateral. */
+@media (max-width: 768px) {
+    .site-footer {
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding: 40px 16px 20px;
+    }
+
+    .footer-content {
+        width: 100%;
+        padding-right: 0;
+    }
+
+    .footer-links-container.footer-vertical {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 24px;
+        text-align: center;
+    }
+
+    .footer-links-container.footer-vertical .footer-column {
+        flex: 1 1 auto;
+        min-width: 0;
+        width: 100%;
+    }
+
+    .footer-column h4 {
+        margin-bottom: 12px;
+    }
+
+    .contact-list a,
+    .social-icons-container.social-icons-inline {
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   Ajustes para dispositivos muy pequeños
+   ========================================================================== */
+@media (max-width: 480px) {
+    .site-footer {
+        padding: 40px 15px 20px 15px;
+        text-align: center;
+    }
+    
+    .social-icons-container {
+        justify-content: center;
+    }
+
+    .contact-list a {
+        justify-content: center;
+    }
+}
+    .contact-list a { display: flex; align-items: center; gap: 10px; }
+    .social-icons-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .social-icons-container img {
+      display: block;
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+      transition: transform 0.2s ease;
+    }
+    .social-icons-container a:hover img { transform: scale(1.15); }
+    .footer-bottom {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--ft-border);
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      .site-footer { width: 100%; margin-left: 0; text-align: center; }
+      .social-icons-container, .contact-list a { justify-content: center; }
+    }
+
+    /* ==========================================================================
+       5. MAIN LAYOUT & SIDEBAR
+       ========================================================================== */
+    .app-body { flex: 1; height: calc(100vh - 76px);
+    margin-left: 195px; }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      bottom: 0;
+      width: 195px;
+      background-color: #00A79D;
+      color: white;
+      padding: 15px 0;
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      z-index: 10;
+      box-shadow: 4px 0 20px rgba(0, 167, 157, 0.15);
+      
+    }
+
+    .sidebar-logo-container {
+      padding: 12px;
+      
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+     .sidebar-menu { display: flex; flex-direction: column; gap: 2px; }
+
+    .nav-section-label {
+      font-size: 0.7rem; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--literal-white);
+      margin: 16px 16px 8px; font-weight: 700;
+    }
+
+    .sidebar-menu { display: flex; flex-direction: column; gap: 6px; }
+
+    .nav-btn {
+      background: transparent; border: none;
+      color: var(--literal-white);
+      padding: 14px 18px; border-radius: var(--radius-md);
+      text-align: left;  font-weight: 600;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      transition: 0.25s ease, color 0.25s ease;
+      transform: none;
+      margin: 0px 10px 0px 0px;
+    }
+
+    .nav-btn-content { 
+      display: flex; 
+      align-items: center; 
+      gap: 14px; }
+      
+
+    .nav-btn:hover, .nav-btn.active {
+      background-color: white;
+      transform: translateX(4px);
+      color: var(--hospired-primary-dark);
+      border-left: 4px solid var(--hospired-green);
+      transition: background-color 0.25s ease, color 0.25s ease;
+      transform: none;
+      
+    }
+
+    .nav-badge {
+      background-color: var(--hospired-green);
+      color: white; font-size: 0.75rem;
+      padding: 2px 8px; border-radius: 12px; font-weight: 700;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      flex: 1; padding: 32px 40px;
+      overflow-y: auto; background-color: var(--hospired-gray);
+    }
+
+    .panel-section { display: none; }
+    .panel-section.active { display: block; margin: 50px; }
+
+    /* ==========================================================================
+       6. PANEL COMPONENTS
+       ========================================================================== */
+    .grid-4col {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px; margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background-color: var(--hospired-white);
+      border-radius: var(--radius-md);
+      padding: 24px; border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition-bounce);
+      position: relative; overflow: hidden;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--hospired-blue);
+    }
+
+    .stat-card::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%;
+      background-color: var(--hospired-green);
+    }
+
+    .stat-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .stat-icon {
+      width: 44px; height: 44px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      background-color: rgba(56, 141, 174, 0.1); color: var(--hospired-blue);
+    }
+    
+    .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+    .stat-value { font-size: 2.2rem; font-weight: 800; color: var(--hospired-dark); margin-bottom: 4px; letter-spacing: -1px; }
+    .stat-trend { font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+    .trend-up { color: var(--hospired-green); }
+
+    /* Hero Banner */
+    .hero-banner {
+      position: relative; border-radius: var(--radius-lg);
+      overflow: hidden; height: 360px; margin-bottom: 32px;
+      
+    }
+
+    .carousel-slide {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      opacity: 0; transition: opacity 1s ease-in-out;
+      display: flex; align-items: center;
+    }
+    .carousel-slide.active { opacity: 1; z-index: 1; }
+
+    .carousel-slide img {
+      position: absolute; width: 100%; height: 100%; object-fit: cover;
+      mix-blend-mode: overlay; opacity: 0.9;
+      transform: scale(1.05); transition: transform 6s ease;
+    }
+    .carousel-slide.active img { transform: scale(1); }
+
+    .hero-content {
+      position: relative; z-index: 2; padding: 48px;
+      max-width: 650px; color: var(--literal-white);
+    }
+
+    .hero-tag {
+      background-color: var(--hospired-green);
+      color: white; padding: 6px 14px; border-radius: 20px;
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; display: inline-block; margin-bottom: 16px;
+    }
+
+    .hero-content h1 { font-size: 2.4rem; font-weight: 800; line-height: 1.2; margin-bottom: 16px; color: var(--text-main); border-radius: 2px solid var(--hospired-dark); background-color: rgba(255,255,255,0.8); margin: 10px, 0px, 20px, 0px;
+    padding: 30px; border-radius: 15px;}
+    .hero-content p { font-size: 1.05rem; color: #CBD5E1; line-height: 1.6; font-weight: 300; margin-bottom: 24px; }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--hospired-green), #3D8268);
+      color: white; border: none; padding: 12px 24px;
+      border-radius: var(--radius-sm); font-weight: 700; font-size: 0.95rem;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+    
+      transition: var(--transition-bounce);
+
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(80, 156, 129, 0.5); }
+
+    .hero-glass-card {
+      position: absolute; right: 48px; bottom: 32px; z-index: 3;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 20px 24px; border-radius: var(--radius-md);
+      color: white; width: 320px;
+     
+    }
+    .glass-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+    .glass-metric { font-size: 1.8rem; font-weight: 800; color: var(--literal-white); }
+
+    .content-grid-2col {
+      display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 32px;
+    }
+
+    .card-panel {
+      background-color: var(--hospired-white);
+      border-radius: var(--radius-md); padding: 32px;
+      
+    }
+    .contenedor{
+      margin: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .panel-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);
+    }
+    .panel-title { font-size: 1.3rem; font-weight: 700; color: var(--hospired-dark); }
+
+    /* CSS Charts */
+    .css-chart { display: flex; align-items: flex-end; justify-content: space-between; height: 200px; padding-top: 20px; gap: 16px; }
+    .chart-col { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+    .chart-bar-container { width: 100%; height: 160px; display: flex; align-items: flex-end; justify-content: center; background-color: var(--bg-subtle); border-radius: var(--radius-sm); padding: 4px; }
+    .chart-bar {
+      width: 100%; background: linear-gradient(180deg, var(--hospired-blue) 0%, var(--hospired-dark) 100%);
+      border-radius: 6px; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+    .chart-bar:hover { background: linear-gradient(180deg, var(--hospired-green) 0%, var(--hospired-blue) 100%); }
+    .chart-bar::after {
+      content: attr(data-val); position: absolute; top: -25px; left: 50%;
+      transform: translateX(-50%); font-size: 0.75rem; font-weight: 700;
+      color: var(--hospired-dark); opacity: 0; transition: opacity 0.2s;
+    }
+    .chart-bar:hover::after { opacity: 1; }
+    .chart-label { margin-top: 10px; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+
+    /* Data Tables */
+    .table-responsive { overflow-x: auto; width: 100%; }
+    .data-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+    
+    .data-table th {
+      background-color: var(--bg-subtle); color: var(--text-muted);
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; padding: 14px 20px; text-align: left;
+      border-bottom: 2px solid var(--border-color);
+    }
+    
+    .data-table td {
+      padding: 18px 20px; font-size: 0.95rem; font-weight: 500;
+      color: var(--hospired-dark); border-bottom: 1px solid var(--border-color);
+      transition: var(--transition-smooth);
+    }
+
+    .data-table tr:hover td {
+      background-color: rgba(56, 141, 174, 0.04);
+    }
+
+    .patient-cell { display: flex; align-items: center; gap: 12px; }
+    .patient-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background-color: rgba(80, 156, 129, 0.15); color: var(--hospired-green);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.85rem;
+    }
+
+    /* Badges */
+    .badge {
+      padding: 6px 12px; border-radius: 20px; font-size: 0.75rem;
+      font-weight: 700; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .badge-visual { background-color: #FEF3C7; color: #D97706; border: 1px solid #FCD34D; }
+    .badge-physical { background-color: #D1FAE5; color: #059669; border: 1px solid #A7F3D0; }
+    .badge-audit { background-color: #E0E7FF; color: #4F46E5; border: 1px solid #C7D2FE; }
+    .badge-cognitive { background-color: #DBEAFE; color: #2563EB; border: 1px solid #93C5FD; }
+
+    /* Modo oscuro: fondo oscuro/neutro + borde neon acorde al color + texto blanco puro. */
+    html.global-dark-mode .badge-visual,
+    html.global-dark-mode .badge-physical,
+    html.global-dark-mode .badge-audit,
+    html.global-dark-mode .badge-cognitive {
+      background-color: rgba(30, 30, 36, 0.7) !important;
+      color: #ffffff !important;
+    }
+    html.global-dark-mode .badge-visual { border: 1px solid #FFA500 !important; box-shadow: 0 0 8px rgba(255, 165, 0, 0.7); }
+    html.global-dark-mode .badge-physical { border: 1px solid #39FF14 !important; box-shadow: 0 0 8px rgba(57, 255, 20, 0.7); }
+    html.global-dark-mode .badge-audit { border: 1px solid #B026FF !important; box-shadow: 0 0 8px rgba(176, 38, 255, 0.7); }
+    html.global-dark-mode .badge-cognitive { border: 1px solid #00BFFF !important; box-shadow: 0 0 8px rgba(0, 191, 255, 0.7); }
+
+    /* Forms */
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    .form-group.full-width { grid-column: span 2; }
+    
+    .form-label { font-size: 0.85rem; font-weight: 700; color: var(--hospired-dark); }
+    .form-input {
+      padding: 12px 16px; border: 1.5px solid var(--border-color);
+      border-radius: var(--radius-sm); font-size: 0.95rem; font-family: inherit;
+      color: var(--hospired-dark); background-color: var(--bg-surface);
+      transition: var(--transition-smooth);
+    }
+    .form-input:focus {
+      outline: none; border-color: var(--hospired-blue);
+      box-shadow: 0 0 0 4px rgba(56, 141, 174, 0.15);
+    }
+
+    /* Timeline */
+    .timeline { display: flex; flex-direction: column; gap: 20px; position: relative; padding-left: 24px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 0;
+      width: 2px; height: 100%; background-color: var(--border-color);
+    }
+    .timeline-item { position: relative; }
+    .timeline-dot {
+      position: absolute; left: -24px; top: 4px;
+      width: 16px; height: 16px; border-radius: 50%;
+      background-color: var(--hospired-green);
+      border: 3px solid var(--literal-white);
+      box-shadow: 0 0 0 3px rgba(80, 156, 129, 0.3);
+    }
+    .timeline-card {
+      background-color: var(--bg-subtle); padding: 16px;
+      border-radius: var(--radius-sm); border: 1px solid var(--border-color);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    /* ==========================================================================
+       7. FLOATING ACCESSIBILITY WIDGET
+       ========================================================================== */
+    .a11y-widget-container {
+      position: fixed; bottom: 24px; right: 24px; z-index: 999999 !important; pointer-events: auto;
+    }
+
+    .a11y-trigger-btn {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--hospired-dark), var(--hospired-blue));
+      color: white; border: 3px solid var(--hospired-white);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--transition-bounce); outline: none;
+    }
+
+    .a11y-trigger-btn:hover {
+      transform: scale(1.1) rotate(5deg); box-shadow: 0 0 25px rgba(80, 156, 129, 0.6);
+    }
+
+    body.a11y-high-contrast .a11y-trigger-btn {
+      background: #ffff00 !important; color: #000000 !important;
+      border: 3px solid #ffffff !important; box-shadow: 0 0 15px #ffff00 !important;
+    }
+
+    .a11y-menu {
+      position: absolute; bottom: 74px; right: 0; width: 320px;
+      background-color: var(--hospired-white); border-radius: var(--radius-md);
+      border: 1px solid var(--border-color); box-shadow: var(--shadow-lg);
+      padding: 20px; display: none; flex-direction: column; gap: 12px;
+    }
+
+    .a11y-menu.active { display: flex; animation: fadeInScale 0.35s var(--transition-smooth) forwards; }
+
+    .a11y-header {
+      display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid var(--border-color); padding-bottom: 10px;
+      font-weight: 800; font-size: 0.95rem; color: var(--hospired-dark);
+    }
+
+    .a11y-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); line-height: 1; }
+
+    .a11y-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .a11y-btn-option {
+      background-color: var(--bg-subtle); border: 1px solid var(--border-color);
+      padding: 10px; border-radius: var(--radius-sm); font-size: 0.8rem; font-weight: 700;
+      color: var(--hospired-dark); cursor: pointer; transition: var(--transition-smooth);
+      display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;
+    }
+
+    .a11y-btn-option:hover { background-color: rgba(56, 141, 174, 0.1); border-color: var(--hospired-blue); }
+
+    .a11y-btn-reset {
+      grid-column: span 2; background-color: #FEE2E2; color: #991B1B;
+      border-color: #FCA5A5; flex-direction: row; justify-content: center;
+    }
+    .a11y-btn-reset:hover { background-color: #FCA5A5; }
+
+    /* ==========================================================================
+       8. PATIENT HISTORY STYLES
+       ========================================================================== */
+    /* Ruta de navegacion (breadcrumb) eliminada; el header ahora absorbe el espacio alineando su unico hijo al extremo. */
+    .content-sub-header { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 24px; }
+
+    .patient-profile-card {
+      background-color: var(--bg-surface); border-radius: var(--radius-md); padding: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; gap: 25px; align-items: center;
+      margin-bottom: 30px; border: 1px solid var(--border-color); border-top: 4px solid var(--hospired-blue);
+    }
+
+    .historial-avatar {
+      width: 90px; height: 90px; background-color: var(--bg-subtle);
+      border: 2px solid var(--hospired-blue); border-radius: 50%; display: flex;
+      align-items: center; justify-content: center; font-size: 2.5rem; color: var(--hospired-blue);
+      font-weight: bold; flex-shrink: 0;
+    }
+
+    .patient-info { flex: 1; }
+    .patient-info h1 { font-size: 1.6rem; color: var(--hospired-dark); margin-bottom: 5px; }
+
+    .patient-details-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 15px; }
+
+    .detail-item p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 3px; }
+    .detail-item strong { font-size: 1rem; color: var(--text-main); }
+
+    .accessibility-badge {
+      display: inline-flex; align-items: center; gap: 8px; background-color: #f0fdfa;
+      color: #0f766e; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem;
+      font-weight: bold; border: 1px solid #ccfbf1; margin-top: 14px;
+    }
+
+    .btn-outline {
+      background-color: var(--hospired-white); border: 1px solid var(--border-color); color: var(--text-main);
+      cursor: pointer; padding: 15px 25px; border-radius: 6px; font-weight: bold; transition: var(--transition-smooth);
+    }
+    .btn-outline:hover { background-color: var(--bg-subtle); }
+
+    .history-table { width: 100%; border-collapse: collapse; }
+    .history-table th {
+      text-align: left; padding: 12px 15px; color: var(--text-muted);
+      border-bottom: 2px solid var(--border-color); font-weight: 600; font-size: 0.9rem;
+    }
+    .history-table td {
+      padding: 15px; border-bottom: 1px solid var(--border-color); color: var(--text-main);
+      font-size: 0.95rem; vertical-align: middle;
+    }
+    .history-table tr:hover { background-color: var(--bg-subtle); }
+
+    .badge.completed { background-color: #d1fae5; color: #10b981; border: 1px solid #A7F3D0; }
+    .badge.pending { background-color: #fef3c7; color: #f59e0b; border: 1px solid #FCD34D;}
+    .badge.cancelled { background-color: #fee2e2; color: #ef4444; border: 1px solid #FCA5A5;}
+
+    .action-btn {
+      background: none; border: none; color: var(--hospired-blue); cursor: pointer;
+      font-weight: bold; font-size: 0.9rem;
+    }
+    .action-btn:hover { text-decoration: underline; color: var(--hospired-dark); }
+
+    @media (max-width: 768px) {
+      .patient-profile-card { flex-direction: column; text-align: center; }
+      .patient-details-grid { grid-template-columns: 1fr 1fr; }
+    }
+    
+    /* ==========================================================================
+       9. FOOTER (HOSPIRED ACCESSIBLE FOOTER)
+       ========================================================================== */
+    .site-footer {
+      
+        --ft-bg: #0f3f5d;
+        --ft-text: #f1f5f9;
+        --ft-accent: #00d1c4;
+        --ft-border: rgba(255, 255, 255, 0.15);
+        --ft-focus-outline: #3b82f6;
+
+        background-color: var(--ft-bg); color: var(--ft-text);
+        padding: 60px 20px 20px 20px; border-top: 5px solid #00A79D;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .footer-content { max-width: 1200px; margin: 0 auto; 
+    margin-left: 300px;}
+    .footer-links-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 40px; }
+
+    .footer-column h4 {
+        color: var(--ft-accent); font-size: 1.15rem; font-weight: 700;
+        margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .footer-column ul { list-style: none; padding: 0; margin: 0; }
+    .footer-column li { margin-bottom: 12px; }
+
+    .footer-column a {
+        color: var(--ft-text); text-decoration: none; font-size: 0.95rem;
+        display: inline-block; transition: color 0.2s ease, text-decoration 0.2s ease;
+    }
+    .footer-column a:hover { color: var(--ft-accent); text-decoration: underline; }
+    .footer-column a:focus-visible {
+        outline: 3px solid var(--ft-focus-outline); outline-offset: 4px; border-radius: 4px; color: var(--ft-accent);
+    }
+
+    .contact-list a { display: flex; align-items: center; gap: 10px; }
+    
+    .social-icons-container { display: flex; gap: 20px; align-items: center; margin-top: 10px; }
+    .social-icons-container a {
+        display: inline-flex; align-items: center; justify-content: center;
+        border-radius: 8px; color: var(--ft-text);
+        transition: transform 0.2s ease, color 0.2s ease;
+    }
+    .social-icons-container a:hover { transform: scale(1.15); color: var(--ft-accent); }
+    .social-icons-container svg { width: 32px; height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
+
+    .footer-bottom {
+        text-align: center; margin-top: 50px; padding-top: 24px;
+        border-top: 1px solid var(--ft-border); font-size: 0.9rem; color: #cbd5e1;
+    }
+
+    @media (max-width: 480px) {
+        .site-footer { padding: 40px 15px 20px 15px; text-align: center; }
+        .social-icons-container, .contact-list a { justify-content: center; }
+    }
+
+    /* Mantiene el mismo widget de accesibilidad de la vista de pacientes. */
+    #globalAccessibilityWrapper .accessibility-trigger-btn {
+      width: 56px;
+      height: 56px;
+    }
+    #globalAccessibilityWrapper .accessibility-trigger-btn svg {
+      width: 26px;
+      height: 26px;
+      fill: currentColor !important;
+      stroke: none;
+    }
+    #globalAccessibilityWrapper .accessibility-panel {
+      width: min(95vw, 580px);
+    }
+    #globalAccessibilityWrapper .accessibility-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(135deg, rgba(0, 167, 157, 0.12), white);
+    }
+    #globalAccessibilityWrapper .accessibility-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 12px;
+    }
+    #globalAccessibilityWrapper .access-option-btn {
+      padding: 12px;
+      font-size: 0.88rem;
+    }
+
+    .site-footer { width: calc(100% - 195px); margin-left: 195px; }
+    .footer-content { max-width: 1080px; margin: 0 auto; }
+    .social-icons-container.social-icons-inline { gap: 14px; margin-top: 16px; }
+    .social-icons-container a:hover { transform: none; }
+    .social-icons-container a:hover img { transform: scale(1.15); }
+
+    /* ==========================================================================
+       9. MOBILE HAMBURGER MENU (< 768px)
+       ========================================================================== */
+    .mobile-menu-toggle {
+      display: none;
+      background: transparent; border: none; color: var(--text-main);
+      width: 44px; height: 44px; border-radius: var(--radius-sm);
+      align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    }
+    .mobile-menu-toggle svg { width: 26px; height: 26px; stroke: currentColor; }
+    .mobile-menu-toggle:hover { background-color: var(--bg-subtle); }
+    .mobile-menu-toggle:focus-visible { outline: 2px solid var(--hospired-blue); outline-offset: 2px; }
+
+    /* Barra horizontal desplegable (no lista vertical) que sustituye al sidebar fijo en movil. */
+    .mobile-nav-bar {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .app-body { margin-left: 0; height: auto; flex-direction: column; }
+
+      .top-navbar {
+        margin-left: 0; height: auto; flex-wrap: wrap;
+        padding: 16px 20px; row-gap: 12px;
+      }
+      .mobile-menu-toggle { display: flex; order: 0; }
+      .brand-container { order: 1; }
+      .nav-actions { order: 2; margin-left: auto; }
+      .search-wrapper { order: 3; flex: 1 1 100%; }
+      .nav-search-bar { width: 100%; }
+      .nav-search-bar:focus-within { width: 100%; }
+
+      /* Menu movil: barra horizontal con slide-in vertical (max-height) que empuja
+         el contenido hacia abajo en vez de superponerse (sin position:fixed/absolute). */
+      .mobile-nav-bar {
+        display: flex; flex-wrap: wrap; gap: 8px;
+        max-height: 0; opacity: 0; overflow: hidden;
+        padding: 0 20px; background-color: #00A79D;
+        transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
+      }
+      .mobile-nav-bar.active {
+        max-height: 640px; opacity: 1; padding: 16px 20px 20px;
+      }
+      .mobile-nav-bar .nav-btn {
+        flex: 1 1 auto; white-space: nowrap; padding: 10px 14px;
+      }
+      .mobile-nav-bar .nav-btn-content { gap: 8px; }
+      .mobile-nav-bar .nav-btn span { font-size: 0.85rem; }
+
+      .main-content { padding: 20px; }
+      .site-footer { width: 100%; margin-left: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .mobile-nav-bar .nav-btn { flex: 1 1 100%; }
+      .hero-content { padding: 24px; }
+    }
+
+    /* Dashboard mobile layout: admissions become readable cards instead of
+       forcing the whole dashboard to keep a desktop-width table. */
+    @media (max-width: 768px) {
+      #panel-dashboard .content-grid-2col {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      #panel-dashboard .content-grid-2col > .card-panel {
+        min-width: 0;
+        width: 100%;
+      }
+
+      #panel-dashboard .content-grid-2col .panel-header {
+        align-items: stretch;
+      }
+
+      #panel-dashboard .content-grid-2col .panel-header .btn-primary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      #panel-dashboard .data-table {
+        display: block;
+        min-width: 0;
+      }
+
+      #panel-dashboard .data-table thead {
+        display: none;
+      }
+
+      #panel-dashboard .data-table tbody,
+      #panel-dashboard .data-table tr,
+      #panel-dashboard .data-table td {
+        display: block;
+        width: 100%;
+      }
+
+      #panel-dashboard .data-table tr {
+        margin-bottom: 12px;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        background: var(--bg-surface);
+      }
+
+      #panel-dashboard .data-table td {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.88rem;
+      }
+
+      #panel-dashboard .data-table td:last-child {
+        border-bottom: 0;
+      }
+
+      #panel-dashboard .data-table td::before {
+        flex: 0 0 92px;
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      #panel-dashboard .data-table td:nth-child(1)::before { content: 'Paciente'; }
+      #panel-dashboard .data-table td:nth-child(2)::before { content: 'Requisito'; }
+      #panel-dashboard .data-table td:nth-child(3)::before { content: 'Registro'; }
+      #panel-dashboard .data-table td:nth-child(4)::before { content: 'Estado'; }
+
+      #panel-dashboard .timeline {
+        padding-left: 20px;
+        gap: 12px;
+      }
+
+      #panel-dashboard .timeline-card {
+        width: 100%;
+        min-width: 0;
+        gap: 8px;
+      }
+
+      #panel-dashboard .timeline-card > span {
+        align-self: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #panel-dashboard .data-table td {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      #panel-dashboard .data-table td::before {
+        flex-basis: auto;
+      }
+
+      #panel-dashboard .patient-cell {
+        width: 100%;
+      }
+    }
+
+    html.global-dark-mode .mobile-nav-bar.active {
+      box-shadow: inset 0 -12px 20px -12px rgba(0, 229, 255, 0.25);
+    }
+
+    /* Responsive final: conserva la estructura del panel y elimina los
+       desplazamientos rígidos en tabletas y teléfonos. */
+    @media (max-width: 1100px) and (min-width: 769px) {
+      .top-navbar {
+        margin-left: 195px;
+        padding: 0 24px;
+      }
+
+      .content-body {
+        width: 100%;
+      }
+
+      .panel-section.active {
+        margin: 24px;
+      }
+
+      .content-grid-2col {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-glass-card {
+        right: 24px;
+        width: min(300px, 40%);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .top-navbar {
+        width: 100%;
+        margin-left: 0;
+        padding: 64px 16px 12px;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .nav-actions {
+        margin-left: auto;
+      }
+
+      .user-profile {
+        max-width: min(100%, 280px);
+      }
+
+      .user-profile > div:first-child {
+        min-width: 0;
+      }
+
+      .user-profile > div:first-child > div {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .panel-section.active {
+        margin: 20px 0;
+      }
+
+      .hero-banner {
+        height: auto;
+        min-height: 320px;
+      }
+
+      .hero-content {
+        max-width: 100%;
+        padding: 28px 20px;
+      }
+
+      .hero-content h1 {
+        font-size: clamp(1.5rem, 7vw, 2.2rem);
+        padding: 20px;
+      }
+
+      .hero-glass-card {
+        display: none;
+      }
+
+      .content-grid-2col {
+        grid-template-columns: 1fr;
+      }
+
+      .card-panel,
+      .stat-card {
+        padding: 20px 16px;
+      }
+
+      .panel-header,
+      .contenedor,
+      .timeline-card,
+      .patient-profile-card {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .contenedor {
+        margin: 0 0 20px;
+      }
+
+      .panel-header,
+      .contenedor {
+        justify-content: flex-start;
+      }
+
+      .form-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .form-group.full-width {
+        grid-column: auto;
+      }
+
+      .patient-details-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .patient-profile-card {
+        text-align: center;
+      }
+
+      .patient-profile-card .btn-primary {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .timeline-card {
+        align-items: flex-start;
+      }
+
+      .css-chart {
+        gap: 8px;
+        overflow-x: auto;
+        padding-left: 4px;
+        padding-right: 4px;
+      }
+
+      .chart-col {
+        min-width: 44px;
+      }
+
+      .a11y-widget-container {
+        right: 12px;
+        bottom: 12px;
+      }
+
+      .a11y-menu {
+        right: 0;
+        width: min(320px, calc(100vw - 24px));
+        max-height: 75vh;
+        overflow-y: auto;
+      }
+
+      .site-footer {
+        width: 100% !important;
+        margin-left: 0 !important;
+      }
+
+      .footer-content {
+        width: 100%;
+        padding-right: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nav-actions {
+        gap: 10px;
+      }
+
+      .user-profile {
+        gap: 8px;
+        padding: 6px 8px;
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+      }
+
+      .notif-dropdown {
+        position: fixed;
+        top: 74px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+      }
+
+      .network-modal {
+        position: fixed;
+        top: 74px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+      }
+
+      .data-table,
+      .history-table {
+        min-width: 680px;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+      }
+    }
+    
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</head>
+<body>
+  <div class="shape-decor shape-1"></div>
+  <div class="shape-decor shape-2"></div>
+  <div class="shape-decor shape-3"></div>
+
+  <aside class="sidebar">
+    <div>
+      <div class="sidebar-logo-container">
+        <a href="/Panel.De.Instituciones/panel-hospital (2).html" aria-label="Inicio Hospired">
+          <img class="logo-badge" src="/login/Hospired.logo.png" alt="Logo de Hospired">
+        </a>
+      </div>
+      <nav class="sidebar-menu">
+        <button class="nav-btn active" onclick="switchTab(event, 'panel-dashboard')">
+          <div class="nav-btn-content">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span data-en="Central Dashboard" data-es="Panel Central">Panel Central</span>
+          </div>
+        </button>
+        <button class="nav-btn" onclick="switchTab(event, 'panel-afiliacion')">
+          <div class="nav-btn-content">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span data-en="Hospital Profile" data-es="Perfil del Hospital">Perfil del Hospital</span>
+          </div>
+        </button>
+        <button class="nav-btn" onclick="switchTab(event, 'panel-pacientes')">
+          <div class="nav-btn-content">
+            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span data-en="Patient Control" data-es="Control de Pacientes">Control de Pacientes</span>
+          </div>
+        </button>
+        <button class="nav-btn" onclick="switchTab(event, 'panel-citas')">
+          <div class="nav-btn-content">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span data-en="Agenda & Consultations" data-es="Agenda y Consultas"> Agenda y Consultas </span>
+          </div>
+        </button>
+      </nav>
+
+      <div class="nav-section-label"style="margin-top: 16px;"data-en="Technical Support"data-es="Soporte Técnico">Technical Support</div>
+      <nav class="sidebar-menu">
+        <button class="nav-btn" onclick="window.location.href='../soporte-y-ayuda-hsp.html'">
+            <div class="nav-btn-content">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+
+                <span data-en="Help and support" data-es="Ayuda y Soporte">
+                    Soporte y Ayuda
+                </span>
+            </div>
+        </button>
+      </nav>
+    </div>
+  </aside>
+  <!-- 1. CORPORATE HEADER -->
+  <header class="top-navbar">
+    <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Abrir menu de navegacion" aria-expanded="false" aria-controls="mobileNavBar" onclick="toggleMobileNav()">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+
+    <!-- Integrated Search -->
+    <div class="search-wrapper">
+      <div class="nav-search-bar">
+        <svg style="color: var(--text-muted);" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="globalSearchInput" placeholder="Search record, doctor or patient..." onkeyup="handleGlobalSearch()">
+      </div>
+      <div class="search-results-dropdown" id="searchResults"></div>
+    </div>
+
+    <div class="nav-actions">
+      <!-- Operational Network Status -->
+      
+
+         
+
+      <!-- Hospital Profile Trigger (Clickable) -->
+      <div class="user-profile" title="Ver perfil institucional" onclick="openSharedProfileModal()">
+        <div style="text-align: right;">
+          <div id="profileHospitalName" style="font-weight: 700; font-size: 0.9rem; color: var(--hospired-dark);">  Salvador National Hospital </div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">Institutional Profile</div>
+        </div>
+        <div class="avatar">HN</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Menu movil horizontal (se llena por JS a partir de los botones del sidebar; ver buildMobileNav()) -->
+  <nav class="mobile-nav-bar" id="mobileNavBar" aria-label="Navegacion movil"></nav>
+
+  <!-- 2. MAIN BODY -->
+  <div class="app-body">
+    
+  
+    <!-- MAIN CONTENT AREA -->
+    <main class="content-body page-content-transition">
+      
+      <!-- TAB 1: CENTRAL DASHBOARD -->
+      <section id="panel-dashboard" class="panel-section active animated-panel">
+        
+        <div class="hero-banner">
+          <div class="carousel-slide active" id="slide-1">
+            <img src="/Hospital-de-El-Salvador-scaled.jpg.jpeg" alt="Modern Hospital">
+            <div class="hero-content">
+              <span class="hero-tag" data-en="Inclusive Management" data-es="Gestión Inclusiva">Inclusive Management</span>
+              <h1 data-en="Barrier-Free Healthcare for El Salvador" data-es="Atención Médica Libre de Barreras para El Salvador">Barrier-Free Healthcare for El Salvador</h1>
+              
+              <button class="btn-primary" onclick="switchTab(null, 'panel-pacientes', true)">
+                <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                <span data-en="Register New Record" data-es="Registrar Nuevo Registro">Register New Record</span>
+              </button>
+            </div>
+          </div>
+          
+          
+        </div>
+
+        <div class="grid-4col">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label" data-en="Patients Treated" data-es="Pacientes Atendidos">Patients Treated</span>
+              <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
+            </div>
+           
+            <div class="stat-trend trend-up"><svg style="width:14px; height:14px;" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> <span data-en="+12% this month" data-es="+12% este mes">+12% this month</span></div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label" data-en="Active Consultations" data-es="Consultas Activas">Active Consultations</span>
+              <div class="stat-icon" style="background-color: rgba(80, 156, 129, 0.1); color: var(--hospired-green);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+            </div>
+            <div class="stat-value">42</div>
+            <div class="stat-trend trend-up" data-en="Avg. time 18 min" data-es="Tiempo prom. 18 min">Avg. time 18 min</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label" data-en="Specialized Staff" data-es="Personal Especializado">Specialized Staff</span>
+              <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+            </div>
+            <div class="stat-value">84</div>
+            <div class="stat-trend" style="color: var(--text-muted);" data-en="Doctors & nursing" data-es="Doctores & enfermería">Doctors & nursing</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-label" data-en="LESA Interpreters" data-es="Intérpretes LESA">LESA Interpreters</span>
+              <div class="stat-icon" style="background-color: rgba(80, 156, 129, 0.1); color: var(--hospired-green);"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+            </div>
+            <div class="stat-value">12</div>
+            <div class="stat-trend trend-up" data-en="Available day shift" data-es="Disponible turno diurno">Available day shift</div>
+          </div>
+        </div>
+
+        <div class="content-grid-2col">
+          <div class="card-panel">
+            <div class="panel-header">
+              <span class="panel-title" data-en="Recent Facility Admissions" data-es="Admisiones Recientes del Centro">Recent Facility Admissions</span>
+              <button class="btn-primary" style="padding: 6px 14px; font-size: 0.8rem;" onclick="switchTab(null, 'panel-pacientes', true)" data-en="View All" data-es="Ver Todo" title="View All records">View All</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th data-en="Patient" data-es="Paciente">Patient</th>
+                    <th data-en="Requirement" data-es="Requisito">Requirement</th>
+                    <th data-en="Registration Time" data-es="Hora de Registro">Registration Time</th>
+                    <th data-en="Status" data-es="Estado">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar">AM</div>
+                        <div>
+                          <div style="font-weight: 700;">Ana Beatriz Merino</div>
+                          <div style="font-size: 0.75rem; color: var(--text-muted);">DUI: 05124982-3</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-visual" data-en="Visual Support" data-es="Apoyo Visual">Visual Support</span></td>
+                    <td>10:15 AM</td>
+                    <td><span style="color: var(--hospired-green); font-weight: 700;" data-en="In Consultation Room 4" data-es="En Sala de Consulta 4">In Consultation Room 4</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar" style="background-color: #E0E7FF; color: #4F46E5;">CF</div>
+                        <div>
+                          <div style="font-weight: 700;">Carlos H. Flores</div>
+                          <div style="font-size: 0.75rem; color: var(--text-muted);">DUI: 02341198-1</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-physical" data-en="Reduced Mobility" data-es="Movilidad Reducida">Reduced Mobility</span></td>
+                    <td>09:40 AM</td>
+                    <td><span style="color: var(--hospired-blue); font-weight: 700;" data-en="Waiting Room" data-es="Sala de Espera">Waiting Room</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="patient-cell">
+                        <div class="patient-avatar" style="background-color: #DBEAFE; color: #2563EB;">LR</div>
+                        <div>
+                          <div style="font-weight: 700;">Luis Rivas</div>
+                          <div style="font-size: 0.75rem; color: var(--text-muted);">DUI: 03987654-2</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge badge-cognitive" data-en="Cognitive Support" data-es="Apoyo Cognitivo">Cognitive Support</span></td>
+                    <td>11:00 AM</td>
+                    <td><span style="color: var(--hospired-blue); font-weight: 700;" data-en="Waiting Room" data-es="Sala de Espera">Waiting Room</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-panel">
+            <div class="panel-header">
+              <span class="panel-title" data-en="Updates" data-es="Actualizaciones">Updates</span>
+            </div>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-card">
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.85rem;" data-en="North Ramp Enabled" data-es="Rampa Norte Habilitada">North Ramp Enabled</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);" data-en="Maintenance completed" data-es="Mantenimiento completado">Maintenance completed</div>
+                  </div>
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--hospired-blue);" data-en="10 m ago" data-es="hace 10 m">10 m ago</span>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot" style="background-color: var(--hospired-blue);"></div>
+                <div class="timeline-card">
+                  <div>
+                    <div style="font-weight: 700; font-size: 0.85rem;" data-en="LESA Update" data-es="Actualización LESA">LESA Update</div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);" data-en="2 new interpreters on shift" data-es="2 nuevos intérpretes en turno">2 new interpreters on shift</div>
+                  </div>
+                  <span style="font-size: 0.75rem; font-weight: 700; color: var(--hospired-blue);" data-en="1 h ago" data-es="hace 1 h">1 h ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-panel" style="margin-bottom: 24px; margin-top: 32px;">
+          <div class="panel-header">
+            <div>
+             <div class="panel-title" data-en="Weekly Inclusive Care Flow" data-es="Flujo Semanal de Atención Inclusiva">    Weekly Inclusive Care Flow
+              </div>
+              <p  style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;"  data-en="Comparative intake of patients with accessibility requirements." data-es="Registro comparativo de pacientes con requisitos de accesibilidad.">Comparative intake of patients with accessibility requirements.
+              </p>
+            </div>
+          </div>
+          
+          <div class="css-chart">
+            <div class="chart-col">
+              <div class="chart-bar-container"><div class="chart-bar" style="height: 65%;" data-val="142"></div></div>
+              <span class="chart-label" data-en="Monday" data-es="Lunes">Monday</span>
+            </div>
+            <div class="chart-col">
+              <div class="chart-bar-container"><div class="chart-bar" style="height: 85%;" data-val="185"></div></div>
+              <span class="chart-label" data-en="Tuesday" data-es="Martes">Tuesday</span>
+            </div>
+            <div class="chart-col">
+              <div class="chart-bar-container"><div class="chart-bar" style="height: 45%;" data-val="98"></div></div>
+              <span class="chart-label" data-en="Wednesday" data-es="Miércoles">Wednesday</span>
+            </div>
+            <div class="chart-col">
+              <div class="chart-bar-container"><div class="chart-bar" style="height: 95%;" data-val="210"></div></div>
+              <span class="chart-label" data-en="Thursday" data-es="Jueves">Thursday</span>
+            </div>
+            <div class="chart-col">
+              <div class="chart-bar-container"><div class="chart-bar" style="height: 70%;" data-val="155"></div></div>
+              <span class="chart-label" data-en="Friday" data-es="Viernes">Friday</span>
+            </div>
+            <div class="chart-col">
+              <div class="chart-bar-container"><div class="chart-bar" style="height: 30%;" data-val="64"></div></div>
+              <span class="chart-label" data-en="Saturday" data-es="Sábado">Saturday</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: HOSPITAL PROFILE (Institutional Configuration) -->
+      <section id="panel-afiliacion" class="panel-section animated-panel">
+        <div class="card-panel" style="max-width: 900px; margin: 0 auto;">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title"><h2 id="nombreInstitucion" data-en="Hospital Institutional Profile" data-es="Perfil Institucional del Hospital">Hospital Institutional Profile</h2></div>
+              <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 4px;" data-en="Manage operational parameters and public protocols of your medical center." data-es="Gestiona parámetros operacionales y protocolos públicos de tu centro médico.">Manage operational parameters and public protocols of your medical center.</p>
+            </div>
+            
+          </div>
+
+          <form>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label" data-en="Medical Center Name" data-es="Nombre del Centro Médico">Medical Center Name</label>
+                <input type="text" id="panelNombre" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-en="Affiliation Code" data-es="Código de Afiliación">Affiliation Code</label>
+                <input type="text" class="form-input" value="HOSP-SLV-0042" disabled style="background-color: var(--bg-subtle);">
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-en="Director / Medical Officer" data-es="Director / Oficial Médico">Director / Medical Officer</label>
+                <input type="text" id="panelRepresentante" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-en="Emergency Phone" data-es="Teléfono de Emergencia">Emergency Phone</label>
+                <input type="tel" id="panelTelefono" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" data-en="Center Type" data-es="Tipo de Centro">Center Type</label>
+                <input type="text" id="panelTipo" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" data-en="Location" data-es="Ubicación">Location</label>
+                <input type="text" id="panelUbicacion" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" data-en="Email" data-es="Correo">Email</label>
+                <input type="email" id="panelCorreo" class="form-input">
+            </div>
+              <div class="form-group full-width">
+                <label class="form-label" data-en="Active Accessibility Protocols" data-es="Protocolos de Accesibilidad Activos">Active Accessibility Protocols</label>
+                <textarea id="panelMensaje" class="form-input" rows="4"></textarea>
+              </div>
+
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-top: 32px; gap: 16px;">
+              <button type="button" class="btn-primary" style="background: var(--hospired-gray); color: var(--hospired-dark); box-shadow: none;" data-en="Reset" data-es="Reiniciar">Reset</button>
+              <button type="submit" class="btn-primary" data-en="Save Institutional Changes" data-es="Guardar Cambios Institucionales">Save Institutional Changes</button>
+            </div>
+          </form>
+        </div>
+      
+      </section>
+
+      <!-- TAB 3: PATIENT CONTROL -->
+      <section id="panel-pacientes" class="panel-section animated-panel">
+        <div class="card-panel">
+          <div class="contenedor">
+            <span class="panel-title" data-en="General Record Directory" data-es="Directorio General de Registros">General Record Directory</span>
+              <button class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem;" onclick="exportarRegistroGeneralPDF()" data-en=" Export PDF " data-es=" Exportar PDF "> Export PDF </button>
+            </div>
+          
+          <div class="panel-header">
+            <div style="display: flex; gap: 12px;">
+             
+          </div>
+
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-en="Record #" data-es="Registro #">Record #</th>
+                  <th data-en="Patient" data-es="Paciente">Patient</th>
+                  <th data-en="ID Number" data-es="Número de ID">ID Number</th>
+                  <th data-en="Specific Requirement" data-es="Requisito Específico">Specific Requirement</th>
+                  <th data-en="Last Consultation" data-es="Última Consulta">Last Consultation</th>
+                  <th data-en="Actions" data-es="Acciones">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight: 800; color: var(--hospired-blue);">EXP-9020</td>
+                  <td><div style="font-weight: 700;">Roberto Martínez Hernández</div></td>
+                  <td>04567891-2</td>
+                  <td><span class="badge badge-visual" data-en="Wheelchair Access" data-es="Acceso en Silla de Ruedas">Wheelchair Access</span></td>
+                  <td>12/05/2026</td>
+                  <td><button onclick="openPatientHistory('EXP-9020')"data-en="Open History →"data-es="Abrir Historial →"  style="background:none; border:none; color:var(--hospired-blue); font-weight:700; cursor:pointer; text-decoration:none;">Open History →</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 800; color: var(--hospired-blue);">EXP-9021</td>
+                  <td><div style="font-weight: 700;">Ana Beatriz Merino</div></td>
+                  <td>05124982-3</td>
+                  <td><span class="badge badge-visual" data-en="Visual Support (Braille)" data-es="Apoyo Visual (Braille)">Visual Support (Braille)</span></td>
+                  <td>12/05/2026</td>
+                  <td><button onclick="openPatientHistory('EXP-9021')"data-en="Open History →"data-es="Abrir Historial →"  style="background:none; border:none; color:var(--hospired-blue); font-weight:700; cursor:pointer; text-decoration:none;">Open History →</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 800; color: var(--hospired-blue);">EXP-9022</td>
+                  <td><div style="font-weight: 700;">Carlos Humberto Flores</div></td>
+                  <td>02341198-1</td>
+                  <td><span class="badge badge-physical" data-en="Wheelchair Access" data-es="Acceso en Silla de Ruedas">Wheelchair Access</span></td>
+                  <td>14/05/2026</td>
+                  <td><button onclick="openPatientHistory('EXP-9022')"data-en="Open History →"data-es="Abrir Historial →"  style="background:none; border:none; color:var(--hospired-blue); font-weight:700; cursor:pointer; text-decoration:none;">Open History →</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 800; color: var(--hospired-blue);">EXP-9023</td>
+                  <td><div style="font-weight: 700;">Elena María Ramos</div></td>
+                  <td>03881245-8</td>
+                  <td><span class="badge badge-audit" data-en="Hearing Support (LESA)" data-es="Apoyo Auditivo (LESA)">Hearing Support (LESA)</span></td>
+                  <td>15/05/2026</td>
+                  <td><button onclick="openPatientHistory('EXP-9023')"data-en="Open History →"data-es="Abrir Historial →"  style="background:none; border:none; color:var(--hospired-blue); font-weight:700; cursor:pointer; text-decoration:none;">Open History →</button></td>
+                </tr>
+                <!-- NUEVOS PACIENTES AGREGADOS -->
+                <tr>
+                  <td style="font-weight: 800; color: var(--hospired-blue);">EXP-9024</td>
+                  <td><div style="font-weight: 700;">Luis Fernando Gómez</div></td>
+                  <td>06234511-9</td>
+                  <td><span class="badge" style="background-color: #EDE9FE; color: #7C3AED; border: 1px solid #DDD6FE;" data-en="Cognitive Support" data-es="Apoyo Cognitivo">Cognitive Support</span></td>
+                  <td>16/05/2026</td>
+                  <td><button onclick="openPatientHistory('EXP-9024')"data-en="Open History →"data-es="Abrir Historial →"  style="background:none; border:none; color:var(--hospired-blue); font-weight:700; cursor:pointer; text-decoration:none;">Open History →</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight: 800; color: var(--hospired-blue);">EXP-9025</td>
+                  <td><div style="font-weight: 700;">María José Quintanilla</div></td>
+                  <td>01784999-4</td>
+                  <td><span class="badge" style="background-color: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd;" data-en="Elderly Support" data-es="Apoyo para Personas Mayores">Elderly Support</span></td>
+                  <td>17/05/2026</td>
+                  <td><button onclick="openPatientHistory('EXP-9025')"data-en="Open History →"data-es="Abrir Historial →"  style="background:none; border:none; color:var(--hospired-blue); font-weight:700; cursor:pointer; text-decoration:none;">Open History →</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: AGENDA & CONSULTATIONS -->
+      <section id="panel-citas" class="panel-section animated-panel">
+        <div class="card-panel">
+          <div class="panel-header">
+            <span class="panel-title" data-en="Today's Schedule" data-es="Horario de Hoy">Today's Schedule</span>
+          </div>
+          <div class="timeline" style="margin-top: 24px;">
+            <div class="timeline-item">
+              <div class="timeline-dot"></div>
+              <div class="timeline-card">
+                <div>
+                  <div style="font-weight: 800; color: var(--hospired-dark); font-size: 1rem;" data-en="09:30 AM - Ophthalmological Evaluation" data-es="09:30 AM - Evaluación Oftalmológica">09:30 AM - Ophthalmological Evaluation</div>
+                  <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;" data-en="Patient: Ana Beatriz Merino | Doctor: Dr. Fernando López" data-es="Paciente: Ana Beatriz Merino | Doctor: Dr. Fernando López">Patient: Ana Beatriz Merino | Doctor: Dr. Fernando López</div>
+                </div>
+                <span class="badge badge-visual" data-en="Requires Facility Guide" data-es="Requiere Guía del Centro">Requires Facility Guide</span>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background-color: var(--hospired-blue);"></div>
+              <div class="timeline-card">
+                <div>
+                  <div style="font-weight: 800; color: var(--hospired-dark); font-size: 1rem;" data-en="11:00 AM - Physical Therapy & Rehabilitation" data-es="11:00 AM - Fisioterapia y Rehabilitación">11:00 AM - Physical Therapy & Rehabilitation</div>
+                  <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 4px;" data-en="Patient: Carlos H. Flores | Physical Therapy Room Floor 1" data-es="Paciente: Carlos H. Flores | Sala de Fisioterapia Piso 1">Patient: Carlos H. Flores | Physical Therapy Room Floor 1</div>
+                </div>
+                <span class="badge badge-physical" data-en="South Ramp Access" data-es="Acceso por la rampa sur">Acceso por la rampa sur</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: PATIENT HISTORY -->
+      <section id="panel-historial" class="panel-section animated-panel">
+        <div class="content-sub-header">
+            <button class="btn-outline"onclick="switchTab(null, 'panel-pacientes', true)"data-en="Back to directory"data-es="Volver al directorio">Back to directory</button>
+        </div>
+
+        <!-- TARJETAS DINÁMICAS (Se ocultan/muestran con JS) -->
+        <!-- PACIENTE 1 (Original) -->
+        <div class="patient-profile-card" id="profile-EXP-9020" style="display: flex;">
+            <div class="historial-avatar">RM</div>
+            <div class="patient-info">
+                <h1>Roberto Martínez Hernández</h1>
+                <span style="color: var(--text-muted);">ID: 04567891-2 | Record: #EXP-9020</span>
+
+                
+                <div class="patient-details-grid">
+                    <div class="detail-item">
+                        <p data-en="Age / Sex" data-es="Edad / Sexo">Edad / Sexo</p>
+                        <strong>68 years / M</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Blood Type</p>
+                        <strong>O Positive (O+)</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Phone</p>
+                        <strong>+503 7000-0000</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Allergies</p>
+                        <strong style="color: #ef4444;">Penicillin</strong>
+                    </div>
+                    
+                </div>
+                  
+                <div class="accessibility-badge" data-en="Accessibility Needs" data-es="Necesidades de Accesibilidad" aria-label="Accessibility Needs">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="16" r="4"></circle><path d="M12 12h4l1.5 5"></path><path d="M16 12V8a2 2 0 0 0-2-2h-3"></path><circle cx="11" cy="4" r="1.5"></circle></svg> 
+                    Wheelchair user patient (Requires ramp/elevator)
+                    
+                </div>
+            </div>
+             <button class="btn-primary" onclick="descargarPacienteActualPDF('EXP-9020')">Download PDF</button>
+        </div>
+        
+
+        <!-- PACIENTE 2 -->
+        <div class="patient-profile-card" id="profile-EXP-9021" style="display: none;">
+            <div class="historial-avatar" style="color: #d97706; border-color: #d97706; background-color: #fef3c7;">AM</div>
+            <div class="patient-info">
+                <h1>Ana Beatriz Merino</h1>
+                <span style="color: var(--text-muted);">ID: 05124982-3 | Record: #EXP-9021</span>
+                
+                <div class="patient-details-grid">
+                    <div class="detail-item">
+                        <p>Age / Sex</p>
+                        <strong>45 years / F</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Blood Type</p>
+                        <strong>A Positive (A+)</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Phone</p>
+                        <strong>+503 7111-2222</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Allergies</p>
+                        <strong>None</strong>
+                    </div>
+                </div>
+
+                <div class="accessibility-badge" aria-label="Accessibility Needs" style="background-color: #fef3c7; color: #d97706; border-color: #fcd34d;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> 
+                    Visual Support patient (Requires facility guide / Braille)
+                </div>
+            </div>
+            <button class="btn-primary" onclick="descargarPacienteActualPDF('EXP-9021')"> Download PDF</button>
+        </div>
+
+        <!-- PACIENTE 3 -->
+        <div class="patient-profile-card" id="profile-EXP-9022" style="display: none;">
+            <div class="historial-avatar" style="color: #4F46E5; border-color: #4F46E5; background-color: #E0E7FF;">CF</div>
+            <div class="patient-info">
+                <h1>Carlos Humberto Flores</h1>
+                <span style="color: var(--text-muted);">ID: 02341198-1 | Record: #EXP-9022</span>
+                
+                <div class="patient-details-grid">
+                    <div class="detail-item">
+                        <p>Age / Sex</p>
+                        <strong>52 years / M</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Blood Type</p>
+                        <strong>B Negative (B-)</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Phone</p>
+                        <strong>+503 7222-3333</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Allergies</p>
+                        <strong style="color: #ef4444;">Ibuprofen</strong>
+                    </div>
+                </div>
+
+                <div class="accessibility-badge" aria-label="Accessibility Needs" style="background-color: #D1FAE5; color: #059669; border-color: #A7F3D0;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M8 6h8"></path><path d="M8 14h8"></path></svg> 
+                    Reduced Mobility patient (Requires ramp access)
+                </div>
+            </div>
+            <button class="btn-primary" onclick="descargarPacienteActualPDF('EXP-9022')"> Download PDF</button>
+        </div>
+
+        <!-- PACIENTE 4 -->
+        <div class="patient-profile-card" id="profile-EXP-9023" style="display: none;">
+            <div class="historial-avatar" style="color: #4F46E5; border-color: #4F46E5; background-color: #E0E7FF;">ER</div>
+            <div class="patient-info">
+                <h1>Elena María Ramos</h1>
+                <span style="color: var(--text-muted);">ID: 03881245-8 | Record: #EXP-9023</span>
+                
+                <div class="patient-details-grid">
+                    <div class="detail-item">
+                        <p>Age / Sex</p>
+                        <strong>29 years / F</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Blood Type</p>
+                        <strong>O Negative (O-)</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Phone</p>
+                        <strong>+503 7333-4444</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Allergies</p>
+                        <strong style="color: #ef4444;">Latex</strong>
+                    </div>
+                </div>
+
+                <div class="accessibility-badge" aria-label="Accessibility Needs" style="background-color: #E0E7FF; color: #4F46E5; border-color: #C7D2FE;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22.53 15.65A10 10 0 0 1 12 22a10 10 0 0 1-10-10c0-4.5 3-8 7-9.5"></path><path d="M15.4 7A6 6 0 0 0 12 6a6 6 0 0 0-6 6"></path></svg>
+                    Hearing Support patient (LESA Interpreter required)
+                </div>
+            </div>
+            <button class="btn-primary" onclick="descargarPacienteActualPDF('EXP-9023')"> Download PDF</button>
+        </div>
+
+        <!-- PACIENTE 5 -->
+        <div class="patient-profile-card" id="profile-EXP-9024" style="display: none;">
+            <div class="historial-avatar" style="color: #8B5CF6; border-color: #8B5CF6; background-color: #EDE9FE;">LG</div>
+            <div class="patient-info">
+                <h1>Luis Fernando Gómez</h1>
+                <span style="color: var(--text-muted);">ID: 06234511-9 | Record: #EXP-9024</span>
+                
+                <div class="patient-details-grid">
+                    <div class="detail-item">
+                        <p data-en="Age / Sex" data-es="Edad / Sexo">Edad / Sexo</p>
+                        <strong>19 years / M</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Blood Type</p>
+                        <strong>AB Positive (AB+)</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Phone</p>
+                        <strong>+503 7444-5555</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Allergies</p>
+                        <strong>Dust mites</strong>
+                    </div>
+                </div>
+
+                <div class="accessibility-badge" aria-label="Accessibility Needs" style="background-color: #EDE9FE; color: #7C3AED; border-color: #DDD6FE;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"></path><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"></path></svg>
+                    Cognitive Support (ASD / Quiet environment preferred)
+                </div>
+            </div>
+            <button class="btn-primary"onclick="descargarPacienteActualPDF('EXP-9024')"> Download PDF </button>
+        </div>
+
+        <!-- PACIENTE 6 -->
+        <div class="patient-profile-card" id="profile-EXP-9025" style="display: none;">
+            <div class="historial-avatar" style="color: #0ea5e9; border-color: #0ea5e9; background-color: #e0f2fe;">MQ</div>
+            <div class="patient-info">
+                <h1>María José Quintanilla</h1>
+                <span style="color: var(--text-muted);">ID: 01784999-4 | Record: #EXP-9025</span>
+                
+                <div class="patient-details-grid">
+                    <div class="detail-item">
+                        <p data-en="Age / Sex" data-es="Edad / Sexo">Edad / Sexo</p>
+                        <strong>74 years / F</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Blood Type</p>
+                        <strong>A Negative (A-)</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Phone</p>
+                        <strong>+503 7555-6666</strong>
+                    </div>
+                    <div class="detail-item">
+                        <p>Allergies</p>
+                        <strong style="color: #ef4444;">Sulfa drugs</strong>
+                    </div>
+                </div>
+
+                <div class="accessibility-badge" aria-label="Accessibility Needs" style="background-color: #e0f2fe; color: #0284c7; border-color: #bae6fd;">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"></path><path d="M8 2h8"></path></svg>
+                    Elderly Support (Fall risk / Needs constant accompaniment)
+                </div>
+            </div>
+            <button class="btn-primary" onclick="descargarPacienteActualPDF('EXP-9025')"> Download PDF </button>
+        </div>
+
+        <div class="card-panel">
+            <div class="panel-header" style="border-bottom:none; padding-bottom:0;">
+                <span class="panel-title">Medical History</span>
+                
+            </div>
+
+            <div style="overflow-x: auto; margin-top: 16px;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Specialty</th>
+                            <th>Attending Physician</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>12 Oct 2026<br><span style="font-size: 0.8rem; color: var(--text-muted);">09:00 AM</span></td>
+                            <td><span>Clinical Laboratory</span><br><span style="font-size: 0.8rem; color: var(--text-muted);">General Blood Test</span></td>
+                            <td>Licda. Ana Ruiz</td>
+                            <td><span class="badge completed">Completed</span></td>
+                            <td><button class="action-btn">View Results</button></td>
+                        </tr>
+                        <tr>
+                            <td>05 Sep 2026<br><span style="font-size: 0.8rem; color: var(--text-muted);">02:30 PM</span></td>
+                            <td><span>General Medicine</span><br><span style="font-size: 0.8rem; color: var(--text-muted);">Routine Checkup</span></td>
+                            <td>Dra. Silvia Castro</td>
+                            <td><span class="badge completed">Completed</span></td>
+                            <td><button class="action-btn">View Prescription</button></td>
+                        </tr>
+                        <tr>
+                            <td>18 Jul 2026<br><span style="font-size: 0.8rem; color: var(--text-muted);">11:00 AM</span></td>
+                            <td><span>Physiotherapy</span><br><span style="font-size: 0.8rem; color: var(--text-muted);">Knee Therapy</span></td>
+                            <td>Lic. Mario Vega</td>
+                            <td><span class="badge cancelled">Cancelled</span></td>
+                            <td><button class="action-btn">Reschedule</button></td>
+                        </tr>
+                        <tr>
+                            <td>22 May 2026<br><span style="font-size: 0.8rem; color: var(--text-muted);">10:00 AM</span></td>
+                            <td><span>Cardiology</span><br><span style="font-size: 0.8rem; color: var(--text-muted);">Initial Evaluation</span></td>
+                            <td>Dr. Carlos Mendoza</td>
+                            <td><span class="badge completed">Completed</span></td>
+                            <td><button class="action-btn">View Summary</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- 3. FLOATING ACCESSIBILITY COMPONENT -->
+  <div class="a11y-widget-container">
+    <button class="a11y-trigger-btn" id="a11yBtn" title="Accessibility Options" onclick="toggleA11yMenu()">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"></circle><path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.4-.44-.98-.74-1.64-.74-.66 0-1.24.3-1.64.74l-1.29 1.43C8.09 10.25 6.54 11.02 5 11v2c2.01-.02 3.99-.97 5.23-2.31l.27-.3v5.61L8.2 21.2a1 1 0 1 0 1.6 1.2L11 20.8V15h2v5.8l1.2 1.6a1 1 0 1 0 1.6-1.2l-2.3-3.8v-5.61l.27.3C15.01 12.03 16.99 12.98 19 13z"></path></svg>
+    </button>
+    
+    <div class="a11y-menu" id="a11yMenu">
+      <div class="a11y-header">
+        <span>Web Accessibility</span>
+        <button class="a11y-close" onclick="toggleA11yMenu()">&times;</button>
+      </div>
+      <div class="a11y-grid">
+        <button class="a11y-btn-option" onclick="changeFontSize(1)">
+          <span style="font-size: 1.2rem;">A+</span>
+          <span>Increase Text</span>
+        </button>
+        <button class="a11y-btn-option" onclick="changeFontSize(-1)">
+          <span style="font-size: 1.2rem;">A-</span>
+          <span>Decrease Text</span>
+        </button>
+        <button class="a11y-btn-option" onclick="toggleA11yMode('high-contrast')">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20z" fill="currentColor"></path></svg>
+          <span>High Contrast</span>
+        </button>
+        <button class="a11y-btn-option" onclick="toggleA11yMode('grayscale')">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle></svg>
+          <span>Grayscale</span>
+        </button>
+        <button class="a11y-btn-option" onclick="toggleA11yMode('invert')">
+          <svg viewBox="0 0 24 24"><path d="M12 3v18a9 9 0 0 0 0-18z"></path></svg>
+          <span>Invert Colors</span>
+        </button>
+        <button class="a11y-btn-option" onclick="toggleA11yMode('spacing')">
+          <svg viewBox="0 0 24 24"><line x1="4" y1="12" x2="20" y2="12"></line><polyline points="8 8 4 12 8 16"></polyline><polyline points="16 8 20 12 16 16"></polyline></svg>
+          <span>Text Spacing</span>
+        </button>
+        <button class="a11y-btn-option" style="grid-column: span 2;" onclick="toggleA11yMode('underline')">
+          <svg viewBox="0 0 24 24"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path><line x1="4" y1="21" x2="20" y2="21"></line></svg>
+          <span>Underline Links</span>
+        </button>
+
+        <button class="a11y-btn-option a11y-btn-reset" onclick="resetA11y()">
+          <span>Reset Settings</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-content">
+        <div class="footer-links-container footer-vertical">
+           
+            <nav class="footer-column" aria-label="Navegación del pie de página: Nosotros">
+              <h4>Nosotros</h4>
+                <ul>
+                <li><a href="../index.html#quienes-somos">¿Quiénes somos?</a></li>
+                <li><a href="../index.html#mision">Nuestra Misión</a></li>
+                <li><a href="../index.html#vision">Nuestra Visión</a></li>
+                <li><a href="../index.html#como-funciona">Cómo funciona</a></li>
+                </ul>
+            </nav>
+           
+            <nav class="footer-column" aria-label="Navegación del pie de página: Soporte y Legal">
+              <h4>Ayuda y Legal</h4>
+                <ul>
+                <li><a href="../soporte_y_ayuda.html">Soporte Técnico</a></li>
+                <li><a href="../soporte_y_ayuda.html">Ayuda Urgente</a></li>
+                <li><a href="/terminos-condiciones.html">Términos y condiciones</a></li>
+                <li><a href="../index.html#privacidad">Política de privacidad</a></li>
+                </ul>
+            </nav>
+
+            <div class="footer-column">
+              <h4>Contáctanos</h4>
+                <ul class="contact-list">
+                    <li>
+                        <a href="tel:22222222" aria-label="Call landline support 2 2 2 2, 2 2 2 2">
+                            <!-- SVG Phone -->
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> 
+                            2222 - 2222
+                        </a>
+                    </li>
+                    <li>
+                        <a href="tel:23237898" aria-label="Call mobile support 2 3 2 3, 7 8 9 8">
+                            <!-- SVG Mobile -->
+                            <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> 
+                            2323 - 7898
+                        </a>
+                    </li>
+                </ul>
+                <div class="social-icons-container social-icons-inline">
+                <a href="https://www.instagram.com/hospired_es?igsh=YXN0dHFocnF6NTZh" target="_blank" rel="noopener" aria-label="Visitar Instagram de Hospired">
+                  <img src="../instagram-8203531_1280.png" alt="Instagram de Hospired">
+                    </a>
+                <a href="https://facebook.com/hospired" target="_blank" rel="noopener" aria-label="Visitar Facebook de Hospired">
+                  <img src="../image-removebg-preview.png" alt="Facebook de Hospired">
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+   
+    <div class="footer-bottom">
+        <p>&copy; 2026 Hospired. Todos los derechos reservados. Diseñado con enfoque en accesibilidad universal.</p>
+    </div>
+  </footer>
+  
+  <!-- 4. INTERFACE LOGIC & ACCESSIBILITY (JS) -->
+  <script>
+    // Marca la sesion activa como institucional para paginas compartidas (ej. soporte_y_ayuda.html).
+    sessionStorage.setItem('hospired_active_role', 'institution');
+
+    const hospitalData = JSON.parse(
+    localStorage.getItem('hospired_institution_affiliation')
+);
+
+if (hospitalData) {
+
+    document.getElementById("profileHospitalName").textContent = hospitalData.name;
+
+    document.getElementById('nombreInstitucion').textContent =
+        hospitalData.name;
+
+    document.getElementById('panelNombre').value =
+        hospitalData.name;
+
+    document.getElementById('panelTipo').value =
+        hospitalData.type;
+
+    document.getElementById('panelUbicacion').value =
+        hospitalData.location;
+
+    document.getElementById('panelRepresentante').value =
+        hospitalData.contact;
+
+    document.getElementById('panelCorreo').value =
+        hospitalData.email;
+
+    document.getElementById('panelTelefono').value =
+        hospitalData.phone;
+
+    document.getElementById('panelMensaje').value =
+        hospitalData.message;
+}
+//guardar info
+
+    function switchTab(event, panelId, fromButton = false) {
+      if (!fromButton && event) {
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+      } else if (fromButton) {
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(panelId)) {
+            btn.classList.add('active');
+          }
+        });
+      }
+
+      document.querySelectorAll('.panel-section').forEach(panel => {
+        panel.classList.remove('active');
+      });
+
+      const targetPanel = document.getElementById(panelId);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+        targetPanel.style.animation = 'none';
+        targetPanel.offsetHeight; 
+        targetPanel.style.animation = 'fadeInScale 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+      }
+    }
+    function abrirSeccionDesdeURL() {
+    const hash = window.location.hash;
+
+    const secciones = {
+        '#inicio': 'panel-dashboard',
+        '#perfil': 'panel-afiliacion',
+        '#pacientes': 'panel-pacientes',
+        '#agenda': 'panel-citas'
+    };
+
+    const panelId = secciones[hash];
+
+    if (panelId) {
+        switchTab(null, panelId, true);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', abrirSeccionDesdeURL);
+
+    // Clona los botones del sidebar dentro de la barra movil horizontal (una sola fuente de verdad).
+    function buildMobileNav() {
+      const bar = document.getElementById('mobileNavBar');
+      if (!bar || bar.dataset.built) return;
+      document.querySelectorAll('.sidebar .nav-btn').forEach(btn => {
+        const clone = btn.cloneNode(true);
+        clone.addEventListener('click', closeMobileNav);
+        bar.appendChild(clone);
+      });
+      bar.dataset.built = 'true';
+    }
+
+    function toggleMobileNav() {
+      const bar = document.getElementById('mobileNavBar');
+      const toggleBtn = document.getElementById('mobileMenuToggle');
+      if (!bar || !toggleBtn) return;
+      const isOpen = bar.classList.toggle('active');
+      toggleBtn.setAttribute('aria-expanded', String(isOpen));
+    }
+
+    function closeMobileNav() {
+      const bar = document.getElementById('mobileNavBar');
+      const toggleBtn = document.getElementById('mobileMenuToggle');
+      bar?.classList.remove('active');
+      toggleBtn?.setAttribute('aria-expanded', 'false');
+    }
+
+    document.addEventListener('DOMContentLoaded', buildMobileNav);
+
+
+    // NUEVA FUNCIÓN PARA MOSTRAR EL HISTORIAL DINÁMICO
+    function openPatientHistory(recordId) {
+      // 1. Ocultar todos los perfiles
+      const allProfiles = document.querySelectorAll('.patient-profile-card');
+      allProfiles.forEach(profile => {
+        profile.style.display = 'none';
+      });
+
+      // 2. Mostrar únicamente el perfil solicitado
+      const selectedProfile = document.getElementById('profile-' + recordId);
+      if (selectedProfile) {
+        selectedProfile.style.display = 'flex'; // Mantiene el layout flexbox original
+      }
+
+      // 3. Cambiar a la pestaña de historial
+      switchTab(null, 'panel-historial', true);
+    }
+
+    function toggleNotifications() {
+      const dropdown = document.getElementById('notifDropdown');
+      const networkModal = document.getElementById('networkModal');
+      networkModal.classList.remove('active');
+      dropdown.classList.toggle('active');
+    }
+
+    function readNotif(element) {
+      if (element.classList.contains('unread')) {
+        element.classList.remove('unread');
+        updateBadgeCount();
+      }
+    }
+
+    function markAllNotificationsRead() {
+      const unreadItems = document.querySelectorAll('.notif-item.unread');
+      unreadItems.forEach(item => item.classList.remove('unread'));
+      updateBadgeCount();
+    }
+
+    function updateBadgeCount() {
+      const count = document.querySelectorAll('.notif-item.unread').length;
+      const badge = document.getElementById('notifBadge');
+      if (count > 0) {
+        badge.innerText = count;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    function toggleNetworkModal() {
+      const modal = document.getElementById('networkModal');
+      const notifDropdown = document.getElementById('notifDropdown');
+      notifDropdown.classList.remove('active');
+      modal.classList.toggle('active');
+    }
+
+    function refreshNetworkStatus() {
+      const lang = preferences.language;
+
+    text.innerText = lang === 'en'
+      ? 'Checking network...'
+      : 'Comprobando red...';
+      setTimeout(() => {
+        text.innerText = lang === 'en'
+    ? 'El Salvador Network: Operational'
+    : 'Red de El Salvador: Operativa';
+        alert("All nodes (San Salvador, Santa Ana, San Miguel) responding with optimal latency (<25ms).");
+      }, 800);
+    }
+
+    const searchData = [
+      { name: "Ana Beatriz Merino", info: "EXP-9021 - Visual Support (Braille)", tab: "panel-pacientes" },
+      { name: "Roberto Martínez Hernández", info: "EXP-9020 - Wheelchair Access", tab: "panel-pacientes" },
+      { name: "Carlos Humberto Flores", info: "EXP-9022 - Reduced Mobility", tab: "panel-pacientes" },
+      { name: "Elena María Ramos", info: "EXP-9023 - Hearing Support (LESA)", tab: "panel-pacientes" },
+      { name: "Dr. Fernando López", info: "Ophthalmology Specialist", tab: "panel-citas" },
+      { name: "LESA Helpdesk", info: "Interpreter Support Unit", tab: "panel-dashboard" },
+      { name: "María José Quintanilla", info: "Record: #EXP-9025", tab: "panel-pacientes" },
+      { name: "Luis Fernando Gómez", info: "Record: #EXP-9024", tab: "panel-pacientes" }
+    ];
+
+    function handleGlobalSearch() {
+      const input = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+      const resultsContainer = document.getElementById('searchResults');
+      
+      const tableRows = document.querySelectorAll('.data-table tbody tr');
+      tableRows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(input) ? '' : 'none';
+      });
+
+      if (input.length > 0) {
+        const matches = searchData.filter(item => 
+          item.name.toLowerCase().includes(input) || item.info.toLowerCase().includes(input)
+        );
+
+        if (matches.length > 0) {
+          resultsContainer.innerHTML = matches.map(m => `
+            <div class="search-result-item" onclick="selectSearchResult('${m.tab}')">
+              <div>
+                <strong style="font-size:0.85rem; color:var(--hospired-dark);">${m.name}</strong>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${m.info}</div>
+              </div>
+              <span style="font-size:0.7rem; font-weight:700; color:var(--hospired-blue);">&rarr;</span>
+            </div>
+          `).join('');
+        } else {
+          resultsContainer.innerHTML = `<div style="padding:12px; font-size:0.8rem; color:var(--text-muted); text-align:center;">No results found</div>`;
+        }
+        resultsContainer.classList.add('active');
+      } else {
+        resultsContainer.classList.remove('active');
+      }
+    }
+
+    function selectSearchResult(tabId) {
+      switchTab(null, tabId, true);
+      document.getElementById('searchResults').classList.remove('active');
+      document.getElementById('globalSearchInput').value = '';
+    }
+
+    let currentFontSize = 16;
+
+    function toggleA11yMenu() {
+      const menu = document.getElementById('a11yMenu');
+      menu.classList.toggle('active');
+    }
+
+    function changeFontSize(delta) {
+      currentFontSize = Math.min(Math.max(currentFontSize + delta, 12), 22);
+      document.documentElement.style.setProperty('--base-font-size', `${currentFontSize}px`);
+    }
+
+    function toggleA11yMode(modeClass) {
+      const body = document.body;
+      if (modeClass === 'high-contrast') {
+        body.classList.toggle('a11y-high-contrast');
+        body.classList.remove('a11y-grayscale', 'a11y-invert');
+      } else if (modeClass === 'grayscale') {
+        body.classList.toggle('a11y-grayscale');
+        body.classList.remove('a11y-high-contrast', 'a11y-invert');
+      } else if (modeClass === 'invert') {
+        body.classList.toggle('a11y-invert');
+        body.classList.remove('a11y-high-contrast', 'a11y-grayscale');
+      } else if (modeClass === 'spacing') {
+        body.classList.toggle('a11y-spacing');
+      } else if (modeClass === 'underline') {
+        body.classList.toggle('a11y-underline');
+      }
+    }
+
+    function resetA11y() {
+      currentFontSize = 16;
+      document.documentElement.style.setProperty('--base-font-size', '16px');
+      document.body.classList.remove('a11y-high-contrast', 'a11y-grayscale', 'a11y-invert', 'a11y-spacing', 'a11y-underline');
+    }
+
+    document.addEventListener('click', (e) => {
+      const notifContainer = document.querySelector('.notif-container');
+      const networkContainer = document.querySelector('.status-container');
+      const searchWrapper = document.querySelector('.search-wrapper');
+      const a11yContainer = document.querySelector('.a11y-widget-container');
+
+      // .status-container fue eliminado del markup; sin esta guarda, .contains()
+      // lanzaba TypeError en CADA click de la pagina y cortaba el resto de la funcion,
+      // impidiendo que se cerraran el buscador y el menu de accesibilidad al hacer click afuera.
+      if (notifContainer && !notifContainer.contains(e.target)) {
+        document.getElementById('notifDropdown').classList.remove('active');
+      }
+      if (networkContainer && !networkContainer.contains(e.target)) {
+        document.getElementById('networkModal')?.classList.remove('active');
+      }
+      if (searchWrapper && !searchWrapper.contains(e.target)) {
+        document.getElementById('searchResults').classList.remove('active');
+      }
+      if (a11yContainer && !a11yContainer.contains(e.target)) {
+        document.getElementById('a11yMenu').classList.remove('active');
+      }
+    });
+
+    function saveHospitalProfile(event) {
+      event.preventDefault();
+      const btn = event.target.querySelector('button[type="submit"]');
+      const originalText = btn.innerText;
+      
+      btn.innerText = "Saving configuration...";
+      btn.style.background = "var(--hospired-blue)";
+      
+      setTimeout(() => {
+        btn.innerText = "Changes Saved Successfully!";
+        btn.style.background = "var(--hospired-green)";
+        setTimeout(() => {
+          btn.innerText = originalText;
+          btn.style.background = "";
+        }, 2500);
+      }, 1000);
+    }
+
+    
+  /* ==========================================================
+   DOWNLOAD PDF - PACIENTE ACTUAL
+   ========================================================== */
+
+function descargarPacienteActualPDF() {
+
+    /* Verificar que jsPDF esté disponible */
+
+    if (!window.jspdf) {
+        alert('The PDF library could not be loaded.');
+        return;
+    }
+
+
+    const { jsPDF } = window.jspdf;
+
+
+    /* Buscar el paciente que actualmente está visible */
+
+    const perfiles = document.querySelectorAll(
+        '#panel-historial .patient-profile-card'
+    );
+
+
+    let pacienteActual = null;
+
+
+    perfiles.forEach(perfil => {
+
+        const estilo = window.getComputedStyle(perfil);
+
+        if (
+            estilo.display !== 'none' &&
+            estilo.visibility !== 'hidden'
+        ) {
+            pacienteActual = perfil;
+        }
+
+    });
+
+
+    if (!pacienteActual) {
+
+        alert('No patient is currently selected.');
+
+        return;
+    }
+
+
+    /* Obtener Record ID */
+
+    const recordId =
+        pacienteActual.id.replace(
+            'profile-',
+            ''
+        );
+
+
+    /* ======================================================
+       DATOS DEL PACIENTE
+       ====================================================== */
+
+    const nombre =
+        pacienteActual
+            .querySelector('.patient-info h1')
+            ?.textContent
+            .trim() ||
+        'Patient';
+
+
+    const identificacion =
+        pacienteActual
+            .querySelector('.patient-info > span')
+            ?.textContent
+            .trim() ||
+        '';
+
+
+    const detalles = [];
+
+
+    pacienteActual
+        .querySelectorAll('.detail-item')
+        .forEach(item => {
+
+            const etiqueta =
+                item.querySelector('p')
+                    ?.textContent
+                    .trim();
+
+
+            const valor =
+                item.querySelector('strong')
+                    ?.textContent
+                    .trim();
+
+
+            if (etiqueta && valor) {
+
+                detalles.push({
+                    etiqueta,
+                    valor
+                });
+
+            }
+
+        });
+
+
+    const accesibilidad =
+        pacienteActual
+            .querySelector('.accessibility-badge')
+            ?.textContent
+            .replace(/\s+/g, ' ')
+            .trim() ||
+        'No accessibility information available.';
+
+
+    /* ======================================================
+       CREAR PDF
+       ====================================================== */
+
+    const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+    });
+
+
+    const ancho =
+        doc.internal.pageSize.getWidth();
+
+
+    const alto =
+        doc.internal.pageSize.getHeight();
+
+
+    /* ======================================================
+       COLORES HOSPIRED
+       ====================================================== */
+
+    const azulOscuro = [19, 64, 116];
+
+    const azulClaro = [61, 147, 195];
+
+    const gris = [90, 95, 100];
+
+    const grisClaro = [242, 245, 248];
+
+    const blanco = [255, 255, 255];
+
+
+    /* ======================================================
+       ENCABEZADO
+       ====================================================== */
+
+    doc.setFillColor(
+        azulOscuro[0],
+        azulOscuro[1],
+        azulOscuro[2]
+    );
+
+
+    doc.roundedRect(
+        12,
+        10,
+        ancho - 24,
+        32,
+        4,
+        4,
+        'F'
+    );
+
+
+    doc.setTextColor(
+        blanco[0],
+        blanco[1],
+        blanco[2]
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    );
+
+
+    doc.setFontSize(22);
+
+
+    doc.text(
+        'HOSPIRED',
+        20,
+        24
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'normal'
+    );
+
+
+    doc.setFontSize(9);
+
+
+    doc.text(
+        'Patient Management System',
+        20,
+        32
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    );
+
+
+    doc.setFontSize(9);
+
+
+    doc.text(
+        'CONFIDENTIAL',
+        ancho - 20,
+        25,
+        {
+            align: 'right'
+        }
+    );
+
+
+    /* ======================================================
+       TÍTULO
+       ====================================================== */
+
+    doc.setTextColor(
+        azulOscuro[0],
+        azulOscuro[1],
+        azulOscuro[2]
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    );
+
+
+    doc.setFontSize(18);
+
+
+    doc.text(
+        'Patient Clinical Record',
+        20,
+        58
+    );
+
+
+    doc.setDrawColor(
+        azulClaro[0],
+        azulClaro[1],
+        azulClaro[2]
+    );
+
+
+    doc.setLineWidth(1);
+
+
+    doc.line(
+        20,
+        63,
+        ancho - 20,
+        63
+    );
+
+
+    /* ======================================================
+       INFORMACIÓN PRINCIPAL
+       ====================================================== */
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    );
+
+
+    doc.setFontSize(15);
+
+
+    doc.setTextColor(
+        40,
+        45,
+        50
+    );
+
+
+    doc.text(
+        nombre,
+        20,
+        77
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'normal'
+    );
+
+
+    doc.setFontSize(10);
+
+
+    doc.setTextColor(
+        gris[0],
+        gris[1],
+        gris[2]
+    );
+
+
+    doc.text(
+        identificacion,
+        20,
+        85
+    );
+
+
+    doc.text(
+        `Record: ${recordId}`,
+        ancho - 20,
+        85,
+        {
+            align: 'right'
+        }
+    );
+
+
+    /* ======================================================
+       PATIENT INFORMATION
+       ====================================================== */
+
+    let y = 103;
+
+
+    doc.setFillColor(
+        grisClaro[0],
+        grisClaro[1],
+        grisClaro[2]
+    );
+
+
+    doc.roundedRect(
+        18,
+        y - 8,
+        ancho - 36,
+        12,
+        3,
+        3,
+        'F'
+    );
+
+
+    doc.setTextColor(
+        azulOscuro[0],
+        azulOscuro[1],
+        azulOscuro[2]
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    );
+
+
+    doc.setFontSize(12);
+
+
+    doc.text(
+        'Patient Information',
+        23,
+        y
+    );
+
+
+    y += 15;
+
+
+    /* ======================================================
+       DATOS
+       ====================================================== */
+
+    detalles.forEach((detalle, indice) => {
+
+        const texto =
+            doc.splitTextToSize(
+                detalle.valor,
+                110
+            );
+
+
+        if (indice % 2 === 0) {
+
+            doc.setFillColor(
+                248,
+                250,
+                252
+            );
+
+
+            doc.roundedRect(
+                20,
+                y - 5,
+                ancho - 40,
+                Math.max(
+                    10,
+                    texto.length * 5 + 5
+                ),
+                2,
+                2,
+                'F'
+            );
+
+        }
+
+
+        doc.setFont(
+            'helvetica',
+            'bold'
+        );
+
+
+        doc.setFontSize(9);
+
+
+        doc.setTextColor(
+            gris[0],
+            gris[1],
+            gris[2]
+        );
+
+
+        doc.text(
+            `${detalle.etiqueta}:`,
+            25,
+            y + 1
+        );
+
+
+        doc.setFont(
+            'helvetica',
+            'normal'
+        );
+
+
+        doc.setTextColor(
+            40,
+            45,
+            50
+        );
+
+
+        doc.text(
+            texto,
+            80,
+            y + 1
+        );
+
+
+        y += Math.max(
+            10,
+            texto.length * 5 + 7
+        );
+
+    });
+
+
+    /* ======================================================
+       ACCESSIBILITY
+       ====================================================== */
+
+    y += 10;
+
+
+    doc.setFillColor(
+        azulOscuro[0],
+        azulOscuro[1],
+        azulOscuro[2]
+    );
+
+
+    doc.roundedRect(
+        18,
+        y - 8,
+        ancho - 36,
+        12,
+        3,
+        3,
+        'F'
+    );
+
+
+    doc.setTextColor(
+        blanco[0],
+        blanco[1],
+        blanco[2]
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'bold'
+    );
+
+
+    doc.setFontSize(12);
+
+
+    doc.text(
+        'Accessibility Information',
+        23,
+        y
+    );
+
+
+    y += 12;
+
+
+    doc.setTextColor(
+        40,
+        45,
+        50
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'normal'
+    );
+
+
+    doc.setFontSize(10);
+
+
+    const textoAccesibilidad =
+        doc.splitTextToSize(
+            accesibilidad,
+            ancho - 45
+        );
+
+
+    doc.text(
+        textoAccesibilidad,
+        23,
+        y
+    );
+
+
+    /* ======================================================
+       FECHA
+       ====================================================== */
+
+    const fecha =
+        new Date().toLocaleDateString(
+            'en-US',
+            {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }
+        );
+
+
+    /* ======================================================
+       FOOTER
+       ====================================================== */
+
+    doc.setDrawColor(
+        210,
+        215,
+        220
+    );
+
+
+    doc.setLineWidth(0.3);
+
+
+    doc.line(
+        20,
+        alto - 20,
+        ancho - 20,
+        alto - 20
+    );
+
+
+    doc.setFont(
+        'helvetica',
+        'normal'
+    );
+
+
+    doc.setFontSize(8);
+
+
+    doc.setTextColor(
+        110,
+        115,
+        120
+    );
+
+
+    doc.text(
+        `Generated by Hospired • ${fecha}`,
+        20,
+        alto - 13
+    );
+
+
+    doc.text(
+        `Patient Record: ${recordId}`,
+        ancho - 20,
+        alto - 13,
+        {
+            align: 'right'
+        }
+    );
+
+
+    /* ======================================================
+       DESCARGAR PDF
+       ====================================================== */
+
+    const nombreArchivo =
+        nombre
+            .normalize('NFD')
+            .replace(
+                /[\u0300-\u036f]/g,
+                ''
+            )
+            .replace(
+                /[^a-zA-Z0-9]+/g,
+                '_'
+            );
+
+
+    doc.save(
+        `Patient_${recordId}_${nombreArchivo}.pdf`
+    );
+}
+
+function agregarPiePDFGeneral(doc) {
+
+    const ancho =
+        doc.internal.pageSize.getWidth();
+
+    const alto =
+        doc.internal.pageSize.getHeight();
+
+    doc.setDrawColor(215, 220, 225);
+
+    doc.setLineWidth(0.3);
+
+    doc.line(
+        18,
+        alto - 15,
+        ancho - 18,
+        alto - 15
+    );
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(110, 115, 120);
+
+    doc.text(
+        'HOSPIRED • Patient Management System',
+        18,
+        alto - 8
+    );
+
+    doc.text(
+        'Confidential Patient Registry',
+        ancho / 2,
+        alto - 8,
+        { align: 'center' }
+    );
+}
+
+function exportarRegistroGeneralPDF() {
+
+    if (!window.jspdf) {
+        alert('The PDF library could not be loaded.');
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+
+    // Buscar la tabla general de pacientes
+    const tabla = document.querySelector('#panel-pacientes .data-table');
+
+    if (!tabla) {
+        alert('The patient registry table could not be found.');
+        return;
+    }
+
+    const filas = tabla.querySelectorAll('tbody tr');
+
+    if (filas.length === 0) {
+        alert('There are no patients to export.');
+        return;
+    }
+
+    // Crear PDF horizontal
+    const doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+    });
+
+    const ancho = doc.internal.pageSize.getWidth();
+    const alto = doc.internal.pageSize.getHeight();
+
+    const azulOscuro = [19, 64, 116];
+    const azulClaro = [61, 147, 195];
+    const grisClaro = [244, 246, 249];
+    const grisTexto = [90, 95, 100];
+    const blanco = [255, 255, 255];
+
+    // =========================
+    // ENCABEZADO
+    // =========================
+
+    doc.setFillColor(...azulOscuro);
+    doc.rect(0, 0, ancho, 35, 'F');
+
+    doc.setTextColor(...blanco);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.text('HOSPIRED', 18, 16);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.text('Patient Management System', 18, 24);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text(
+        'GENERAL PATIENT REGISTRY',
+        ancho - 18,
+        18,
+        { align: 'right' }
+    );
+
+    // =========================
+    // TÍTULO
+    // =========================
+
+    doc.setTextColor(...azulOscuro);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+
+    doc.text(
+        'General Patient Registry',
+        18,
+        50
+    );
+
+    const fecha = new Date().toLocaleDateString(
+        'en-US',
+        {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }
+    );
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(...grisTexto);
+
+    doc.text(
+        `Generated: ${fecha}`,
+        18,
+        58
+    );
+
+    doc.text(
+        `Total Patients: ${filas.length}`,
+        ancho - 18,
+        58,
+        { align: 'right' }
+    );
+
+    doc.setDrawColor(...azulClaro);
+    doc.setLineWidth(1);
+
+    doc.line(
+        18,
+        64,
+        ancho - 18,
+        64
+    );
+
+    // =========================
+    // TABLA
+    // =========================
+
+    const columnas = [
+        { titulo: 'RECORD #', ancho: 35 },
+        { titulo: 'PATIENT', ancho: 70 },
+        { titulo: 'ID NUMBER', ancho: 45 },
+        { titulo: 'SPECIFIC REQUIREMENT', ancho: 70 },
+        { titulo: 'LAST CONSULTATION', ancho: 55 }
+    ];
+
+    const inicioX = 18;
+    const anchoTabla = columnas.reduce(
+        (total, columna) => total + columna.ancho,
+        0
+    );
+
+    let y = 72;
+
+    function encabezadoTabla() {
+
+        doc.setFillColor(...azulOscuro);
+
+        doc.roundedRect(
+            inicioX,
+            y,
+            anchoTabla,
+            12,
+            2,
+            2,
+            'F'
+        );
+
+        doc.setTextColor(...blanco);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+
+        let x = inicioX;
+
+        columnas.forEach(columna => {
+
+            doc.text(
+                columna.titulo,
+                x + 3,
+                y + 7.5
+            );
+
+            x += columna.ancho;
+        });
+
+        y += 12;
+    }
+
+    encabezadoTabla();
+
+    // =========================
+    // PACIENTES
+    // =========================
+
+    filas.forEach((fila, indice) => {
+
+        const celdas = fila.querySelectorAll('td');
+
+        // Tu tabla tiene 6 columnas.
+        // Solo usamos las primeras 5.
+        if (celdas.length < 5) {
+            return;
+        }
+
+        const record = celdas[0].innerText.trim();
+        const paciente = celdas[1].innerText.trim();
+        const identificacion = celdas[2].innerText.trim();
+        const requisito = celdas[3].innerText.trim();
+        const consulta = celdas[4].innerText.trim();
+
+        const alturaFila = 16;
+
+        // Nueva página
+        if (y + alturaFila > alto - 25) {
+
+            agregarPiePDFGeneral(doc);
+
+            doc.addPage();
+
+            y = 20;
+
+            encabezadoTabla();
+        }
+
+        // Fondo alternado
+        if (indice % 2 === 0) {
+
+            doc.setFillColor(...grisClaro);
+
+            doc.rect(
+                inicioX,
+                y,
+                anchoTabla,
+                alturaFila,
+                'F'
+            );
+        }
+
+        // Record
+        doc.setTextColor(...azulOscuro);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+
+        doc.text(
+            record,
+            inicioX + 3,
+            y + 10
+        );
+
+        // Paciente
+        doc.setTextColor(42, 47, 53);
+        doc.setFont('helvetica', 'bold');
+
+        const nombreTexto =
+            doc.splitTextToSize(
+                paciente,
+                64
+            );
+
+        doc.text(
+            nombreTexto,
+            inicioX + 35,
+            y + 6
+        );
+
+        // ID
+        doc.setFont('helvetica', 'normal');
+
+        doc.text(
+            identificacion,
+            inicioX + 105,
+            y + 10
+        );
+
+        // Requisito
+        const requisitoTexto =
+            doc.splitTextToSize(
+                requisito,
+                64
+            );
+
+        doc.text(
+            requisitoTexto,
+            inicioX + 150,
+            y + 6
+        );
+
+        // Consulta
+        doc.text(
+            consulta,
+            inicioX + 220,
+            y + 10
+        );
+
+        // Línea
+        doc.setDrawColor(220, 225, 230);
+        doc.setLineWidth(0.2);
+
+        doc.line(
+            inicioX,
+            y + alturaFila,
+            inicioX + anchoTabla,
+            y + alturaFila
+        );
+
+        y += alturaFila;
+    });
+
+    // Pie de página
+    agregarPiePDFGeneral(doc);
+
+    // =========================
+    // ABRIR PDF
+    // =========================
+
+    const pdfBlob = doc.output('blob');
+
+    const pdfURL =
+        URL.createObjectURL(pdfBlob);
+
+    window.open(
+        pdfURL,
+        '_blank'
+    );
+}
+const traduccionesFaltantes = {
+  'Medical History': 'Historial Médico',
+  'Date': 'Fecha',
+  'Specialty': 'Especialidad',
+  'Attending Physician': 'Médico Tratante',
+  'Status': 'Estado',
+  'Action': 'Acción',
+  'View Results': 'Ver Resultados',
+  'View Prescription': 'Ver Receta',
+  'Reschedule': 'Reprogramar',
+  'View Summary': 'Ver Resumen',
+  'Blood Type': 'Tipo de Sangre',
+  'Phone': 'Teléfono',
+  'Allergies': 'Alergias',
+  'Download PDF': 'Descargar PDF',
+  'Back to directory': 'Volver al directorio',
+  'Technical Support': 'Soporte Técnico',
+  'Help & Legal': 'Ayuda y Legal',
+  'Contact Us': 'Contáctanos',
+  'Patient Information': 'Información del Paciente',
+  'Accessibility Information': 'Información de Accesibilidad',
+  'Reset Settings': 'Restablecer Configuración',
+  'Increase Text': 'Aumentar Texto',
+  'Decrease Text': 'Disminuir Texto',
+  'High Contrast': 'Alto Contraste',
+  'Grayscale': 'Escala de Grises',
+  'Invert Colors': 'Invertir Colores',
+  'Text Spacing': 'Espaciado de Texto',
+  'Underline Links': 'Subrayar Enlaces'
+};
+
+document.querySelectorAll('body *').forEach(elemento => {
+  if (elemento.dataset.en || elemento.dataset.es) return;
+
+  const texto = elemento.textContent.trim().replace(/\s+/g, ' ');
+  if (!texto || elemento.children.length > 0) return;
+
+  const español = traduccionesFaltantes[texto];
+  if (!español) return;
+
+  elemento.dataset.en = texto;
+  elemento.dataset.es = español;
+});
+
+  </script>
+</body>
+</html>

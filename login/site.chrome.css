@@ -1,0 +1,697 @@
+/* ==========================================================================
+   HOSPIRED — SITE CHROME (Header + Footer)
+   Reutiliza las variables ya definidas en :root dentro de login.css
+   (--primary, --secondary, --surface, --border, --shadow-*, --radius-*, etc.)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------
+   Espacio para el header fijo. Se aplica solo si el body trae esta
+   clase, para no afectar páginas que no incluyan el header.
+   -------------------------------------------------------------------- */
+body.has-site-header {
+    padding-top: 88px;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    font-family: "Inter", sans-serif;
+}
+
+.menu-shell {
+    max-width: var(--max-width, 1350px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    min-height: 72px;
+}
+
+.brand {
+    margin-right: auto;
+}
+
+.brand img {
+    width: 96px;
+    height: auto;
+    display: block;
+}
+
+.compact-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.search-and-accessibility-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+}
+
+.search-wrap {
+    flex: 1;
+    min-width: 220px;
+    position: relative;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+}
+
+.search-form input[type="search"] {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small) 0 0 var(--radius-small);
+    font-family: inherit;
+    font-size: 0.92rem;
+    color: var(--text);
+    transition: var(--transition);
+}
+
+.search-form input[type="search"]:focus-visible {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(0, 167, 157, .12);
+}
+
+.search-form button {
+    padding: 10px 16px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    border-radius: 0 var(--radius-small) var(--radius-small) 0;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.search-form button:hover {
+    background: var(--primary-dark);
+}
+
+/* --------------------------------------------------------------------
+   Dropdown de resultados de búsqueda
+   -------------------------------------------------------------------- */
+
+.search-results-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-small);
+    box-shadow: var(--shadow-small);
+    z-index: 999;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.search-results-dropdown.show {
+    display: block;
+}
+
+.search-result-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    color: var(--text);
+    text-decoration: none;
+    display: block;
+    font-size: 0.9rem;
+    transition: var(--transition);
+}
+
+.search-result-item:hover {
+    background-color: var(--background);
+    color: var(--primary-dark);
+}
+
+/* --------------------------------------------------------------------
+   Menú hamburguesa
+   -------------------------------------------------------------------- */
+
+.hamburger {
+    position: relative;
+}
+
+.hamburger-button {
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    font-family: inherit;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hamburger-button:hover,
+.hamburger-button:focus-visible {
+    border-color: var(--primary);
+    color: var(--primary-dark);
+}
+
+.menu-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-medium);
+    min-width: min(90vw, 280px);
+    z-index: 1001;
+    border-radius: var(--radius-medium);
+    padding: 10px;
+}
+
+.menu-panel.show {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.menu-item {
+    padding: 12px 14px;
+    color: var(--text);
+    text-decoration: none;
+    border-radius: var(--radius-small);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: var(--transition);
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+    background: var(--primary);
+    color: white;
+}
+
+.menu-item-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(0, 167, 157, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.menu-item:hover .menu-item-icon,
+.menu-item:focus-visible .menu-item-icon {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* --------------------------------------------------------------------
+   Acciones principales + perfil
+   -------------------------------------------------------------------- */
+
+.nav-links-container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.actions .btn {
+    padding: 10px 16px;
+    border: none;
+    border-radius: var(--radius-small);
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.actions .btn:hover {
+    background: var(--primary-dark);
+}
+
+.actions .btn.ghost {
+    background: transparent;
+    color: var(--secondary);
+    border: 1px solid var(--border);
+}
+
+.actions .btn.ghost:hover {
+    background: var(--secondary);
+    color: white;
+    border-color: var(--secondary);
+}
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+    text-decoration: none;
+}
+
+.avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--secondary);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.account .name {
+    font-weight: 700;
+    display: block;
+    color: var(--text);
+    font-size: 0.92rem;
+}
+
+.account .hint {
+    font-size: 0.82rem;
+    color: var(--text-light);
+}
+
+/* ==========================================================================
+   BOTÓN DE ACCESIBILIDAD — FLOTANTE, ESQUINA INFERIOR DERECHA
+   ========================================================================== */
+
+.accessibility-wrapper {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1002;
+}
+
+.accessibility-trigger-btn {
+    padding: 0;
+    width: 56px;
+    height: 56px;
+    background: var(--primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-medium);
+    transition: var(--transition);
+}
+
+.accessibility-trigger-btn:hover,
+.accessibility-trigger-btn:focus-visible {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 22px 45px rgba(15, 63, 93, .18);
+}
+
+.accessibility-trigger-btn svg {
+    width: 26px;
+    height: 26px;
+}
+
+.accessibility-panel {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 14px);
+    top: auto;
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-medium);
+    width: min(92vw, 420px);
+    max-height: min(75vh, 520px);
+    z-index: 1002;
+    border-radius: var(--radius-large);
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+}
+
+.accessibility-panel.show {
+    display: block;
+}
+
+.accessibility-header {
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(0, 167, 157, 0.10), var(--surface));
+}
+
+.accessibility-kicker {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--primary-dark);
+    margin-bottom: 4px;
+}
+
+.accessibility-header h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: var(--text);
+}
+
+.accessibility-subtitle {
+    font-size: 0.86rem;
+    color: var(--text-light);
+    line-height: 1.45;
+}
+
+.accessibility-grid {
+    padding: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    max-height: calc(min(75vh, 520px) - 150px);
+    overflow-y: auto;
+}
+
+.access-option-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    border-radius: var(--radius-small);
+    min-height: 58px;
+    font-size: 0.86rem;
+    font-weight: 600;
+    line-height: 1.25;
+    font-family: inherit;
+    transition: var(--transition);
+}
+
+.access-option-btn:hover,
+.access-option-btn:focus-visible,
+.access-option-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 8px 20px rgba(0, 167, 157, 0.18);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.access-option-btn:hover .access-icon,
+.access-option-btn:focus-visible .access-icon,
+.access-option-btn.active .access-icon {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.accessibility-footer {
+    padding: 10px 14px 14px;
+    border-top: 1px solid var(--border);
+    background: var(--background);
+}
+
+.accessibility-footer .access-option-btn {
+    width: 100%;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border-color: transparent;
+}
+
+.accessibility-footer .access-option-btn:hover,
+.accessibility-footer .access-option-btn:focus-visible {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: white;
+}
+
+.access-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 167, 157, 0.12);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+    .top-row {
+        flex-wrap: wrap;
+        min-height: unset;
+        padding: 10px 0;
+    }
+
+    .search-wrap {
+        order: 3;
+        flex-basis: 100%;
+        min-width: 0;
+    }
+
+    .accessibility-panel {
+        width: min(92vw, 360px);
+    }
+}
+
+/* --------------------------------------------------------------------
+   Utilidad de accesibilidad para lectores de pantalla
+   -------------------------------------------------------------------- */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ==========================================================================
+   CLASES GLOBALES DE ACCESIBILIDAD
+   (Se aplican tanto a <html> como a <body> — ver js/header.js)
+   .high-contrast / .large-text / .motor-mode / .protanopia / .deuteranopia
+   / .tritanopia ya están definidas en login.css; aquí solo se agregan las
+   que login.css todavía no cubre.
+   ========================================================================== */
+
+.text-plus-1 body,
+html.text-plus-1 { font-size: 110%; }
+.text-plus-2 body,
+html.text-plus-2 { font-size: 120%; }
+.text-minus-1 body,
+html.text-minus-1 { font-size: 90%; }
+.text-minus-2 body,
+html.text-minus-2 { font-size: 80%; }
+
+.spacing-active body,
+body.spacing-active {
+    letter-spacing: 0.05em;
+    word-spacing: 0.1em;
+    line-height: 1.7;
+}
+
+.dyslexia-font body,
+body.dyslexia-font {
+    font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif;
+}
+
+.cursor-plus body,
+body.cursor-plus {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='10' cy='10' r='8' fill='none' stroke='%2300A79D' stroke-width='3'/%3E%3C/svg%3E"), auto;
+}
+
+.onehand-active body,
+body.onehand-active {
+    padding-left: 24px;
+    padding-right: 24px;
+}
+
+.dark-mode body,
+body.dark-mode {
+    background-color: #121212;
+    color: #f5f5f5;
+}
+
+.monochrome-active body,
+body.monochrome-active {
+    filter: grayscale(100%);
+}
+
+.colorblind-mode body,
+body.colorblind-mode {
+    filter: hue-rotate(180deg) saturate(1.2) contrast(1.05);
+}
+
+.screenreader-active body,
+body.screenreader-active {
+    outline: 3px solid var(--warning, #f59e0b);
+    outline-offset: 4px;
+}
+
+body {
+    transition:
+        font-size 0.2s,
+        letter-spacing 0.2s,
+        word-spacing 0.2s,
+        line-height 0.2s,
+        background-color 0.2s,
+        color 0.2s;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.site-footer {
+    background-color: var(--secondary);
+    color: #f1f5f9;
+    padding: 60px 20px 20px;
+    border-top: 5px solid var(--primary);
+    font-family: "Inter", sans-serif;
+    margin-top: 60px;
+}
+
+.footer-content {
+    max-width: var(--max-width, 1350px);
+    margin: 0 auto;
+}
+
+.footer-links-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+}
+
+.footer-column h4 {
+    color: #5eead4;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column li {
+    margin-bottom: 12px;
+}
+
+.footer-column a {
+    color: #f1f5f9;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: inline-block;
+    transition: var(--transition);
+}
+
+.footer-column a:hover {
+    color: #5eead4;
+    text-decoration: underline;
+}
+
+.footer-column a:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 4px;
+    border-radius: 4px;
+    color: #5eead4;
+}
+
+.contact-list a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.phone-icon {
+    font-size: 1.1rem;
+}
+
+.social-icons-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.social-icons-container a {
+    display: inline-block;
+    border-radius: 8px;
+}
+
+.social-icons-container img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.social-icons-container a:hover img {
+    transform: scale(1.15);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+@media (max-width: 480px) {
+    .site-footer {
+        padding: 40px 15px 20px;
+        text-align: center;
+    }
+
+    .social-icons-container,
+    .contact-list a {
+        justify-content: center;
+    }
+}

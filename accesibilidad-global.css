@@ -1,0 +1,813 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+
+@font-face {
+    font-family: 'OpenDyslexic';
+    src: local('OpenDyslexic'), url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic@master/OpenDyslexic-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --hospired-primary: #00A79D;
+    --hospired-primary-dark: #007F78;
+    --hospired-surface: #ffffff;
+    --hospired-surface-alt: #f8fafc;
+    --hospired-border: #dfe5ef;
+    --hospired-text-main: #1e293b;
+    --hospired-text-muted: #475569;
+    --hospired-bg: #f4f7fb;
+}
+
+html,
+body {
+    background: var(--hospired-bg) !important;
+    color: var(--hospired-text-main) !important;
+    font-family: 'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif !important;
+}
+
+html body,
+html body *,
+html body *::before,
+html body *::after {
+    box-sizing: border-box;
+}
+
+html body,
+html body p,
+html body span,
+html body strong,
+html body label,
+html body li,
+html body td,
+html body th,
+html body input,
+html body textarea,
+html body select,
+html body button,
+html body a {
+    font-family: inherit !important;
+}
+
+#globalAccessibilityWrapper {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 2500;
+}
+
+#globalAccessibilityWrapper .accessibility-trigger-btn,
+.accessibility-wrapper .accessibility-trigger-btn {
+    width: 52px;
+    height: 52px;
+    border: 0;
+    border-radius: 50%;
+    background: var(--hospired-primary, #00a79d);
+    color: #ffffff;
+    box-shadow: 0 8px 22px rgba(0, 127, 120, 0.28);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+#globalAccessibilityWrapper .accessibility-trigger-btn svg,
+.accessibility-wrapper .accessibility-trigger-btn svg {
+    width: 26px;
+    height: 26px;
+    display: block;
+}
+
+#globalAccessibilityWrapper .accessibility-panel {
+    display: none;
+    position: fixed;
+    right: 24px;
+    bottom: 88px;
+    width: min(95vw, 580px);
+    padding: 16px;
+    background: var(--hospired-surface, #ffffff);
+    color: var(--hospired-text-main, #1e293b);
+    border: 1px solid var(--hospired-border, #dfe5ef);
+    border-radius: 16px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.2);
+}
+
+#globalAccessibilityWrapper .accessibility-panel.show {
+    display: block;
+}
+
+#globalAccessibilityWrapper .accessibility-header {
+    margin-bottom: 12px;
+    cursor: grab;
+    touch-action: none;
+}
+
+#globalAccessibilityWrapper .accessibility-header:active {
+    cursor: grabbing;
+}
+
+#globalAccessibilityWrapper .accessibility-kicker {
+    margin: 0 0 4px;
+    color: var(--hospired-primary-dark, #007f78);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+#globalAccessibilityWrapper .accessibility-header h3,
+#globalAccessibilityWrapper .accessibility-subtitle {
+    margin: 0;
+}
+
+#globalAccessibilityWrapper .accessibility-subtitle {
+    margin-top: 4px;
+    color: var(--hospired-text-muted, #475569);
+    font-size: 0.82rem;
+}
+
+#globalAccessibilityWrapper .accessibility-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+#globalAccessibilityWrapper .access-option-btn {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border: 1px solid var(--hospired-border, #dfe5ef);
+    border-radius: 9px;
+    background: var(--hospired-surface-alt, #f8fafc);
+    color: var(--hospired-text-main, #1e293b);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: left;
+}
+
+#globalAccessibilityWrapper .access-option-btn.active,
+#globalAccessibilityWrapper .access-option-btn:hover,
+#globalAccessibilityWrapper .access-option-btn:focus-visible {
+    background: var(--hospired-primary, #00a79d);
+    color: #ffffff;
+    outline: none;
+}
+
+#globalAccessibilityWrapper .accessibility-footer {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--hospired-border, #dfe5ef);
+}
+
+#globalAccessibilityWrapper #globalAccessibilityReset {
+    width: 100%;
+    justify-content: center;
+}
+
+html.global-high-contrast,
+html.global-high-contrast body {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+html.global-high-contrast body *,
+html.global-high-contrast body *::before,
+html.global-high-contrast body *::after {
+    background-color: transparent !important;
+    border-color: #ffffff !important;
+    box-shadow: none !important;
+    color: #ffffff !important;
+}
+
+html.global-high-contrast body .accessibility-trigger-btn,
+html.global-high-contrast body .access-option-btn,
+html.global-high-contrast body .btn,
+html.global-high-contrast body button,
+html.global-high-contrast body a {
+    background: #000000 !important;
+    color: #ffffff !important;
+}
+
+html.global-high-contrast body h1,
+html.global-high-contrast body h2,
+html.global-high-contrast body h3,
+html.global-high-contrast body h4,
+html.global-high-contrast body h5,
+html.global-high-contrast body h6 {
+    color: #ffe066 !important;
+}
+
+html.global-high-contrast body .accessibility-panel,
+html.global-high-contrast body .profile-modal,
+html.global-high-contrast body .modal,
+html.global-high-contrast body .card,
+html.global-high-contrast body .directory-card,
+html.global-high-contrast body .section-box,
+html.global-high-contrast body .main-container,
+html.global-high-contrast body .content-body {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+/* Corrección del bloque "Flujo de atención": evita fondos blancos opacos y figuras invisibles */
+html.global-high-contrast body .process-section,
+html.global-high-contrast body .flujo-atencion,
+html.global-high-contrast body .process-header,
+html.global-high-contrast body .process-grid,
+html.global-high-contrast body .process-card,
+html.global-high-contrast body .card-top-row,
+html.global-high-contrast body .step-content,
+html.global-high-contrast body .step-icon-wrapper,
+html.global-high-contrast body .card-glow {
+    background: #000000 !important;
+    border: 2px solid #ffffff !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+html.global-high-contrast body .process-kicker,
+html.global-high-contrast body .process-title,
+html.global-high-contrast body .process-summary,
+html.global-high-contrast body .step-title,
+html.global-high-contrast body .step-tag,
+html.global-high-contrast body .step-description,
+html.global-high-contrast body .step-cta,
+html.global-high-contrast body .step-number {
+    color: #ffff00 !important;
+}
+
+html.global-high-contrast body .process-section svg,
+html.global-high-contrast body .flujo-atencion svg,
+html.global-high-contrast body .step-icon-wrapper svg {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+    color: #ffffff !important;
+}
+
+/* Alias de compatibilidad con nombres de clase solicitados */
+html.font-dislexia,
+html.font-dislexia body,
+html.font-dislexia * {
+    font-family: 'OpenDyslexic', 'Open Sans', 'Atkinson Hyperlegible', Arial, sans-serif !important;
+}
+
+html.alto-contraste,
+html.alto-contraste body {
+    background: #000000 !important;
+    color: #ffff00 !important;
+}
+
+html.alto-contraste body *,
+html.alto-contraste body *::before,
+html.alto-contraste body *::after {
+    background-color: #000000 !important;
+    border-color: #ffffff !important;
+    color: #ffff00 !important;
+}
+
+html.alto-contraste .flujo-atencion,
+html.alto-contraste .process-card,
+html.alto-contraste .step-content,
+html.alto-contraste .step-icon-wrapper {
+    border: 2px solid #ffffff !important;
+    background: #000000 !important;
+}
+
+html.alto-contraste svg {
+    fill: currentColor !important;
+    stroke: currentColor !important;
+}
+
+html.modo-daltonismo body > *:not(#globalAccessibilityWrapper) {
+    filter: saturate(0.75) contrast(1.1) hue-rotate(-12deg) !important;
+}
+
+html.global-dark-mode {
+    --color-surface: #111827 !important;
+    --color-bg-light: #0b1220 !important;
+    --bg-subtle: #1e293b !important;
+    --color-border: #334155 !important;
+    --color-text-main: #edf6ff !important;
+    --color-text-muted: #cbd5e1 !important;
+    --color-primary-dark: #7de3d8 !important;
+    --hospired-blue: #7de3d8 !important;
+}
+
+html.global-dark-mode,
+html.global-dark-mode body {
+    background: #0b1220 !important;
+    color: #ecf8ff !important;
+}
+
+html.global-dark-mode body *,
+html.global-dark-mode body *::before,
+html.global-dark-mode body *::after {
+    color: inherit !important;
+}
+
+/* Contenedores principales y tarjetas en modo oscuro */
+html.global-dark-mode body .accessibility-panel,
+html.global-dark-mode body .profile-modal,
+html.global-dark-mode body .modal,
+html.global-dark-mode body .card,
+html.global-dark-mode body .directory-card,
+html.global-dark-mode body .section-box,
+html.global-dark-mode body .main-container,
+html.global-dark-mode body .content-body,
+html.global-dark-mode body .profile,
+html.global-dark-mode body .search-form,
+html.global-dark-mode body .modal-content,
+html.global-dark-mode body .catalog-info-field,
+html.global-dark-mode body .service-dropdown-item,
+html.global-dark-mode body .reviews-container,
+html.global-dark-mode body .review-item,
+html.global-dark-mode body .faq-item,
+html.global-dark-mode body .video-card,
+html.global-dark-mode body .video-info,
+html.global-dark-mode body .form-group input,
+html.global-dark-mode body .form-group select,
+html.global-dark-mode body .form-group textarea,
+html.global-dark-mode body .faq-content,
+html.global-dark-mode body .alert-success,
+html.global-dark-mode body .search-results-dropdown,
+html.global-dark-mode body .booking-card,
+html.global-dark-mode body .booking-section,
+html.global-dark-mode body .process-section,
+html.global-dark-mode body .flujo-atencion,
+html.global-dark-mode body .process-card,
+html.global-dark-mode body .about-corporate-section,
+html.global-dark-mode body .about-container,
+html.global-dark-mode body .about-hero-block,
+html.global-dark-mode body .about-hero-graphic,
+html.global-dark-mode body .mv-card,
+html.global-dark-mode body .mv-cards-grid,
+html.global-dark-mode body .notif-card,
+html.global-dark-mode body .notifications-section,
+html.global-dark-mode body .appointment-item,
+html.global-dark-mode body .form-control,
+html.global-dark-mode body .type-option-btn,
+html.global-dark-mode body .tab-btn,
+html.global-dark-mode body .profile-field,
+html.global-dark-mode body .profile-field input {
+    background: #111827 !important;
+    color: #edf6ff !important;
+    border-color: #334155 !important;
+}
+
+/* Sub-bloques y campos interactivos en modo oscuro */
+html.global-dark-mode body .form-control,
+html.global-dark-mode body .type-option-btn,
+html.global-dark-mode body .tab-btn,
+html.global-dark-mode body .appointment-item,
+html.global-dark-mode body .step-icon-wrapper,
+html.global-dark-mode body .mv-icon-shape,
+html.global-dark-mode body .graphic-card-mockup {
+    background: #1e293b !important;
+    color: #edf6ff !important;
+    border-color: #334155 !important;
+}
+
+html.global-dark-mode body .form-control:focus {
+    background: #1e293b !important;
+    color: #edf6ff !important;
+    border-color: #14b8a6 !important;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.25) !important;
+}
+
+html.global-dark-mode body .type-option-btn.active,
+html.global-dark-mode body .tab-btn.active {
+    background: #14b8a6 !important;
+    color: #06131a !important;
+    border-color: #14b8a6 !important;
+}
+
+html.global-dark-mode body .process-card:hover,
+html.global-dark-mode body .process-card:focus-visible,
+html.global-dark-mode body .mv-card:hover,
+html.global-dark-mode body .mv-card:focus-visible {
+    background: #1e293b !important;
+    border-color: #14b8a6 !important;
+}
+
+/* Títulos y distintivos */
+html.global-dark-mode body h1,
+html.global-dark-mode body h2,
+html.global-dark-mode body h3,
+html.global-dark-mode body h4,
+html.global-dark-mode body h5,
+html.global-dark-mode body h6,
+html.global-dark-mode body .directory-header h1,
+html.global-dark-mode body .support-hero h1,
+html.global-dark-mode body .section-title,
+html.global-dark-mode body .card-title,
+html.global-dark-mode body .modal-section-title,
+html.global-dark-mode body .video-info h3,
+html.global-dark-mode body .faq-item summary,
+html.global-dark-mode body .form-group label,
+html.global-dark-mode body .process-title,
+html.global-dark-mode body .form-section-title,
+html.global-dark-mode body .about-main-title,
+html.global-dark-mode body .mv-card-title,
+html.global-dark-mode body .step-title,
+html.global-dark-mode body .appointment-info h4,
+html.global-dark-mode body .campaign-banner h4 {
+    color: #7de3d8 !important;
+}
+
+html.global-dark-mode body .form-section-title {
+    border-bottom-color: #14b8a6 !important;
+}
+
+html.global-dark-mode body .about-badge,
+html.global-dark-mode body .process-kicker,
+html.global-dark-mode body .step-tag {
+    background: rgba(20, 184, 166, 0.15) !important;
+    color: #7de3d8 !important;
+}
+
+html.global-dark-mode body .step-number {
+    color: #38bdf8 !important;
+}
+
+html.global-dark-mode body .step-cta {
+    color: #7de3d8 !important;
+}
+
+/* Textos informativos y párrafos */
+html.global-dark-mode body p,
+html.global-dark-mode body span,
+html.global-dark-mode body li,
+html.global-dark-mode body td,
+html.global-dark-mode body th,
+html.global-dark-mode body label,
+html.global-dark-mode body input,
+html.global-dark-mode body textarea,
+html.global-dark-mode body select,
+html.global-dark-mode body small,
+html.global-dark-mode body .accessibility-subtitle,
+html.global-dark-mode body .card-address,
+html.global-dark-mode body .faq-content,
+html.global-dark-mode body .video-info p,
+html.global-dark-mode body .support-hero p,
+html.global-dark-mode body .directory-header p,
+html.global-dark-mode body .catalog-info-field strong,
+html.global-dark-mode body .service-dropdown-item,
+html.global-dark-mode body .review-item,
+html.global-dark-mode body .review-item span,
+html.global-dark-mode body .alert-success,
+html.global-dark-mode body .profile .account .hint,
+html.global-dark-mode body .profile .account .name,
+html.global-dark-mode body .menu-item span,
+html.global-dark-mode body .menu-item,
+html.global-dark-mode body .process-summary,
+html.global-dark-mode body .step-description,
+html.global-dark-mode body .about-lead,
+html.global-dark-mode body .mv-card-description,
+html.global-dark-mode body .radio-options-inline label,
+html.global-dark-mode body .appointment-info p,
+html.global-dark-mode body .campaign-banner p {
+    color: #e2edf7 !important;
+}
+
+html.global-dark-mode body .accessibility-kicker,
+html.global-dark-mode body a,
+html.global-dark-mode body .link,
+html.global-dark-mode body .service-price,
+html.global-dark-mode body .modal-close,
+html.global-dark-mode body .video-placeholder::before {
+    color: #7de3d8 !important;
+}
+
+html.global-dark-mode body .btn-solid-dark,
+html.global-dark-mode body .btn-submit,
+html.global-dark-mode body .btn-wizard-trigger,
+html.global-dark-mode body .profile-action.primary,
+html.global-dark-mode body .access-option-btn.active,
+html.global-dark-mode body .access-option-btn:hover,
+html.global-dark-mode body .access-option-btn:focus-visible {
+    background: #14b8a6 !important;
+    color: #06131a !important;
+    border-color: #14b8a6 !important;
+}
+
+html.global-dark-mode body .card-img-frame,
+html.global-dark-mode body .video-placeholder,
+html.global-dark-mode body .search-results-dropdown {
+    background: #0f172a !important;
+    color: #edf6ff !important;
+}
+
+html.global-dark-mode body .search-result-item:hover {
+    background: #1e293b !important;
+}
+
+html.global-dark-mode body .service-price {
+    background: rgba(20, 184, 166, 0.15) !important;
+    border: 1px solid rgba(125, 227, 216, 0.5) !important;
+}
+
+html.global-dark-mode body .alert-success,
+html.global-dark-mode body .success-message {
+    background: rgba(20, 184, 166, 0.12) !important;
+    border-color: #14b8a6 !important;
+    color: #7de3d8 !important;
+}
+
+/* Badges y banners de notificaciones */
+html.global-dark-mode body .badge-proxima {
+    background: rgba(56, 189, 248, 0.2) !important;
+    color: #38bdf8 !important;
+}
+
+html.global-dark-mode body .badge-cancelada {
+    background: rgba(239, 68, 68, 0.2) !important;
+    color: #f87171 !important;
+}
+
+html.global-dark-mode body .badge-antigua {
+    background: rgba(148, 163, 184, 0.2) !important;
+    color: #cbd5e1 !important;
+}
+
+html.global-dark-mode body .campaign-banner {
+    background: rgba(20, 184, 166, 0.15) !important;
+    border-left-color: #14b8a6 !important;
+}
+
+/* Iconos SVG dentro de tarjetas en modo oscuro */
+html.global-dark-mode body .step-icon-wrapper svg,
+html.global-dark-mode body .mv-icon-shape svg {
+    fill: #7de3d8 !important;
+    color: #7de3d8 !important;
+}
+
+
+html.global-monochrome body > *:not(#globalAccessibilityWrapper) {
+    filter: grayscale(100%) contrast(1.15) !important;
+}
+
+html.global-protanopia body > *:not(#globalAccessibilityWrapper) {
+    filter: saturate(0.8) contrast(1.15) hue-rotate(12deg) !important;
+}
+
+html.global-deuteranopia body > *:not(#globalAccessibilityWrapper) {
+    filter: saturate(0.75) contrast(1.1) hue-rotate(-12deg) !important;
+}
+
+html.global-tritanopia body > *:not(#globalAccessibilityWrapper) {
+    filter: saturate(0.8) contrast(1.1) hue-rotate(165deg) !important;
+}
+
+html.global-spacing body,
+html.global-spacing body * {
+    line-height: 1.8 !important;
+    letter-spacing: 0.08em !important;
+    word-spacing: 0.12em !important;
+}
+
+html.global-dyslexia,
+html.global-dyslexia body,
+html.global-dyslexia body *,
+html.global-dyslexia body *::before,
+html.global-dyslexia body *::after {
+    font-family: 'OpenDyslexic', 'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif !important;
+    letter-spacing: 0.01em !important;
+}
+
+html.global-large-cursor,
+html.global-large-cursor * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 4l28 18-14 5 9 18-9 4-10-18-11 8z' fill='white' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 12 10, auto !important;
+}
+
+html.global-one-hand .menu-item,
+html.global-one-hand .access-option-btn,
+html.global-one-hand button,
+html.global-one-hand a,
+html.global-one-hand input,
+html.global-one-hand select,
+html.global-one-hand textarea {
+    min-height: 48px !important;
+    padding: 0.75rem 1rem !important;
+}
+
+html.global-dyslexia .accessibility-panel,
+html.global-dyslexia .accessibility-trigger-btn,
+html.global-dyslexia .access-option-btn,
+html.global-dyslexia button,
+html.global-dyslexia input,
+html.global-dyslexia select,
+html.global-dyslexia textarea,
+html.global-dyslexia a {
+    font-family: 'OpenDyslexic', 'Atkinson Hyperlegible', 'Segoe UI', Arial, sans-serif !important;
+}
+
+html.global-text-plus-1 *,
+html.global-text-plus-2 *,
+html.global-text-minus-1 *,
+html.global-text-minus-2 * {
+    font-size: inherit !important;
+}
+
+html.global-text-plus-1 body,
+html.global-text-plus-1 body * {
+    font-size: 1.05em !important;
+}
+
+html.global-text-plus-2 body,
+html.global-text-plus-2 body * {
+    font-size: 1.1em !important;
+}
+
+html.global-text-minus-1 body,
+html.global-text-minus-1 body * {
+    font-size: 0.95em !important;
+}
+
+html.global-text-minus-2 body,
+html.global-text-minus-2 body * {
+    font-size: 0.9em !important;
+}
+
+html.global-high-contrast .accessibility-trigger-btn {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+html.global-dark-mode .accessibility-trigger-btn {
+    background: #14b8a6 !important;
+    color: #06131a !important;
+}
+
+html.global-dark-mode .accessibility-option-btn {
+    background: #1f2937 !important;
+    color: #edf6ff !important;
+    border-color: #475569 !important;
+}
+
+html.global-dark-mode .access-option-btn.active,
+html.global-dark-mode .access-option-btn:hover,
+html.global-dark-mode .access-option-btn:focus-visible {
+    background: #14b8a6 !important;
+    color: #04151d !important;
+}
+
+html.global-high-contrast .accessibility-option-btn {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+html.global-high-contrast .access-option-btn.active,
+html.global-high-contrast .access-option-btn:hover,
+html.global-high-contrast .access-option-btn:focus-visible {
+    background: #ffffff !important;
+    color: #000000 !important;
+}
+
+html.global-dark-mode input,
+html.global-dark-mode textarea,
+html.global-dark-mode select,
+html.global-dark-mode button,
+html.global-dark-mode a,
+html.global-high-contrast input,
+html.global-high-contrast textarea,
+html.global-high-contrast select,
+html.global-high-contrast button,
+html.global-high-contrast a {
+    border-radius: 0.5rem;
+}
+
+html.global-dark-mode input,
+html.global-dark-mode textarea,
+html.global-dark-mode select {
+    background: #0f172a !important;
+    color: #f8fafc !important;
+    border-color: #475569 !important;
+}
+
+html.global-high-contrast input,
+html.global-high-contrast textarea,
+html.global-high-contrast select {
+    background: #000000 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+html.global-high-contrast body a,
+html.global-dark-mode body a {
+    text-decoration: underline !important;
+}
+
+html.global-high-contrast body img,
+html.global-high-contrast body svg,
+html.global-dark-mode body img,
+html.global-dark-mode body svg,
+html.global-protanopia img,
+html.global-deuteranopia img,
+html.global-tritanopia img {
+    filter: none !important;
+}
+
+/* Nota: los filtros de daltonismo/monocromo ya se aplican mas arriba a
+   "body > *:not(#globalAccessibilityWrapper)" para no romper el
+   posicionamiento fixed del boton de accesibilidad (ver reglas de arriba). */
+
+html.global-large-cursor *:not(.accessibility-trigger-btn) {
+    cursor: inherit !important;
+}
+
+html.global-large-cursor .accessibility-trigger-btn,
+html.global-large-cursor button,
+html.global-large-cursor a,
+html.global-large-cursor input,
+html.global-large-cursor select,
+html.global-large-cursor textarea {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath d='M6 4l28 18-14 5 9 18-9 4-10-18-11 8z' fill='white' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 12 10, auto !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+html.global-one-hand input,
+html.global-one-hand select,
+html.global-one-hand textarea {
+    min-height: 52px;
+}
+
+html.global-text-plus-1 body { font-size: 110% !important; }
+html.global-text-plus-2 body { font-size: 120% !important; }
+html.global-text-minus-1 body { font-size: 90% !important; }
+html.global-text-minus-2 body { font-size: 80% !important; }
+
+@media (max-width: 600px) {
+    #globalAccessibilityWrapper { right: 14px; bottom: 14px; }
+    #globalAccessibilityWrapper .accessibility-panel { right: -4px; }
+}
+
+/* ================================================================= */
+/* 1. ESTILOS GLOBALES DE ACCESIBILIDAD (accessibility-global.css) */
+/* ================================================================= */
+
+/* Fuente Dislexia Global */
+body.dyslexia-font,
+body.dyslexia-font * {
+    font-family: "OpenDyslexic", "Comic Sans MS", Arial, sans-serif !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.1em !important;
+}
+
+/* Cursor Grande */
+body.large-cursor,
+body.large-cursor * {
+    cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewport='0 0 24 24' style='fill:black;'><path d='M0 0l20 12-8 3-4 8z'/></svg>"), auto !important;
+}
+
+/* Filtros de Daltonismo (Matrices SVG / CSS) */
+body.filter-protanopia {
+    filter: url('#protanopia-filter');
+}
+body.filter-deuteranopia {
+    filter: url('#deuteranopia-filter');
+}
+body.filter-tritanopia {
+    filter: url('#tritanopia-filter');
+}
+
+/* Modo Oscuro y Alto Contraste Mejorado */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+body.dark-mode h1, body.dark-mode h2, body.dark-mode h3, 
+body.dark-mode h4, body.dark-mode h5, body.dark-mode h6 {
+    color: #ffffff !important;
+}
+body.dark-mode p, body.dark-mode span, body.dark-mode label, body.dark-mode li {
+    color: #d1d5db !important;
+}
+
+body.high-contrast {
+    background-color: #000000 !important;
+    color: #ffff00 !important;
+}
+body.high-contrast * {
+    background-color: transparent !important;
+    color: #ffff00 !important;
+    border-color: #ffff00 !important;
+}
+body.high-contrast a, body.high-contrast button {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+}
