@@ -1211,23 +1211,51 @@
 
       /* Menu movil: barra horizontal con slide-in vertical (max-height) que empuja
          el contenido hacia abajo en vez de superponerse (sin position:fixed/absolute). */
+     @media (max-width: 768px) {
+      .sidebar { display: none; }
+      .app-body { margin-left: 0; height: auto; flex-direction: column; }
+
+      .top-navbar {
+        margin-left: 0; height: auto; flex-wrap: wrap;
+        padding: 16px 20px; row-gap: 12px;
+      }
+      .mobile-menu-toggle { display: flex; order: 0; }
+      .brand-container { order: 1; }
+      .nav-actions { order: 2; margin-left: auto; }
+      .search-wrapper { order: 3; flex: 1 1 100%; }
+      .nav-search-bar { width: 100%; }
+      .nav-search-bar:focus-within { width: 100%; }
+
+      /* Menu movil: barra horizontal con slide-in vertical (max-height) que empuja
+         el contenido hacia abajo en vez de superponerse (sin position:fixed/absolute). */
       .mobile-nav-bar {
-        flex-wrap: wrap;
-        max-height: 0;
-        opacity: 0;
-        overflow: hidden;
-        padding: 0 10px;
-        gap: 6px;
-        transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
-    }
+          display: flex;
+          flex-direction: column;
+          flex-wrap: nowrap;
+          align-items: stretch;
+          gap: 8px;
+          max-height: 0;
+          opacity: 0;
+          overflow: hidden;
+          padding: 0 20px;
+          background-color: #00A79D;
+          transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
       }
       .mobile-nav-bar.active {
-        max-height: 640px; opacity: 1; padding: 16px 20px 20px;
+        max-height: 640px;
+        opacity: 1;
+        padding: 16px 20px 20px;
       }
       .mobile-nav-bar .nav-btn {
-        flex: 1 1 auto; white-space: nowrap; padding: 10px 14px;
+            width: 100%;
+            flex: 0 0 auto;
+            white-space: normal;
+            padding: 10px 14px;
+            box-sizing: border-box;
       }
-      .mobile-nav-bar .nav-btn-content { gap: 8px; }
+      .mobile-nav-bar .nav-btn-content { gap: 8px;    display: flex;
+    align-items: center;
+    gap: 8px; }
       .mobile-nav-bar .nav-btn span { font-size: 0.85rem; }
 
       .main-content { padding: 20px; }
