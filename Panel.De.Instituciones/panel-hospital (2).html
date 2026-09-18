@@ -1212,10 +1212,14 @@
       /* Menu movil: barra horizontal con slide-in vertical (max-height) que empuja
          el contenido hacia abajo en vez de superponerse (sin position:fixed/absolute). */
       .mobile-nav-bar {
-        display: flex; flex-wrap: wrap; gap: 8px;
-        max-height: 0; opacity: 0; overflow: hidden;
-        padding: 0 20px; background-color: #00A79D;
+        flex-wrap: wrap;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        padding: 0 10px;
+        gap: 6px;
         transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
+    }
       }
       .mobile-nav-bar.active {
         max-height: 640px; opacity: 1; padding: 16px 20px 20px;
