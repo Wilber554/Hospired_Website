@@ -811,3 +811,242 @@ body.high-contrast a, body.high-contrast button {
     color: #000000 !important;
     font-weight: bold !important;
 }
+/* =========================================================
+   PANEL DE ACCESIBILIDAD - RESPONSIVE
+   ========================================================= */
+
+#globalAccessibilityWrapper {
+    position: fixed !important;
+    right: 24px;
+    bottom: 24px;
+    z-index: 9999;
+}
+
+/* PANEL PRINCIPAL */
+#globalAccessibilityWrapper .accessibility-panel {
+    position: fixed !important;
+    display: none;
+
+    right: 24px !important;
+    left: auto !important;
+    bottom: 88px !important;
+
+    width: min(580px, calc(100vw - 48px)) !important;
+    max-width: calc(100vw - 48px) !important;
+
+    max-height: calc(100vh - 120px);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    box-sizing: border-box !important;
+}
+
+/* Cuando está abierto */
+#globalAccessibilityWrapper .accessibility-panel.show {
+    display: block;
+}
+
+/* GRID DE OPCIONES */
+#globalAccessibilityWrapper .accessibility-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* BOTONES */
+#globalAccessibilityWrapper .access-option-btn {
+    min-width: 0 !important;
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    overflow: hidden;
+}
+
+#globalAccessibilityWrapper .access-option-btn span:last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
+/* =========================================================
+   TABLETS
+   ========================================================= */
+
+@media (max-width: 1024px) {
+
+    #globalAccessibilityWrapper {
+        right: 18px !important;
+        bottom: 18px !important;
+    }
+
+    #globalAccessibilityWrapper .accessibility-panel {
+        right: 18px !important;
+        bottom: 82px !important;
+
+        width: min(520px, calc(100vw - 36px)) !important;
+        max-width: calc(100vw - 36px) !important;
+
+        max-height: calc(100dvh - 105px);
+    }
+
+    #globalAccessibilityWrapper .accessibility-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+/* =========================================================
+   TELEFONOS
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    #globalAccessibilityWrapper {
+        right: 12px !important;
+        bottom: 12px !important;
+        left: auto !important;
+    }
+
+    #globalAccessibilityWrapper .accessibility-trigger-btn {
+        width: 52px !important;
+        height: 52px !important;
+    }
+
+    #globalAccessibilityWrapper .accessibility-panel {
+        right: 12px !important;
+        left: 12px !important;
+
+        bottom: 76px !important;
+
+        width: auto !important;
+        max-width: none !important;
+
+        max-height: calc(100dvh - 92px);
+
+        padding: 12px !important;
+
+        border-radius: 14px;
+    }
+
+    #globalAccessibilityWrapper .accessibility-header {
+        margin-bottom: 10px;
+    }
+
+    #globalAccessibilityWrapper .accessibility-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    #globalAccessibilityWrapper .access-option-btn {
+        min-height: 48px;
+        padding: 9px 8px !important;
+
+        font-size: 0.78rem !important;
+        line-height: 1.15;
+    }
+
+    #globalAccessibilityWrapper .access-icon {
+        flex: 0 0 auto;
+    }
+
+    #globalAccessibilityWrapper .access-icon svg {
+        width: 19px;
+        height: 19px;
+    }
+}
+
+/* =========================================================
+   TELEFONOS PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+    #globalAccessibilityWrapper {
+        right: 8px !important;
+        bottom: 8px !important;
+    }
+
+    #globalAccessibilityWrapper .accessibility-trigger-btn {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    #globalAccessibilityWrapper .accessibility-panel {
+        left: 8px !important;
+        right: 8px !important;
+
+        bottom: 68px !important;
+
+        max-height: calc(100dvh - 82px);
+
+        padding: 10px !important;
+    }
+
+    #globalAccessibilityWrapper .accessibility-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 7px !important;
+    }
+
+    #globalAccessibilityWrapper .access-option-btn {
+        min-height: 46px;
+
+        padding: 8px 6px !important;
+
+        font-size: 0.74rem !important;
+        gap: 6px;
+    }
+
+    #globalAccessibilityWrapper .access-icon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    #globalAccessibilityWrapper .accessibility-header h3 {
+        font-size: 1.05rem;
+    }
+
+    #globalAccessibilityWrapper .accessibility-subtitle {
+        font-size: 0.76rem;
+        line-height: 1.35;
+    }
+}
+
+/* =========================================================
+   TELEFONOS MUY PEQUEÑOS
+   ========================================================= */
+
+@media (max-width: 340px) {
+
+    #globalAccessibilityWrapper .accessibility-panel {
+        left: 5px !important;
+        right: 5px !important;
+        padding: 8px !important;
+    }
+
+    #globalAccessibilityWrapper .accessibility-grid {
+        grid-template-columns: 1fr !important;
+        gap: 6px !important;
+    }
+
+    #globalAccessibilityWrapper .access-option-btn {
+        min-height: 44px;
+        font-size: 0.78rem !important;
+        padding: 8px !important;
+    }
+}
+
+/* =========================================================
+   PANTALLAS CON POCA ALTURA
+   ========================================================= */
+
+@media (max-height: 600px) {
+
+    #globalAccessibilityWrapper .accessibility-panel {
+        max-height: calc(100dvh - 82px);
+    }
+}
