@@ -2487,3 +2487,52 @@ html.screenreader-active *:focus-visible {
     }
 
 }
+/* =========================================================
+   ACCESIBILIDAD RESPONSIVE - INDEX
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    #globalAccessibilityWrapper .accessibility-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+    }
+
+    #globalAccessibilityWrapper .access-option-btn {
+        min-width: 0 !important;
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    #globalAccessibilityWrapper .accessibility-panel {
+        left: 12px !important;
+        right: 12px !important;
+        width: auto !important;
+        max-width: none !important;
+        max-height: calc(100dvh - 100px);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+/* Teléfonos pequeños */
+@media (max-width: 400px) {
+
+    #globalAccessibilityWrapper .accessibility-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 7px !important;
+    }
+
+    #globalAccessibilityWrapper .access-option-btn {
+        padding: 8px 6px !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+/* Teléfonos extremadamente pequeños */
+@media (max-width: 340px) {
+
+    #globalAccessibilityWrapper .accessibility-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
