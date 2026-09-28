@@ -1336,7 +1336,184 @@
         }
     });
 
+let textAdjustLevel = 0;
 
+    function setAccessibilityClass(className, isActive) {
+        htmlElement.classList.toggle(className, isActive);
+        document.body.classList.toggle(className, isActive);
+    }
+
+    function applyAccessibilityTheme() {
+        const rootStyle = htmlElement.style;
+        const bodyStyle = document.body.style;
+
+        if (htmlElement.classList.contains('high-contrast')) {
+            rootStyle.setProperty('--color-primary', '#ffffff');
+            rootStyle.setProperty('--color-primary-dark', '#ffe066');
+            rootStyle.setProperty('--color-primary-light', '#fff3b0');
+            rootStyle.setProperty('--color-border', '#ffffff');
+            rootStyle.setProperty('--color-surface', '#000000');
+            rootStyle.setProperty('--color-bg-light', '#111111');
+            rootStyle.setProperty('--color-text-main', '#ffffff');
+            rootStyle.setProperty('--color-text-muted', '#f5f5f5');
+        } else if (htmlElement.classList.contains('dark-mode')) {
+            rootStyle.setProperty('--color-primary', '#2dd4bf');
+            rootStyle.setProperty('--color-primary-dark', '#14b8a6');
+            rootStyle.setProperty('--color-primary-light', '#5eead4');
+            rootStyle.setProperty('--color-border', '#334155');
+            rootStyle.setProperty('--color-surface', '#111827');
+            rootStyle.setProperty('--color-bg-light', '#1f2937');
+            rootStyle.setProperty('--color-text-main', '#f8fafc');
+            rootStyle.setProperty('--color-text-muted', '#cbd5e1');
+        } else {
+            rootStyle.setProperty('--color-primary', '#00A79D');
+            rootStyle.setProperty('--color-primary-dark', '#007F78');
+            rootStyle.setProperty('--color-primary-light', '#00c2b6');
+            rootStyle.setProperty('--color-border', '#dfe5ef');
+            rootStyle.setProperty('--color-surface', '#ffffff');
+            rootStyle.setProperty('--color-bg-light', '#f8fafc');
+            rootStyle.setProperty('--color-text-main', '#1e293b');
+            rootStyle.setProperty('--color-text-muted', '#475569');
+        }
+
+        if (htmlElement.classList.contains('spacing-active')) {
+            bodyStyle.lineHeight = '1.95';
+            bodyStyle.letterSpacing = '0.12em';
+            bodyStyle.wordSpacing = '0.18em';
+        } else {
+            bodyStyle.lineHeight = '';
+            bodyStyle.letterSpacing = '';
+            bodyStyle.wordSpacing = '';
+        }
+
+        if (htmlElement.classList.contains('dyslexia-font')) {
+            bodyStyle.fontFamily = '"Comic Sans MS", "Trebuchet MS", Arial, sans-serif';
+        } else {
+            bodyStyle.fontFamily = '';
+        }
+
+        if (htmlElement.classList.contains('cursor-plus')) {
+            bodyStyle.cursor = 'pointer';
+        } else {
+            bodyStyle.cursor = '';
+        }
+
+        if (textAdjustLevel === 0) {
+            rootStyle.fontSize = '';
+            bodyStyle.fontSize = '';
+        } else {
+            const scale = 1 + (textAdjustLevel * 0.1);
+            rootStyle.fontSize = `${16 * scale}px`;
+            bodyStyle.fontSize = `${16 * scale}px`;
+        }
+    }
+
+    function toggleAccessibility(className) {
+        const activeClass = !htmlElement.classList.contains(className);
+        setAccessibilityClass(className, activeClass);
+
+        if (className === 'high-contrast' && activeClass) {
+            setAccessibilityClass('dark-mode', false);
+        } else if (className === 'dark-mode' && activeClass) {
+            setAccessibilityClass('high-contrast', false);
+        }
+
+        const button = document.getElementById({
+            'high-contrast': 'opt-contrast',
+            'spacing-active': 'opt-spacing',
+            'dyslexia-font': 'opt-dyslexia',
+            'cursor-plus': 'opt-cursor',
+            'onehand-active': 'opt-onehand',
+            'dark-mode': 'opt-darkmode',
+            'monochrome-active': 'opt-monochrome',
+            'colorblind-mode': 'opt-colorblind',
+            'screenreader-active': 'opt-screenreader'
+        }[className]);
+        if (button) {
+            button.classList.toggle('active', activeClass);
+            button.setAttribute('aria-pressed', String(activeClass));
+        }
+
+        applyAccessibilityTheme();
+        announceAccessibility(activeClass ? 'Opción activada' : 'Opción desactivada');
+    }
+
+    function adjustText(direction) {
+        htmlElement.classList.remove('text-plus-1', 'text-plus-2', 'text-minus-1', 'text-minus-2');
+        document.body.classList.remove('text-plus-1', 'text-plus-2', 'text-minus-1', 'text-minus-2');
+        textAdjustLevel = Math.max(-2, Math.min(2, textAdjustLevel + direction));
+        if (textAdjustLevel > 0) {
+            setAccessibilityClass(`text-plus-${textAdjustLevel}`, true);
+        } else if (textAdjustLevel < 0) {
+            setAccessibilityClass(`text-minus-${Math.abs(textAdjustLevel)}`, true);
+        }
+
+        applyAccessibilityTheme();
+        document.getElementById('opt-text-plus')?.setAttribute('aria-pressed', String(textAdjustLevel > 0));
+        document.getElementById('opt-text-minus')?.setAttribute('aria-pressed', String(textAdjustLevel < 0));
+    }
+
+    function resetAccessibility() {
+        ['high-contrast', 'spacing-active', 'dyslexia-font', 'cursor-plus', 'onehand-active', 'dark-mode', 'monochrome-active', 'colorblind-mode', 'screenreader-active', 'text-plus-1', 'text-plus-2', 'text-minus-1', 'text-minus-2'].forEach(className => {
+            setAccessibilityClass(className, false);
+        });
+        textAdjustLevel = 0;
+        applyAccessibilityTheme();
+        ['opt-contrast', 'opt-text-plus', 'opt-text-minus', 'opt-spacing', 'opt-dyslexia', 'opt-cursor', 'opt-onehand', 'opt-darkmode', 'opt-monochrome', 'opt-colorblind', 'opt-screenreader'].forEach(id => {
+            const btn = document.getElementById(id);
+            btn?.classList.remove('active');
+            btn?.setAttribute('aria-pressed', 'false');
+        });
+        announceAccessibility('Ajustes restablecidos');
+    }
+
+    function activateColorblind() {
+        const button = document.getElementById('opt-colorblind');
+        const isActive = !htmlElement.classList.contains('colorblind-mode');
+        setAccessibilityClass('colorblind-mode', isActive);
+        button?.classList.toggle('active', isActive);
+        button?.setAttribute('aria-pressed', String(isActive));
+        announceAccessibility(isActive ? 'Daltonismo activado' : 'Daltonismo desactivado');
+    }
+
+    function activateScreenreader() {
+        const button = document.getElementById('opt-screenreader');
+        const isActive = !htmlElement.classList.contains('screenreader-active');
+        setAccessibilityClass('screenreader-active', isActive);
+        button?.classList.toggle('active', isActive);
+        button?.setAttribute('aria-pressed', String(isActive));
+        if (!isActive) {
+            window.speechSynthesis?.cancel();
+            announceAccessibility('Lector de pantalla desactivado');
+            return;
+        }
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance('Lector activado');
+            window.speechSynthesis.speak(utterance);
+        }
+        announceAccessibility('Lector de pantalla activado');
+    }
+
+    function changeLanguage() {
+        const currentLang = document.documentElement.lang || 'es';
+        const nextLang = currentLang === 'es' ? 'en' : 'es';
+        document.documentElement.lang = nextLang;
+        if (searchInput) {
+            searchInput.placeholder = translations[nextLang].searchPlaceholder;
+            searchInput.setAttribute('aria-label', translations[nextLang].searchAria);
+        }
+        if (accessibilityBtn) {
+            accessibilityBtn.setAttribute('aria-label', translations[nextLang].accessibilityButtonAria);
+        }
+        announceAccessibility(nextLang === 'es' ? 'Idioma cambiado a español' : 'Language changed to English');
+    }
+
+    window.resetAccessibility = resetAccessibility;
+    window.toggleAccessibility = toggleAccessibility;
+    window.adjustText = adjustText;
+    window.activateColorblind = activateColorblind;
+    window.activateScreenreader = activateScreenreader;
+    window.changeLanguage = changeLanguage;
 
  // Logica de la barra de busqueda 
   // Base de datos enriquecida con información detallada para el modal
