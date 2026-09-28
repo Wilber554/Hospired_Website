@@ -324,14 +324,33 @@
         applyPreferences();
     }
 
-    function togglePanel(event) {
+function togglePanel(event) {
         event?.stopPropagation();
         const panel = document.getElementById('accessibilityMenu');
         const trigger = document.getElementById('accessibilityBtn');
         if (!panel) return;
+        if (window.innerWidth <= 768) {
+            panel.style.left = '';
+            panel.style.top = '';
+            panel.style.right = '';
+            panel.style.bottom = '';
+        }
         const open = panel.classList.toggle('show');
         trigger?.setAttribute('aria-expanded', String(open));
     }
+
+
+
+// Limpia automáticamente las coordenadas guardadas cuando el usuario redimensiona la pantalla
+window.addEventListener('resize', () => {
+    const panel = document.getElementById('accessibilityMenu');
+    if (panel && window.innerWidth <= 768) {
+        panel.style.left = '';
+        panel.style.top = '';
+        panel.style.right = '';
+        panel.style.bottom = '';
+    }
+})
 
     function changeLanguage() {
         preferences.language = preferences.language === 'es' ? 'en' : 'es';
@@ -407,6 +426,13 @@
         preferences = { ...defaults };
         savePreferences();
         applyPreferences();
+        const panel = document.getElementById('accessibilityMenu');
+        if (panel) {
+            panel.style.left = '';
+            panel.style.top = '';
+            panel.style.right = '';
+            panel.style.bottom = '';
+        }
         announce('Ajustes restablecidos');
     }
 
