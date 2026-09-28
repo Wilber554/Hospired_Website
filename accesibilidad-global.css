@@ -79,24 +79,18 @@ html body a {
     display: block;
 }
 
-#globalAccessibilityWrapper .accessibility-panel,
-.accessibility-panel {
+#globalAccessibilityWrapper .accessibility-panel {
     display: none;
-    position: fixed !important;
-    right: 20px !important;
-    bottom: 85px !important;
-    width: min(92vw, 520px) !important;
-    max-width: calc(100vw - 32px) !important;
-    max-height: calc(100vh - 100px) !important;
-    padding: 16px !important;
-    background: var(--hospired-surface, #ffffff) !important;
-    color: var(--hospired-text-main, #1e293b) !important;
-    border: 1px solid var(--hospired-border, #dfe5ef) !important;
-    border-radius: 16px !important;
-    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.2) !important;
-    box-sizing: border-box !important;
-    overflow-y: auto !important;
-    z-index: 99999 !important;
+    position: fixed;
+    right: 24px;
+    bottom: 88px;
+    width: min(95vw, 580px);
+    padding: 16px;
+    background: var(--hospired-surface, #ffffff);
+    color: var(--hospired-text-main, #1e293b);
+    border: 1px solid var(--hospired-border, #dfe5ef);
+    border-radius: 16px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.2);
 }
 
 #globalAccessibilityWrapper .accessibility-panel.show {
@@ -289,7 +283,7 @@ html.alto-contraste svg {
     stroke: currentColor !important;
 }
 
-html.modo-daltonismo body > *:not(#globalAccessibilityWrapper):not(.accessibility-wrapper) {
+html.modo-daltonismo body > *:not(#globalAccessibilityWrapper) {
     filter: saturate(0.75) contrast(1.1) hue-rotate(-12deg) !important;
 }
 
@@ -553,19 +547,19 @@ html.global-dark-mode body .mv-icon-shape svg {
 }
 
 
-html.global-monochrome body > *:not(#globalAccessibilityWrapper):not(.accessibility-wrapper) {
+html.global-monochrome body > *:not(#globalAccessibilityWrapper) {
     filter: grayscale(100%) contrast(1.15) !important;
 }
 
-html.global-protanopia body > *:not(#globalAccessibilityWrapper):not(.accessibility-wrapper) {
+html.global-protanopia body > *:not(#globalAccessibilityWrapper) {
     filter: saturate(0.8) contrast(1.15) hue-rotate(12deg) !important;
 }
 
-html.global-deuteranopia body > *:not(#globalAccessibilityWrapper):not(.accessibility-wrapper) {
+html.global-deuteranopia body > *:not(#globalAccessibilityWrapper) {
     filter: saturate(0.75) contrast(1.1) hue-rotate(-12deg) !important;
 }
 
-html.global-tritanopia body > *:not(#globalAccessibilityWrapper):not(.accessibility-wrapper) {
+html.global-tritanopia body > *:not(#globalAccessibilityWrapper) {
     filter: saturate(0.8) contrast(1.1) hue-rotate(165deg) !important;
 }
 
@@ -756,27 +750,9 @@ html.global-text-plus-2 body { font-size: 120% !important; }
 html.global-text-minus-1 body { font-size: 90% !important; }
 html.global-text-minus-2 body { font-size: 80% !important; }
 
-@media (max-width: 768px) {
-    #globalAccessibilityWrapper,
-    .accessibility-wrapper {
-        right: 14px !important;
-        bottom: 14px !important;
-    }
-
-    #globalAccessibilityWrapper .accessibility-panel,
-    .accessibility-panel {
-        right: 14px !important;
-        left: 14px !important;
-        bottom: 75px !important;
-        width: auto !important;
-        max-width: calc(100vw - 28px) !important;
-    }
-
-    #globalAccessibilityWrapper .accessibility-grid,
-    .accessibility-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 8px !important;
-    }
+@media (max-width: 600px) {
+    #globalAccessibilityWrapper { right: 14px; bottom: 14px; }
+    #globalAccessibilityWrapper .accessibility-panel { right: -4px; }
 }
 
 /* ================================================================= */
@@ -834,142 +810,4 @@ body.high-contrast a, body.high-contrast button {
     background-color: #ffff00 !important;
     color: #000000 !important;
     font-weight: bold !important;
-}
-/* ==========================================================================
-   REGLAS RESPONSIVAS Y FIJAS PARA EL MENÚ DE ACCESIBILIDAD
-   ========================================================================== */
-
-/* 1. Botón flotante */
-#globalAccessibilityWrapper,
-.accessibility-wrapper {
-    position: fixed !important;
-    right: 20px !important;
-    bottom: 20px !important;
-    z-index: 99999 !important;
-}
-
-/* 2. Panel principal de accesibilidad (Escritorio / PC) */
-#accessibilityMenu,
-.accessibility-panel,
-#globalAccessibilityWrapper .accessibility-panel {
-    display: none;
-    position: fixed !important;
-    right: 20px !important;
-    bottom: 85px !important;
-    width: min(92vw, 520px) !important;
-    max-width: calc(100vw - 32px) !important;
-    max-height: calc(100vh - 110px) !important;
-    background: var(--hospired-surface, #ffffff) !important;
-    color: var(--hospired-text-main, #1e293b) !important;
-    border: 1px solid var(--hospired-border, #dfe5ef) !important;
-    border-radius: 18px !important;
-    box-shadow: 0 12px 35px rgba(15, 23, 42, 0.22) !important;
-    padding: 16px !important;
-    box-sizing: border-box !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    z-index: 99999 !important;
-}
-
-/* Estado cuando está abierto */
-#accessibilityMenu.show,
-.accessibility-panel.show {
-    display: block !important;
-}
-
-/* 3. Rejilla / Grid de botones de opciones */
-#globalAccessibilityWrapper .accessibility-grid,
-.accessibility-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* 4. Estilos de cada opción / botón */
-#globalAccessibilityWrapper .access-option-btn,
-.access-option-btn {
-    min-height: 48px !important;
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    gap: 8px !important;
-    padding: 8px 10px !important;
-    border: 1px solid var(--hospired-border, #dfe5ef) !important;
-    border-radius: 10px !important;
-    background: var(--hospired-surface-alt, #f8fafc) !important;
-    color: var(--hospired-text-main, #1e293b) !important;
-    cursor: pointer !important;
-    font-size: 0.8rem !important;
-    font-weight: 700 !important;
-    line-height: 1.2 !important;
-    box-sizing: border-box !important;
-    white-space: normal !important;
-    word-break: break-word !important;
-}
-
-/* --- ADAPTACIÓN TABLETS (Pantallas <= 768px) --- */
-@media (max-width: 768px) {
-    #accessibilityMenu,
-    .accessibility-panel,
-    #globalAccessibilityWrapper .accessibility-panel {
-        right: 16px !important;
-        left: auto !important;
-        bottom: 80px !important;
-        width: min(92vw, 440px) !important;
-    }
-
-    #globalAccessibilityWrapper .accessibility-grid,
-    .accessibility-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 8px !important;
-    }
-}
-
-/* --- ADAPTACIÓN CELULARES (Pantallas <= 480px) --- */
-@media (max-width: 480px) {
-    #globalAccessibilityWrapper,
-    .accessibility-wrapper {
-        right: 12px !important;
-        bottom: 12px !important;
-    }
-
-    #accessibilityMenu,
-    .accessibility-panel,
-    #globalAccessibilityWrapper .accessibility-panel {
-        position: fixed !important;
-        left: 12px !important;
-        right: 12px !important;
-        bottom: 74px !important;
-        top: auto !important;
-        width: calc(100vw - 24px) !important;
-        max-width: calc(100vw - 24px) !important;
-        max-height: calc(100vh - 90px) !important;
-        padding: 12px !important;
-        border-radius: 16px !important;
-        box-sizing: border-box !important;
-    }
-
-    #globalAccessibilityWrapper .accessibility-grid,
-    .accessibility-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 6px !important;
-    }
-
-    #globalAccessibilityWrapper .access-option-btn,
-    .access-option-btn {
-        min-height: 44px !important;
-        padding: 6px 8px !important;
-        font-size: 0.74rem !important;
-        gap: 6px !important;
-    }
-
-    .access-option-btn svg,
-    .access-icon svg {
-        width: 18px !important;
-        height: 18px !important;
-        flex-shrink: 0 !important;
-    }
 }
