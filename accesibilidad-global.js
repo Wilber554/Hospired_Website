@@ -124,26 +124,29 @@
     }
 
     function applyPreferences() {
-        const root = document.documentElement;
-        Object.entries(prefClassMap).forEach(([key, className]) => {
-            root.classList.toggle(className, Boolean(preferences[key]));
-        });
+    const root = document.documentElement;
+    Object.entries(prefClassMap).forEach(([key, className]) => {
+        root.classList.toggle(className, Boolean(preferences[key]));
+    });
 
-        root.classList.remove('global-protanopia', 'global-deuteranopia', 'global-tritanopia');
-        if (preferences.colorblindMode && preferences.colorblindMode !== 'none') {
-            root.classList.add(`global-${preferences.colorblindMode}`);
-        }
-
-        // Clases alias solicitadas explícitamente para compatibilidad externa
-        root.classList.toggle('font-dislexia', Boolean(preferences.dyslexia));
-        root.classList.toggle('alto-contraste', Boolean(preferences.highContrast));
-        root.classList.toggle('modo-daltonismo', preferences.colorblindMode !== 'none');
-
-        applyTextScaleClasses();
-        root.lang = preferences.language || 'es';
-        syncControls();
-        translateInterface();
+    root.classList.remove('global-protanopia', 'global-deuteranopia', 'global-tritanopia');
+    if (preferences.colorblindMode && preferences.colorblindMode !== 'none') {
+        root.classList.add(`global-${preferences.colorblindMode}`);
     }
+
+    // Clases alias solicitadas explícitamente para compatibilidad externa
+    root.classList.toggle('font-dislexia', Boolean(preferences.dyslexia));
+    root.classList.toggle('alto-contraste', Boolean(preferences.highContrast));
+    root.classList.toggle('modo-daltonismo', preferences.colorblindMode !== 'none');
+
+    applyTextScaleClasses();
+    root.lang = preferences.language || 'es';
+    syncControls();
+    translateInterface();
+    
+    // Mantener el atributo tabindex en los textos si la preferencia está activa al cargar
+    makeElementsFocusable(preferences.screenReader);
+}
 
     function syncControls() {
         const controlMap = {
@@ -350,19 +353,44 @@
         announce(lang === 'en' ? 'Language changed to English' : 'Idioma cambiado a español');
     }
 
-    function activateScreenReader() {
-        togglePreference('screenReader');
-        if (!preferences.screenReader && 'speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
-            return;
-        }
-        if (preferences.screenReader && 'speechSynthesis' in window) {
-            const message = preferences.language === 'en' ? 'Screen reader enabled' : 'Lector de pantalla activado';
-            const utterance = new SpeechSynthesisUtterance(message);
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(utterance);
-        }
+   function activateScreenReader() {
+    togglePreference('screenReader');
+    
+    // Habilitar o deshabilitar el foco en los textos según el estado
+    makeElementsFocusable(preferences.screenReader);
+
+    if (!preferences.screenReader && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        return;
     }
+    if (preferences.screenReader && 'speechSynthesis' in window) {
+        const message = preferences.language === 'en' ? 'Screen reader enabled' : 'Lector de pantalla activado';
+        const utterance = new SpeechSynthesisUtterance(message);
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+    }
+}
+
+    function makeElementsFocusable(enable) {
+    // Seleccionamos las etiquetas de texto principales y clases importantes específicas de tu panel
+    const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, th, td, strong, label, .panel-title, .stat-value, .stat-label, .hero-tag, .glass-metric, .glass-title');
+    
+    textElements.forEach(el => {
+        if (enable) {
+            // Si el lector está activo, hacemos que el texto sea enfocable
+            if (!el.hasAttribute('tabindex')) {
+                el.setAttribute('tabindex', '0');
+                el.setAttribute('data-a11y-tabindex', 'true');
+            }
+        } else {
+            // Si se desactiva, quitamos el foco solo a los elementos que nosotros modificamos
+            if (el.getAttribute('data-a11y-tabindex') === 'true') {
+                el.removeAttribute('tabindex');
+                el.removeAttribute('data-a11y-tabindex');
+            }
+        }
+    });
+}
 
     function bindScreenReader() {
         document.addEventListener('focusin', event => {
@@ -587,14 +615,19 @@
             });
         };
 
+       
         const observer = new MutationObserver(mutations => {
-            if (isTranslating) return;
-            const shouldTranslate = mutations.some(mutation => {
-                if (mutation.type !== 'childList') return false;
-                return mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0;
-            });
-            if (shouldTranslate) scheduleTranslate();
-        });
+    if (isTranslating) return;
+    const shouldTranslate = mutations.some(mutation => {
+        if (mutation.type !== 'childList') return false;
+        return mutation.addedNodes.length > 0 || mutation.removedNodes.length > 0;
+    });
+    if (shouldTranslate) {
+        scheduleTranslate();
+        // Aplicar foco a los elementos recién renderizados
+        setTimeout(() => makeElementsFocusable(preferences.screenReader), 50);
+    }
+});
 
         observer.observe(document.body, { childList: true, subtree: true });
         document.addEventListener('click', event => {
